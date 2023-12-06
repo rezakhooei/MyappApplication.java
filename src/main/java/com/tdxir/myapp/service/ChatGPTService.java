@@ -6,15 +6,22 @@ package com.tdxir.myapp.service;
 import com.tdxir.myapp.ChatGpt.common.Message;
 import com.tdxir.myapp.ChatGpt.request.ChatGPTRequest;
 import com.tdxir.myapp.ChatGpt.response.ChatGPTResponse;
+import com.theokanning.openai.audio.CreateTranscriptionRequest;
+import com.theokanning.openai.service.OpenAiService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-
+@Configuration
+@EnableAsync
 @Service
 public class ChatGPTService {
 
@@ -28,6 +35,10 @@ public class ChatGPTService {
     public ChatGPTService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
+
+
+
+    @Async
 
     public ChatGPTResponse getChatCPTResponse(String prompt) {
 

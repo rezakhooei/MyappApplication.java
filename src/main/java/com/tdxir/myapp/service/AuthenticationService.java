@@ -35,7 +35,7 @@ public class AuthenticationService {
        var jwtToken=jwtService.generateToken(user);
        return AuthenticationResponse.builder()
                .token(jwtToken)
-               .paramCount("1")
+               .paramCount("0")
                .paramTime("10")
                .build();
     }
@@ -53,7 +53,7 @@ public class AuthenticationService {
         var jwtToken=jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
-                .paramCount("4")
+                .paramCount("2")
                 .paramTime(("30"))
                 .build();
     }

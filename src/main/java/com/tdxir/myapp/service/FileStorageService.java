@@ -21,6 +21,7 @@ import com.theokanning.openai.service.OpenAiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileStorageService {
     @Autowired
     private ChatGPTService chatGPTService;
+    @Autowired
+    private ChatGPTService serviceSpeecToText;
     @Value("${openai.api.key}")
     private  String apikey;
     private final Path fileStorageLocation;
@@ -80,7 +83,7 @@ public class FileStorageService {
 
         CreateTranscriptionRequest request= new CreateTranscriptionRequest();
         request.setModel("whisper-1");//gpt-3.5-turbo
-        //request.setLanguage("FA");
+        request.setLanguage("FA");
 
        // String output =    new Date().getTime() + "-file." + getFileExtension(file.getOriginalFilename());
 /*
@@ -103,6 +106,8 @@ public class FileStorageService {
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             File filereply=new File(targetLocation.toString());
+
+
             String transcription=service.createTranscription(request,filereply).getText();//.createTranscription((request,file).getText();
             inf1=transcription;
 
