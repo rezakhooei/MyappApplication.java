@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Created-By: IntelliJ IDEA
+Built-By: windows 10
+Build-Jdk: 17.0.2
+Implementation-Title: newsroom
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: com.tdxir
+Main-Class: ${start-class}
+
