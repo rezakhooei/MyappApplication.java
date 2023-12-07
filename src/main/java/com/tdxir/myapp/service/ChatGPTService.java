@@ -20,8 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-@Configuration
-@EnableAsync
+
 @Service
 public class ChatGPTService {
 
@@ -38,7 +37,7 @@ public class ChatGPTService {
 
 
 
-    @Async
+
 
     public ChatGPTResponse getChatCPTResponse(String prompt) {
 
