@@ -43,7 +43,10 @@ public class JwtService {
         final String username=extractUsername(token);
         return  (username.equals(userDetails.getUsername())) && !isExpired(token);
     }
+public boolean isTokenExPired(String token){//// added by khooei
 
+        return isExpired(token);
+}
     private boolean isExpired(String token) {
         return extractExpiration(token).before(new Date());
     }

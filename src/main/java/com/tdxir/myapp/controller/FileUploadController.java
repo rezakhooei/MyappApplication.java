@@ -38,7 +38,7 @@ public class FileUploadController {
     }
 
     @PostMapping
-    public ResponseEntity<JSONObject> uploadFile(
+    public ResponseEntity<JSONArray> uploadFile(
             @RequestParam(name = "file", required = false) MultipartFile file,
             @RequestParam("inf1") String inf1 ,@RequestParam("inf2") String inf2,@RequestParam("inf3") String inf3,@RequestParam("inf4") String inf4 )throws IOException
      {
@@ -50,10 +50,12 @@ public class FileUploadController {
         /*array.add("element_1");
         array.add("element_2");
         array.add("element_3");*/
-         jsonObject.put("inf1","صدای شما ذخیره شد");
-         jsonObject.put("inf2","اطلاعات شماره 2");
-         jsonObject.put("inf3","اطلاعات شماره 3");
-         jsonObject.put("inf4","اطلاعات شماره 4");
+         for (int i=1;i<=3;++i){
+             jsonObject.put("inf"+String.valueOf(i),String.valueOf(i)+"اطلاعات شماره ");
+             array.add(new JSONObject(jsonObject));
+             jsonObject.clear();
+         }
+        // array.add(jsonObject);
 
         String fileName = fileStorageService.storeFile(file,inf1,inf2,inf3,inf4);
         //fileName="monshi.mp3";
@@ -76,7 +78,8 @@ public class FileUploadController {
          byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
 
          jsonObject.put("file_content",resource.getByteArray());
-
+          array.add(new JSONObject(jsonObject));
+          jsonObject.clear();
 
          InputStream is = new ByteArrayInputStream(encoder);
          InputStreamResource resource1 = new InputStreamResource(is);
@@ -88,7 +91,7 @@ public class FileUploadController {
          ContentDisposition disposition = ContentDisposition.attachment().filename(filereply.getName()).build();
          headers.setContentDisposition(disposition);
 
-         return new ResponseEntity<>(jsonObject, headers, HttpStatus.OK);
+         return new ResponseEntity<>(array, headers, HttpStatus.OK);
 
 
 
