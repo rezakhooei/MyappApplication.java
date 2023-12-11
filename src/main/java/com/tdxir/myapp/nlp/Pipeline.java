@@ -8,12 +8,14 @@ import java.util.Properties;
 
 public class Pipeline {
     private   static Properties properties;
-    private  static  String propertiesName="tokenize,ssplit";
+    private  static  String propertiesName="tokenize,ssplit,pos,lemma,parse,sentiment";
     private static StanfordCoreNLP stanfordCoreNLP;
     private Pipeline(){}
     static {
         properties=new Properties();
         properties.setProperty("annotators",propertiesName);
+        properties.setProperty("lang","fa");
+        properties.setProperty("pos.model","F:\\opt\\tomcat\\resource\\english-left3words-distsim.tagger");//langdetect-183.bin");//"F:\\opt\\tomcat\\resource\\en_ewt_tagger.pt");//
        }
 
     public static StanfordCoreNLP getPipeline() {

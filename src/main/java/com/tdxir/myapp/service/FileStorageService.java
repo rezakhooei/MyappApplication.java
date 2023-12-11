@@ -110,14 +110,15 @@ public class FileStorageService {
             File filereply=new File(targetLocation.toString());
 
 
-            String transcription=service.createTranscription(request,filereply).getText();//.createTranscription((request,file).getText();
+           String transcription=service.createTranscription(request,filereply).getText();//.createTranscription((request,file).getText();
             inf1=transcription;
-            //inf1="I am reza who are you?";
+           // inf1="من به مدرسه عشق میروم";
             SentenceRecognizer sentenceRecognizer=new SentenceRecognizer();
-            List<String> temp=sentenceRecognizer.recognizeSentence(inf1);
+            List<String> temp=sentenceRecognizer.recognizePos(inf1);
 
+            /*
             inf2=temp.get(0);
-            if (temp.size()>1) inf3=temp.get(1);
+            if (temp.size()>1) inf3=temp.get(1);*/
           //  ChatGPTResponse chatCPTResponse = chatGPTService.getChatCPTResponse(inf1);//chatbotInputRequest.getMessage());
           //  inf2=chatCPTResponse.getChoices().get(0).getMessage().getContent();
 
