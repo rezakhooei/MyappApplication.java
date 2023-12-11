@@ -1,5 +1,6 @@
 package com.tdxir.myapp.controller;
 
+import com.tdxir.myapp.model.Users;
 import com.tdxir.myapp.service.JwtService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,15 @@ public class TokenController {
         this.userDetails = userDetails;
     }
 
-    UserDetails userDetails;
+
     @Autowired
     private  JwtService jwtService;
+
+    UserDetails userDetails;
     @PostMapping("/api/checkToken")
     Boolean token(@RequestParam String token)
     {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+       // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 
 

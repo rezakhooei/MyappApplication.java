@@ -118,7 +118,18 @@
             <artifactId>hibernate-core</artifactId>
             <version>6.2.9.Final</version>
         </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>4.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>4.4.0</version>
+			<classifier>models</classifier>
+		</dependency>
+	</dependencies>
 
 	<build>
 

@@ -15,9 +15,11 @@ import com.google.type.DateTime;
 import com.tdxir.myapp.ChatGpt.response.ChatGPTResponse;
 import com.tdxir.myapp.model.Users;
 import com.tdxir.myapp.model.UsersData;
+import com.tdxir.myapp.nlp.SentenceRecognizer;
 import com.tdxir.myapp.repository.UsersDataRepository;
 import com.theokanning.openai.audio.CreateTranscriptionRequest;
 import com.theokanning.openai.service.OpenAiService;
+import org.hibernate.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -110,9 +112,14 @@ public class FileStorageService {
 
             String transcription=service.createTranscription(request,filereply).getText();//.createTranscription((request,file).getText();
             inf1=transcription;
+            //inf1="I am reza who are you?";
+            SentenceRecognizer sentenceRecognizer=new SentenceRecognizer();
+            List<String> temp=sentenceRecognizer.recognizeSentence(inf1);
 
-            ChatGPTResponse chatCPTResponse = chatGPTService.getChatCPTResponse(inf1);//chatbotInputRequest.getMessage());
-            inf2=chatCPTResponse.getChoices().get(0).getMessage().getContent();
+            inf2=temp.get(0);
+            if (temp.size()>1) inf3=temp.get(1);
+          //  ChatGPTResponse chatCPTResponse = chatGPTService.getChatCPTResponse(inf1);//chatbotInputRequest.getMessage());
+          //  inf2=chatCPTResponse.getChoices().get(0).getMessage().getContent();
 
 
 // for record db
