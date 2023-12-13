@@ -14,7 +14,7 @@ public class Pipeline {
     static {
         properties=new Properties();
         properties.setProperty("annotators",propertiesName);
-        properties.setProperty("lang","fa");
+        properties.setProperty("lang","en");
         properties.setProperty("pos.model","F:\\opt\\tomcat\\resource\\english-left3words-distsim.tagger");//langdetect-183.bin");//"F:\\opt\\tomcat\\resource\\en_ewt_tagger.pt");//
        }
 

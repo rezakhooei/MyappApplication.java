@@ -110,11 +110,17 @@ public class FileStorageService {
             File filereply=new File(targetLocation.toString());
 
 
-           String transcription=service.createTranscription(request,filereply).getText();//.createTranscription((request,file).getText();
-            inf1=transcription;
-           // inf1="من به مدرسه عشق میروم";
-            SentenceRecognizer sentenceRecognizer=new SentenceRecognizer();
-            List<String> temp=sentenceRecognizer.recognizePos(inf1);
+        //   String transcription=service.createTranscription(request,filereply).getText();//.createTranscription((request,file).getText();
+            //inf1=transcription;
+           // inf1="I love hassan but he doesn't so";
+           // inf1="Reza has a session on sunday 2 pm in Berlin. after that i should call my mam";//"من و حسن با هم غذا میخوریم و پیراشکی هم دوست داریم";
+           // SentenceRecognizer sentenceRecognizer=new SentenceRecognizer();
+            //List<String> temp=sentenceRecognizer.recognizeSentence(inf1);
+           // List<String> temp1=sentenceRecognizer.recognizeWords(inf1);
+           // List<String> temp2=sentenceRecognizer.recognizePos(inf1);
+           // List<String> temp3=sentenceRecognizer.recognizeNer(inf1);
+          //  List<String> temp4=sentenceRecognizer.recognizeLemma(inf1);
+          //  List<String> temp5=sentenceRecognizer.recognizeSentiment(inf1);
 
             /*
             inf2=temp.get(0);

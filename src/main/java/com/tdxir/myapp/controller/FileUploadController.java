@@ -38,11 +38,11 @@ public class FileUploadController {
     }
 
     @PostMapping
-    public ResponseEntity<JSONArray> uploadFile(
+    public ResponseEntity<JSONObject> uploadFile(
             @RequestParam(name = "file", required = false) MultipartFile file,
             @RequestParam("inf1") String inf1 ,@RequestParam("inf2") String inf2,@RequestParam("inf3") String inf3,@RequestParam("inf4") String inf4 )throws IOException
      {
-
+         JSONObject jsonObjectMain=new JSONObject();
          JSONObject jsonObject = new JSONObject();
 
 
@@ -51,10 +51,12 @@ public class FileUploadController {
         array.add("element_2");
         array.add("element_3");*/
          for (int i=1;i<=3;++i){
-             jsonObject.put("inf"+String.valueOf(i),String.valueOf(i)+"اطلاعات شماره ");
+             jsonObject.put("inf_id",String.valueOf(i));
+             jsonObject.put("inf_text",String.valueOf(i)+"اطلاعات شماره ");
              array.add(new JSONObject(jsonObject));
              jsonObject.clear();
          }
+         jsonObjectMain.put("inf",array);
         // array.add(jsonObject);
 
 
@@ -80,9 +82,9 @@ public class FileUploadController {
 
          byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
 
-         jsonObject.put("file_content",resource.getByteArray());
-          array.add(new JSONObject(jsonObject));
-          jsonObject.clear();
+         jsonObjectMain.put("file_content",resource.getByteArray());
+         // array.add(new JSONObject(jsonObject));
+         // jsonObject.clear();
 
          InputStream is = new ByteArrayInputStream(encoder);
          InputStreamResource resource1 = new InputStreamResource(is);
@@ -94,7 +96,7 @@ public class FileUploadController {
          ContentDisposition disposition = ContentDisposition.attachment().filename(filereply.getName()).build();
          headers.setContentDisposition(disposition);
 
-         return new ResponseEntity<>(array, headers, HttpStatus.OK);
+         return new ResponseEntity<>(jsonObjectMain, headers, HttpStatus.OK);
 
 
 

@@ -11,13 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.SocketOption;
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Properties;
 
 public class SentenceRecognizer {
     public List<String> recognizeWords(String text){
 
-
+         // tokenize   make words
         StanfordCoreNLP stanfordCoreNLP =Pipeline.getPipeline();
         //String text="I am reza who are you";
         CoreDocument coreDocument=new CoreDocument(text);
@@ -33,7 +34,7 @@ public class SentenceRecognizer {
 
     }
     public List<String> recognizeSentiment(String text){
-
+        // Status of sentence negative positive neutral ....
 
         StanfordCoreNLP stanfordCoreNLP =Pipeline.getPipeline();
         //String text="I am reza who are you";
@@ -51,16 +52,16 @@ public class SentenceRecognizer {
     }
     public List<String> recognizeNer(String text){
 
-
+         // kind of noun ... city or person ...
         StanfordCoreNLP stanfordCoreNLP =Pipeline.getPipeline();
-        //String text="I am reza who are you";
+        text="I live in Berlin";
         CoreDocument coreDocument=new CoreDocument(text);
         stanfordCoreNLP.annotate(coreDocument);
         List<CoreLabel> coreLabelList=coreDocument.tokens();
         List<String> stringList=new ArrayList<String>();
         for (CoreLabel coreLabel:coreLabelList)
         {
-            stringList.add(coreLabel.get(CoreAnnotations.NormalizedNamedEntityTagAnnotation.class));
+            stringList.add(coreLabel.get(CoreAnnotations.NamedEntityTagAnnotation.class));
             System.out.println(coreLabel.originalText());
         }
         return stringList;
@@ -68,9 +69,9 @@ public class SentenceRecognizer {
     }
     public List<String> recognizePos(String text){
 
-
+         //                position of words(noun verb ....)
         StanfordCoreNLP stanfordCoreNLP =Pipeline.getPipeline();
-        //String text="I am reza who are you";
+        // text="I live in Berlin";
         CoreDocument coreDocument=new CoreDocument(text);
         stanfordCoreNLP.annotate(coreDocument);
         List<CoreLabel> coreLabelList=coreDocument.tokens();
@@ -85,7 +86,7 @@ public class SentenceRecognizer {
     }
     public List<String> recognizeLemma(String text){
 
-
+         //  Root of words
         StanfordCoreNLP stanfordCoreNLP =Pipeline.getPipeline();
         //String text="I am reza who are you";
         CoreDocument coreDocument=new CoreDocument(text);
