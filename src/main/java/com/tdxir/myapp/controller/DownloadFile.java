@@ -4,6 +4,7 @@ import com.tdxir.myapp.model.UsersData;
 import com.tdxir.myapp.service.HistoryService;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import org.hibernate.internal.util.collections.JoinedList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;
@@ -21,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -34,7 +36,7 @@ public class DownloadFile {
     HistoryService historyService;
 
     @RequestMapping(path = "/download", method = RequestMethod.POST)
-    public ResponseEntity<JSONObject> download(/*@RequestParam String countRequest*/) throws IOException {
+    public ResponseEntity<ArrayList<JSONObject>> download(/*@RequestParam String countRequest*/) throws IOException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -43,9 +45,9 @@ public class DownloadFile {
         JSONObject jsonObject = new JSONObject();
 
 
-        JSONArray array= new JSONArray();
+        ArrayList<JSONObject> array= new ArrayList<JSONObject>();
+        ArrayList<JSONArray> arrayInfList=new ArrayList<>();//JSONArray();JoinedList<JSONArray>();//
         JSONArray arrayInf=new JSONArray();
-        JSONObject jsonObjectMain=new JSONObject();
         for(int z=1;z<=3;++z)
         arrayInf.add(new JSONObject());
 
@@ -57,19 +59,16 @@ public class DownloadFile {
         for(int i=1;i<=3;++i) {
 
             for (int j=1;j<=3;++j){
-                jsonObject.put("inf_id",String.valueOf(j));
+                jsonObject.put("inf_id"+"only test"+String.valueOf(i),String.valueOf(j));
                 jsonObject.put("inf_text",String.valueOf(j)+"اطلاعات شماره ");
-                array.add(new JSONObject(jsonObject));
+                arrayInf.set(j-1,new JSONObject(jsonObject));
 
                 jsonObject.clear();
             }
-            for (int k=1;k<=array.size();++k)
-            {
-                arrayInf.set(k-1,array.get(k-1));
-            }
-            jsonObjectMain.put("inf"+String.valueOf(i),arrayInf);
-            array.clear();
-            //arrayInf.clear();
+
+             arrayInfList.add(arrayInf);
+            jsonObject.put("inf",arrayInfList.get(i-1));
+
            /* userid=usersData.get(lastrecordindex-i).getUserid();
             if(userid.equals("javadghane18@gmail.com")){
 
@@ -91,10 +90,9 @@ public class DownloadFile {
             ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
             byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
 
-            jsonObjectMain.put("file_content"+String.valueOf(i),resource1.getByteArray());
-
-
-
+            jsonObject.put("file_content",resource1.getByteArray());
+            array.add(new JSONObject(jsonObject));
+            jsonObject.clear();
 /*
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=reza.mp3");
@@ -138,7 +136,7 @@ public class DownloadFile {
                 .file_content(is)
                 .build();*/
 
-        return  new ResponseEntity<>(jsonObjectMain,headers,HttpStatus.OK);
+        return  new ResponseEntity<>(array,headers,HttpStatus.OK);
 
 
 
@@ -149,6 +147,8 @@ public class DownloadFile {
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(resource);*/
     }
+
+
 
 }
 

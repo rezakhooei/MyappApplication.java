@@ -2,11 +2,11 @@ package com.tdxir.myapp.nlp;
 
 
 
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+//import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 import java.util.Properties;
 
-public class Pipeline {
+public class Pipeline {/*
     private   static Properties properties;
     private  static  String propertiesName="tokenize,ssplit,pos,lemma,parse,sentiment";
     private static StanfordCoreNLP stanfordCoreNLP;
@@ -23,5 +23,5 @@ public class Pipeline {
             stanfordCoreNLP = new StanfordCoreNLP(properties);
         }
         return stanfordCoreNLP;
-    }
+    }*/
 }
