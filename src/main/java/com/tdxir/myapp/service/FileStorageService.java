@@ -115,6 +115,9 @@ public class FileStorageService {
            // inf1="I love hassan but he doesn't so";
            // inf1="Reza has a session on sunday 2 pm in Berlin. after that i should call my mam";//"من و حسن با هم غذا میخوریم و پیراشکی هم دوست داریم";
            // SentenceRecognizer sentenceRecognizer=new SentenceRecognizer();
+
+            inf1="افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلانه به تصمیمات مان فکر کنیم. و به همین دلیل، ارزش ها، روابط و شغل هایی نامناسب نصیب مان می شود. ";
+
             //List<String> temp=sentenceRecognizer.recognizeSentence(inf1);
            // List<String> temp1=sentenceRecognizer.recognizeWords(inf1);
            // List<String> temp2=sentenceRecognizer.recognizePos(inf1);
