@@ -42,14 +42,7 @@ public class DownloadFile {
 
         List<UsersData> usersData=historyService.usersdatahistory(authentication.getName(), 1);
 
-        JSONObject jsonObject = new JSONObject();
 
-
-        ArrayList<JSONObject> array= new ArrayList<JSONObject>();
-        ArrayList<JSONArray> arrayInfList=new ArrayList<>();//JSONArray();JoinedList<JSONArray>();//
-        JSONArray arrayInf=new JSONArray();
-        for(int z=1;z<=3;++z)
-        arrayInf.add(new JSONObject());
 
 
         //select filename from users_data where userid=userid;
@@ -60,28 +53,28 @@ public class DownloadFile {
         JSONArray final_array=new JSONArray();
         for(int info=1;info<=3;++info) {
             userid=usersData.get(lastrecordindex-info).getUserid();
-            JSONObject jonInfo = new JSONObject();
+            JSONObject jsonInfo = new JSONObject();
             JSONArray arrayInfo=new JSONArray();
             for (int id=1;id<=3;++id){
-                JSONObject jonId = new JSONObject();
-                jonId.put("inf_id"+String.valueOf(info),id);
+                JSONObject jsonId = new JSONObject();
+                jsonId.put("inf_id"+String.valueOf(info),id);
                 if(userid.equals("javadghane18@gmail.com")){
 
-                    jonId.put("inf_text","اطلاعات شماره "+String.valueOf(info) );
+                    jsonId.put("inf_text","اطلاعات شماره "+String.valueOf(info) );
                 }
                 else {
                     if(id==1)
-                    jonId.put("inf_text",usersData.get(lastrecordindex - info).getInf1() );
-                    else if (id==1) {
-                        jonId.put("inf_text",usersData.get(lastrecordindex - info).getInf2() );
-                    } else if (id==1) {
-                        jonId.put("inf_text",usersData.get(lastrecordindex - info).getInf3() );
+                    jsonId.put("inf_text",usersData.get(lastrecordindex - info).getInf1() );
+                    else if (id==2) {
+                        jsonId.put("inf_text",usersData.get(lastrecordindex - info).getInf2() );
+                    } else if (id==3) {
+                        jsonId.put("inf_text",usersData.get(lastrecordindex - info).getInf3() );
                     }
                 }
 
-                arrayInfo.add(jonId);
+                arrayInfo.add(jsonId);
             }
-            jonInfo.put("inf",arrayInfo);
+            jsonInfo.put("inf",arrayInfo);
 
 
        /* for(int i=1;i<=3;++i) {
@@ -124,8 +117,8 @@ public class DownloadFile {
             array.add(new JSONObject(jsonObject));
             jsonObject.clear();*/
 
-            jonInfo.put("file_content",resource1.getByteArray());
-            final_array.add(jonInfo);
+            jsonInfo.put("file_content",resource1.getByteArray());
+            final_array.add(jsonInfo);
 /*
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=reza.mp3");
