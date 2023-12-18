@@ -123,6 +123,7 @@ public class FileStorageService {
             List<String> temp1=sentenceRecognizer.recognizeWords(inf1);
             List<String> temp2=sentenceRecognizer.recognizePos(inf1);
             List<String> temp3=sentenceRecognizer.recognizeNer(inf1);
+            inf2=temp3.toString();
             List<String> temp4=sentenceRecognizer.recognizeLemma(inf1);
             List<String> temp5=sentenceRecognizer.recognizeSentiment(inf1);
 
