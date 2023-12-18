@@ -33,11 +33,12 @@ public class AuthenticationService {
                .build();
        repository.save(user);
        var jwtToken=jwtService.generateToken(user);
-       return AuthenticationResponse.builder()
+       return AuthenticationResponse.builder().build();
+       /*return AuthenticationResponse.builder()
                .token(jwtToken)
                .paramCount("0")
                .paramTime("10")
-               .build();
+               .build();*/
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -49,7 +50,7 @@ public class AuthenticationService {
         );
         var user=repository.findByEmail(request.getEmail())
                 .orElseThrow();
-
+        if (!user.isActive()) return null;
         var jwtToken=jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)

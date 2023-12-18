@@ -77,34 +77,7 @@ public class DownloadFile {
             jsonInfo.put("inf",arrayInfo);
 
 
-       /* for(int i=1;i<=3;++i) {
 
-            for (int j=1;j<=3;++j){
-                jsonObject.put("inf_id",String.valueOf(j));
-                jsonObject.put("inf_text",String.valueOf(j)+"افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلانه به تصمیمات مان فکر کنیم. و به همین دلیل، ارزش ها، روابط و شغل هایی نامناسب نصیب مان می شود. افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد. او دریافته بود که بسیاری از نظرات و قضاوت های ما از تفکرات جامعه نشأت می گیرد، از چیزی که یونانی ها آن را «دوکسا» یا «عقل جمعی حاکم» می نامند. افلاطون در 36 کتابی که نوشت، بارها و بارها نشان داد که این «عقل جمعی حاکم» می تواند پر از اشتباه، تبعیض و خرافه باشد و تفکرات شایع در مورد عشق، شهرت، پول و یا خوبی، چندان با منطق و واقعیت همخوانی ندارند" +
-                        "افلاطون همچنین دریافته بود که چگونه انسان های مغرور، تحت سلطه ی غرایز و احساسات خود هستند و آن ها را با افرادی مقایسه می کرد که توسط اسب هایی وحشی که چشم هایشان پوشانده شده، به این سو و آن سو کشیده می شوند.رویای موجود در پسِ مفهوم عشق این است که می توانیم با نزدیک شدن به چنین افرادی، اندکی مانند آن ها شویم. عشق در نظر افلاطون، نوعی آموزش است. او عقیده دارد کسی که به معنای واقعی کلمه به فردی دیگر عشق می ورزد، تمایل خواهد داشت که توسط معشوق خود به فرد بهتری تبدیل شود. این یعنی شخص باید با کسی باشد که بخشی گمشده از هستی او را در اختیار دارد: ویژگی های خوبی که خودمان از آن ها بی بهره ایم." +
-                        "افلاطون از ما می خواهد این را بپذیریم که کامل نیستیم و تمایل داشته باشیم که ویژگی های خوب دیگران را در خودمان پرورش دهیم. ");
-                arrayInf.set(j-1,new JSONObject(jsonObject));
-
-                jsonObject.clear();
-            }
-
-             arrayInfList.add(arrayInf);
-            jsonObject.put("inf",arrayInfList.get(i-1));
-*/
-           /* userid=usersData.get(lastrecordindex-i).getUserid();
-            if(userid.equals("javadghane18@gmail.com")){
-
-                jsonObject.put("inf1","اطلاعات شماره 1");
-                jsonObject.put("inf2","اطلاعات شماره 2");
-            }
-            else {
-                jsonObject.put("inf1", usersData.get(lastrecordindex - i).getInf1());
-                jsonObject.put("inf2", usersData.get(lastrecordindex - i).getInf2());
-            }
-
-            jsonObject.put("inf3","اطلاعات شماره 3");
-            jsonObject.put("inf4","اطلاعات شماره 4");*/
 
             image = usersData.get(lastrecordindex - info).getFilename();//.indexOf(33)[u].getFilename();
 
@@ -112,22 +85,11 @@ public class DownloadFile {
             Path path1 = Paths.get(filereply1.getAbsolutePath());
             ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
             byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
-/*
-            jsonObject.put("file_content",resource1.getByteArray());
-            array.add(new JSONObject(jsonObject));
-            jsonObject.clear();*/
+
 
             jsonInfo.put("file_content",resource1.getByteArray());
             final_array.add(jsonInfo);
-/*
-        HttpHeaders header = new HttpHeaders();
-        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=reza.mp3");
-        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
-        header.add("Pragma", "no-cache");
-        header.add("Expires", "0");
-*/
 
-            //Path path = Paths.get(filereply.getAbsolutePath());
 
 
         }
@@ -135,43 +97,17 @@ public class DownloadFile {
 
 
 
-        //jsonObject.put("file_content",array);
 
-
-        //jsonObject.put("file_content",array);
-        //jsonObject.put("file_content"+String.valueOf(i),resource1.getByteArray());
-/*
-        FileWriter file = new FileWriter("E:/json_array_output1.json");
-        file.write(jsonObject.toJSONString());
-        file.close();*/
-
-      //  InputStream is = new ByteArrayInputStream(encoder);
-
-        //InputStreamResource resource1 = new InputStreamResource(is);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         ContentDisposition disposition = ContentDisposition.attachment().filename("monshi.mp3").build();
         headers.setContentDisposition(disposition);
-/*
-        ResponseFiles responseFiles=new ResponseFiles();
 
-         responseFiles= ResponseFiles.builder()
-                .file_name(path.getFileName())
-                .file_content(is)
-                .build();*/
 
         return  new ResponseEntity<>(final_array,headers,HttpStatus.OK);
 
-
-
-       // return new ResponseEntity<>(resource1, headers, HttpStatus.OK);
-        /*return ResponseEntity.ok()
-                .headers(header)
-                .contentLength(file.length())
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .body(resource);*/
     }
 
 

@@ -1,5 +1,5 @@
 package com.tdxir.myapp.nlp;
-/*
+
 import edu.stanford.nlp.dcoref.CorefCoreAnnotations;
 import edu.stanford.nlp.ling.CoreAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations;
@@ -14,9 +14,9 @@ import java.util.ArrayList;
 
 import java.util.List;
 import java.util.Properties;
-*/
+
 public class SentenceRecognizer {
-  /*  public List<String> recognizeWords(String text){
+    public List<String> recognizeWords(String text){
 
          // tokenize   make words
         StanfordCoreNLP stanfordCoreNLP =Pipeline.getPipeline();
@@ -117,7 +117,7 @@ public class SentenceRecognizer {
         }
 return stringList;
 
-    }*/
+    }
 }
 
 
