@@ -5,15 +5,14 @@ import edu.stanford.nlp.ling.CoreAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.CoreDocument;
+import edu.stanford.nlp.pipeline.CoreEntityMention;
 import edu.stanford.nlp.pipeline.CoreSentence;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.SocketOption;
-import java.util.ArrayList;
-
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SentenceRecognizer {
     public List<String> recognizeWords(String text){
@@ -54,16 +53,29 @@ public class SentenceRecognizer {
 
          // kind of noun ... city or person ...
         StanfordCoreNLP stanfordCoreNLP =Pipeline.getPipeline();
-        text="I live in Berlin";
-        CoreDocument coreDocument=new CoreDocument(text);
+        text="Obama lives in Berlin";
+        CoreDocument coreDocument=new CoreDocument("Joe Smith is from Seattle.");
         stanfordCoreNLP.annotate(coreDocument);
+        for (CoreEntityMention em : coreDocument.entityMentions())
+            System.out.println("\tdetected entity: \t"+em.text()+"\t"+em.entityType());
+        System.out.println("---");
+        System.out.println("tokens and ner tags");
+        String tokensAndNERTags = coreDocument.tokens().stream().map(token -> "("+token.word()+","+token.ner()+")").collect(
+                Collectors.joining(" "));
+        System.out.println(tokensAndNERTags);
+
         List<CoreLabel> coreLabelList=coreDocument.tokens();
+
         List<String> stringList=new ArrayList<String>();
         for (CoreLabel coreLabel:coreLabelList)
         {
             stringList.add(coreLabel.get(CoreAnnotations.NamedEntityTagAnnotation.class));
             System.out.println(coreLabel.originalText());
+
+
         }
+
+
         return stringList;
 
     }

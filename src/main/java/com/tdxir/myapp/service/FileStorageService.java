@@ -119,13 +119,13 @@ public class FileStorageService {
 
            // inf1="افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلانه به تصمیمات مان فکر کنیم. و به همین دلیل، ارزش ها، روابط و شغل هایی نامناسب نصیب مان می شود. ";
 
-            List<String> temp=sentenceRecognizer.recognizeSentence(inf1);
-            List<String> temp1=sentenceRecognizer.recognizeWords(inf1);
-            List<String> temp2=sentenceRecognizer.recognizePos(inf1);
+          //  List<String> temp=sentenceRecognizer.recognizeSentence(inf1);
+         //   List<String> temp1=sentenceRecognizer.recognizeWords(inf1);
+          //  List<String> temp2=sentenceRecognizer.recognizePos(inf1);
             List<String> temp3=sentenceRecognizer.recognizeNer(inf1);
             inf2=temp3.toString();
-            List<String> temp4=sentenceRecognizer.recognizeLemma(inf1);
-            List<String> temp5=sentenceRecognizer.recognizeSentiment(inf1);
+          //  List<String> temp4=sentenceRecognizer.recognizeLemma(inf1);
+          //  List<String> temp5=sentenceRecognizer.recognizeSentiment(inf1);
 
             /*
             inf2=temp.get(0);
