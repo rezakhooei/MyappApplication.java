@@ -53,11 +53,16 @@ public class SentenceRecognizer {
 
          // kind of noun ... city or person ...
         StanfordCoreNLP stanfordCoreNLP =Pipeline.getPipeline();
-        text="Obama lives in Berlin";
-        CoreDocument coreDocument=new CoreDocument("Joe Smith is from Seattle.");
+        //text="Obama lives in Berlin";
+        CoreDocument coreDocument=new CoreDocument(text);
         stanfordCoreNLP.annotate(coreDocument);
+        List<String> stringList=new ArrayList<String>();
         for (CoreEntityMention em : coreDocument.entityMentions())
+        {
+            stringList.add("\tdetected entity: \t"+em.text()+"\t"+em.entityType());
             System.out.println("\tdetected entity: \t"+em.text()+"\t"+em.entityType());
+        }
+
         System.out.println("---");
         System.out.println("tokens and ner tags");
         String tokensAndNERTags = coreDocument.tokens().stream().map(token -> "("+token.word()+","+token.ner()+")").collect(
@@ -66,7 +71,7 @@ public class SentenceRecognizer {
 
         List<CoreLabel> coreLabelList=coreDocument.tokens();
 
-        List<String> stringList=new ArrayList<String>();
+
         for (CoreLabel coreLabel:coreLabelList)
         {
             stringList.add(coreLabel.get(CoreAnnotations.NamedEntityTagAnnotation.class));
