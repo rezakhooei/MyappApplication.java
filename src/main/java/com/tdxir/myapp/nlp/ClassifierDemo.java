@@ -17,7 +17,7 @@ import edu.stanford.nlp.util.ErasureUtils;
 import edu.stanford.nlp.util.Pair;
 
 public class ClassifierDemo {
-
+/*
     private static String where = "";
 
     private ClassifierDemo() {} // Static methods
@@ -114,5 +114,5 @@ public class ClassifierDemo {
             System.out.printf("%s  =deser=>  %s (%.4f)%n", line, cdc2.classOf(d2), cdc2.scoresOf(d).getCount(cdc2.classOf(d)));
         }
     }
-
+*/
 }

@@ -1,6 +1,7 @@
 package com.tdxir.myapp.controller;
 
 //import com.google.gson.JsonObject;
+import com.tdxir.myapp.nlp.training.MakeTsv;
 import com.tdxir.myapp.service.FileStorageService;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -29,6 +30,7 @@ public class FileUploadController {
 
     private final FileStorageService fileStorageService;
 
+    private  MakeTsv makeTsv;
     private static final String EXTENSION = ".wav";
     private static final String SERVER_LOCATION = "/opt/tomcat/uploads";
 
@@ -60,9 +62,10 @@ public class FileUploadController {
          }
          jsonObjectMain.put("inf",array);
         // array.add(jsonObject);
-
-
-
+/*
+         MakeTsv makeTsv=new MakeTsv();
+         makeTsv.craeteTsv(file);//.getResource().getFile());
+*/
 
         String fileName = fileStorageService.storeFile(file,inf1,inf2,inf3,inf4);
         //fileName="monshi.mp3";

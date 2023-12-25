@@ -5,24 +5,43 @@ package com.tdxir.myapp.nlp;
 //import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import org.springframework.beans.factory.annotation.Value;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 public class Pipeline {
     private   static Properties properties;
-    private  static  String propertiesName="tokenize,ssplit,pos";//"tokenize,ssplit,pos,lemma,ner,parse,sentiment";
+    @Value("${app.file.resource-dir-win}")
+    private   static final   String pathProps = "f://opt/tomcat//resource//";
+    private  static  String propertiesName="tokenize,ssplit,pos,lemma,ner";//,parse,sentiment";
     private static StanfordCoreNLP stanfordCoreNLP;
     private Pipeline(){}
     static {
         properties=new Properties();
         properties.setProperty("annotators",propertiesName);
         properties.setProperty("ner.useSUTime", "false");
-        properties.setProperty("lang","fa");
-        properties.setProperty("pos.model","F:\\opt\\tomcat\\resource\\persian.tagger");//english-left3words-distsim.tagger");//langdetect-183.bin");//"F:\\opt\\tomcat\\resource\\en_ewt_tagger.pt");//
-      //  properties.setProperty("ner.model","F:\\opt\\tomcat\\resource\\englishPCFG.ser");
+        properties.setProperty("lang","en");
+       // properties.setProperty("pos.model","F:\\opt\\tomcat\\resource\\persian.tagger");//english-left3words-distsim.tagger");//langdetect-183.bin");//"F:\\opt\\tomcat\\resource\\en_ewt_tagger.pt");//
+     //   properties.setProperty("ner.model","F:\\opt\\tomcat\\my-nlp\\stanfordexample\\ner-model-kh.ser.gz");
+       //@@@@@@@@@@@@@@  austen.prop
+       /* String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+        String catalogConfigPath = pathProps+ "austen.prop";
+        try {
+            properties.load(new FileInputStream(catalogConfigPath));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }*/
+
+
+        //@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
     }
 
     public static StanfordCoreNLP getPipeline() {
+
+
         if (stanfordCoreNLP==null) {
             stanfordCoreNLP = new StanfordCoreNLP(properties);
         }
