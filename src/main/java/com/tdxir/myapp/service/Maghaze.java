@@ -2,6 +2,7 @@ package com.tdxir.myapp.service;
 
 import com.tdxir.myapp.model.Mahak;
 import com.tdxir.myapp.repository.WkhPostMetaRepository;
+import com.tdxir.myapp.repository.WkhPostsRepository;
 import jakarta.servlet.ServletException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,13 @@ import java.util.List;
 //@RequiredArgsConstructor
 public class Maghaze {
 
-    private  final  WkhPostMetaRepository postMetaRepository;
-    @Autowired
-    public Maghaze(WkhPostMetaRepository postMetaRepository) {
+    private    WkhPostMetaRepository postMetaRepository;
+
+    private   WkhPostsRepository  postsRepository;
+
+    public Maghaze(WkhPostMetaRepository postMetaRepository,WkhPostsRepository postsRepository) {
         this.postMetaRepository = postMetaRepository;
+        this.postsRepository = postsRepository;
     }
 
 
@@ -30,7 +34,7 @@ public class Maghaze {
 
      int numbeforeerror=0;
 
-            File fileNotExist = new File("F:\\personal\\magaze\\filenotexist.txt");//ner_training.tok");
+            File fileNotExist = new File("F:\\personal\\magaze\\mahak-notexist-in-site.txt");//ner_training.tok");
             BufferedWriter buffer = new BufferedWriter(new FileWriter(fileNotExist));
 
             if (!fileNotExist.exists())
@@ -46,6 +50,8 @@ int i=0;
 
                  String stock = String.valueOf(mahak.getStock());
                  String price = String.valueOf(mahak.getPrice());
+
+                 postsRepository.updateName(mahak.getName(),pid);
                  postMetaRepository.updateStock(stock, String.valueOf(pid));
                  postMetaRepository.updatePrice(price, String.valueOf(pid));
                  ++numbeforeerror;
@@ -55,9 +61,12 @@ int i=0;
                  System.out.println("Number doesn't exist                   " + String.valueOf(mahak.getCode()));
                  //throw e;
                 // e.printStackTrace();
+              postsRepository.insertProduct(mahak.getName());
 
-
-                 buffer.write(String.valueOf(mahak.getCode())+"\n");//mahakList.get(numbeforeerror).getCode()) + "\n");
+              postMetaRepository.insertSku(postsRepository.lastId(),String.valueOf(mahak.getCode()));
+              postMetaRepository.insertStock(postsRepository.lastId(),String.valueOf(mahak.getStock()));
+              postMetaRepository.insertPrice(postsRepository.lastId(),String.valueOf(mahak.getPrice()));
+              buffer.write(String.valueOf(mahak.getCode())+"\n");//mahakList.get(numbeforeerror).getCode()) + "\n");
              }
          }
      }

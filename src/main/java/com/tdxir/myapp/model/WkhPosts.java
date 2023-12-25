@@ -19,7 +19,6 @@ public class WkhPosts {
     @Id
     @GeneratedValue
     long id;
-    String post_date;
     String post_title;
     String post_type;
 }

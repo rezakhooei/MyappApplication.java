@@ -27,7 +27,7 @@ public class SiteController {
     private WkhPostMetaRepository wkhPostMetaRepository;
     @PostMapping("/api/updatesite")
     public List<Mahak> updatesite() throws IOException {
-        Maghaze maghaze=new Maghaze(wkhPostMetaRepository);
+        Maghaze maghaze=new Maghaze(wkhPostMetaRepository,wkhPostsRepository);
         List<Mahak> mahakRepositoryList=mahakRepository.findAll();
         maghaze.update(mahakRepositoryList);
         List<WkhPosts> wkhPostsList=wkhPostsRepository.findAll();

@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class wkh_postmeta {
     @Id
     @GeneratedValue
-    long metaid;
+    long meta_id;
     long post_id;
     String meta_key;
     String meta_value;
