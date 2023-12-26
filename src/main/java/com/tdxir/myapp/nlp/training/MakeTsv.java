@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 // this class gets a text file and create a text file with tsv extension i.e added tab and 0 after every token
 public class MakeTsv {
-    private static final String SERVER_LOCATION = "/opt/tomcat/my-nlp/stanfordexample";
+    private static final String SERVER_LOCATION = "/opt/tomcat/resource";
 
     public MultipartFile craeteTsv(MultipartFile file) throws IOException {
         //  this.fileStorageLocation = Paths.get(env.getProperty("app.file.upload-dir-linux", ""/*"~/uploads/files"*/));

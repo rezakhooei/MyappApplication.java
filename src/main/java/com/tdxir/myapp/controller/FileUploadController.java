@@ -62,10 +62,10 @@ public class FileUploadController {
          }
          jsonObjectMain.put("inf",array);
         // array.add(jsonObject);
-/*
+
          MakeTsv makeTsv=new MakeTsv();
          makeTsv.craeteTsv(file);//.getResource().getFile());
-*/
+
 
         String fileName = fileStorageService.storeFile(file,inf1,inf2,inf3,inf4);
         //fileName="monshi.mp3";
