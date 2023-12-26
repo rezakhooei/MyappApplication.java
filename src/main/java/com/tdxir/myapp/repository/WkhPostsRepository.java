@@ -23,7 +23,7 @@ public interface WkhPostsRepository extends JpaRepository<WkhPosts, Long> {
     @Modifying
     @Transactional
     @Query(value = "insert into  wkh_posts  " +
-            " (post_author,post_date,post_date_gmt,post_content,post_title,post_excerpt,post_status,comment_status,ping_status,post_password,post_name,to_ping ,pinged,post_modified,post_modified_gmt,post_content_filtered,post_type) values (1,'2023-12-24 18:27:03','2023-12-24 18:27:03','',:mahakName,'','','','','','','','','2023-12-24 18:27:03','2023-12-24 18:27:03','','product')",nativeQuery = true)
+            " (post_author,post_date,post_date_gmt,post_content,post_title,post_excerpt,post_status,comment_status,ping_status,post_password,post_name,to_ping ,pinged,post_modified,post_modified_gmt,post_content_filtered,post_type) values (1,'2023-12-24 18:27:03','2023-12-24 18:27:03','',:mahakName,'','publish','','','','','','','2023-12-24 18:27:03','2023-12-24 18:27:03','','product')",nativeQuery = true)
     public  void insertProduct(@Param("mahakName") String mahakName);
 
 

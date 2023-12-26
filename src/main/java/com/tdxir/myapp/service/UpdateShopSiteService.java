@@ -3,12 +3,7 @@ package com.tdxir.myapp.service;
 import com.tdxir.myapp.model.Mahak;
 import com.tdxir.myapp.repository.WkhPostMetaRepository;
 import com.tdxir.myapp.repository.WkhPostsRepository;
-import jakarta.servlet.ServletException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,13 +13,13 @@ import java.util.List;
 
 @Service
 //@RequiredArgsConstructor
-public class Maghaze {
+public class UpdateShopSiteService {
 
     private    WkhPostMetaRepository postMetaRepository;
 
     private   WkhPostsRepository  postsRepository;
 
-    public Maghaze(WkhPostMetaRepository postMetaRepository,WkhPostsRepository postsRepository) {
+    public UpdateShopSiteService(WkhPostMetaRepository postMetaRepository, WkhPostsRepository postsRepository) {
         this.postMetaRepository = postMetaRepository;
         this.postsRepository = postsRepository;
     }
@@ -66,6 +61,7 @@ int i=0;
               postMetaRepository.insertSku(postsRepository.lastId(),String.valueOf(mahak.getCode()));
               postMetaRepository.insertStock(postsRepository.lastId(),String.valueOf(mahak.getStock()));
               postMetaRepository.insertPrice(postsRepository.lastId(),String.valueOf(mahak.getPrice()));
+              postMetaRepository.insertRegularPrice(postsRepository.lastId(),String.valueOf(mahak.getPrice()));
               buffer.write(String.valueOf(mahak.getCode())+"\n");//mahakList.get(numbeforeerror).getCode()) + "\n");
              }
          }

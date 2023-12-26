@@ -45,5 +45,9 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Transactional                 //   _price , _sale_price  , _regular_price , wcwp_wholesale
     @Query(value="insert into Wkh_postmeta (post_id,meta_key,meta_value) values (:post_id,'_price',:mahakPrice)",nativeQuery = true)
     public void insertPrice(@Param("post_id") Long postid,@Param("mahakPrice") String mahakPrice);
+    @Modifying
+    @Transactional                 //   _price , _sale_price  , _regular_price , wcwp_wholesale
+    @Query(value="insert into Wkh_postmeta (post_id,meta_key,meta_value) values (:post_id,'_regular_price',:mahakRegularPrice)",nativeQuery = true)
+    public void insertRegularPrice(@Param("post_id") Long postid,@Param("mahakRegularPrice") String mahakRegularPrice);
 
 }

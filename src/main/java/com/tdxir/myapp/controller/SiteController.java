@@ -6,7 +6,7 @@ import com.tdxir.myapp.model.WkhPosts;
 import com.tdxir.myapp.repository.MahakRepository;
 import com.tdxir.myapp.repository.WkhPostMetaRepository;
 import com.tdxir.myapp.repository.WkhPostsRepository;
-import com.tdxir.myapp.service.Maghaze;
+import com.tdxir.myapp.service.UpdateShopSiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +27,9 @@ public class SiteController {
     private WkhPostMetaRepository wkhPostMetaRepository;
     @PostMapping("/api/updatesite")
     public List<Mahak> updatesite() throws IOException {
-        Maghaze maghaze=new Maghaze(wkhPostMetaRepository,wkhPostsRepository);
+        UpdateShopSiteService updateShopSiteService=new UpdateShopSiteService(wkhPostMetaRepository,wkhPostsRepository);
         List<Mahak> mahakRepositoryList=mahakRepository.findAll();
-        maghaze.update(mahakRepositoryList);
+        updateShopSiteService.update(mahakRepositoryList);
         List<WkhPosts> wkhPostsList=wkhPostsRepository.findAll();
         List<wkh_postmeta> wkhPostMetaList=wkhPostMetaRepository.findAll();
 
