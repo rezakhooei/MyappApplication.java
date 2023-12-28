@@ -2,6 +2,7 @@ package com.tdxir.myapp.controller;
 
 //import com.google.gson.JsonObject;
 import com.tdxir.myapp.nlp.training.MakeTsv;
+import com.tdxir.myapp.repository.MahakRepository;
 import com.tdxir.myapp.service.FileStorageService;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -63,7 +64,8 @@ public class FileUploadController {
          jsonObjectMain.put("inf",array);
         // array.add(jsonObject);
 
-         MakeTsv makeTsv=new MakeTsv();
+         MakeTsv makeTsv;//=new MakeTsv(new MahakRepository()) ;
+         makeTsv=new MakeTsv();
          makeTsv.craeteTsv(file);//.getResource().getFile());
 
 

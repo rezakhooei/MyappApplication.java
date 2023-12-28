@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping
 public class MakeModelController {
     MakeNer makeNer=new MakeNer();
-    @PostMapping("/api/nlp")
+    @PostMapping("/api/model")
     public void makemodel(){
         makeNer.trainAndWrite("F:\\opt\\tomcat\\resource\\ner-model.ser.gz","F:\\opt\\tomcat\\resource\\props.txt","F:\\opt\\tomcat\\resource\\stanford_train.txt");
 

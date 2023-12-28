@@ -21,9 +21,9 @@ public class MakeNer {
         Properties props = StringUtils.propFileToProperties(prop);
         props.setProperty("serializeTo", modelOutPath);
         //if input use that, else use from properties file.
-        if (trainingFilepath != null) {
+      /*  if (trainingFilepath != null) {
             props.setProperty("trainFile", trainingFilepath);
-        }
+        }*/
         SeqClassifierFlags flags = new SeqClassifierFlags(props);
         CRFClassifier<CoreLabel> crf = new CRFClassifier<>(flags);
         crf.train();

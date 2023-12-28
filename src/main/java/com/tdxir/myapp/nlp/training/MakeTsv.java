@@ -1,10 +1,14 @@
 package com.tdxir.myapp.nlp.training;
 
+import com.tdxir.myapp.model.Mahak;
 import com.tdxir.myapp.nlp.Pipeline;
+import com.tdxir.myapp.repository.MahakRepository;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.CoreDocument;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -15,8 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 // this class gets a text file and create a text file with tsv extension i.e added tab and 0 after every token
 public class MakeTsv {
+
+
+    @Autowired
+    private MahakRepository mahakRepository;
+
     private static final String SERVER_LOCATION = "/opt/tomcat/resource";
 
     public MultipartFile craeteTsv(MultipartFile file) throws IOException {
@@ -66,7 +76,7 @@ public class MakeTsv {
             BufferedWriter bufferTsv = new BufferedWriter(new FileWriter(fileTsv));
             for (int lenghstr =0;lenghstr<=stringList.size()-1;++lenghstr) {
                 bufferTok.write(stringList.get(lenghstr)+"\n");
-                bufferTsv.write(stringList.get(lenghstr)+"\tO\n");
+                bufferTsv.write(stringList.get(lenghstr)+"\tکالا\n");
                 //buffer.newLine();
                 System.out.println(stringList.get(lenghstr)+"\tO\n");
             }
@@ -86,6 +96,21 @@ public class MakeTsv {
                 Collectors.joining(" "));
         System.out.println(tokensAndNERTags);
         return file;
+
+    }
+    public String pretrain() throws IOException {
+
+        List<Mahak> mahakList= mahakRepository.findAll();
+        File file=new File("f:\\opt\\tomcat\\resource\\pretrainfile.txt");
+        if (!file.exists())
+            file.createNewFile();
+        BufferedWriter bufferTxt=new BufferedWriter(new  FileWriter(file));
+        for(Mahak mL:mahakList)  {
+            String strTemp="کد"+"\tO\n"+String.valueOf(mL.getCode())+"\tcode\n"+"نام"+"\tO\n"+mL.getName()+"\tname\n"+"قیمت"+"\tO\n"+String.valueOf(mL.getPrice())+"\tprice\n"+"تومان"+"\tO\n" +"تعداد"+"\tO\n"+String.valueOf(mL.getStock())+"\tstock\n"+"میباشد"+"\tO\n";
+        bufferTxt.write(strTemp);
+        }
+        bufferTxt.close();
+        return "ok joojoo";
 
     }
 }

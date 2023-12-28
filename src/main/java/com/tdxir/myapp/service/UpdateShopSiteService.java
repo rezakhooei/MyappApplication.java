@@ -3,6 +3,7 @@ package com.tdxir.myapp.service;
 import com.tdxir.myapp.model.Mahak;
 import com.tdxir.myapp.repository.WkhPostMetaRepository;
 import com.tdxir.myapp.repository.WkhPostsRepository;
+import org.junit.jupiter.api.Test;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
@@ -10,6 +11,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Service
 //@RequiredArgsConstructor
