@@ -49,20 +49,23 @@ public class SentenceRecognizer {
         return stringList;
 
     }
-    public List<String> recognizeNer(String text){
+    public ArrayList<String> recognizeNer(String text){
 
          // kind of noun ... city or person ...
         StanfordCoreNLP stanfordCoreNLP =Pipeline.getPipeline();
         //text="Emma lives in Berlin";
         CoreDocument coreDocument=new CoreDocument(text);
         stanfordCoreNLP.annotate(coreDocument);
-        List<String> stringList=new ArrayList<String>();
+        ArrayList<String> stringList=new ArrayList<String>();
+        int i=0;
         for (CoreEntityMention em : coreDocument.entityMentions())
         {
-            stringList.add("\tdetected entity: \t"+em.text()+"\t"+em.entityType());
+            stringList.add(i++,em.text());
+            stringList.add(i++,em.entityType());
+           // stringList.add("\tdetected entity: \t"+em.text()+"\t"+em.entityType());
             System.out.println("\tdetected entity: \t"+em.text()+"\t"+em.entityType());
         }
-
+/*
         System.out.println("---");
         System.out.println("tokens and ner tags");
         String tokensAndNERTags = coreDocument.tokens().stream().map(token -> "("+token.word()+","+token.ner()+")").collect(
@@ -78,7 +81,7 @@ public class SentenceRecognizer {
             System.out.println(coreLabel.originalText());
 
 
-        }
+        }*/
 
 
         return stringList;

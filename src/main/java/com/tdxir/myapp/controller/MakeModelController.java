@@ -11,7 +11,7 @@ public class MakeModelController {
     MakeNer makeNer=new MakeNer();
     @PostMapping("/api/model")
     public void makemodel(){
-        makeNer.trainAndWrite("F:\\opt\\tomcat\\resource\\ner-model.ser.gz","F:\\opt\\tomcat\\resource\\props.txt","F:\\opt\\tomcat\\resource\\stanford_train.txt");
+        makeNer.trainAndWrite("F:\\opt\\tomcat\\resource\\ner-model.ser.gz","F:\\opt\\tomcat\\resource\\props.txt","F:\\opt\\tomcat\\resource\\pretrainfile.txt");
 
     }
 }

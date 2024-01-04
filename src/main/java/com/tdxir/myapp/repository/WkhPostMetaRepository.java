@@ -18,6 +18,9 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Query("select w1.post_id from wkh_postmeta w1 where w1.meta_key='_sku' and w1.meta_value=:mahakCode")
 
         public long post_id (@Param("mahakCode") String mahakCode);
+    @Query("select w1.meta_value from wkh_postmeta w1 where w1.post_id=:post_id and w1.meta_key='_price'")
+
+    public long price (@Param("post_id") String post_id);
 
     @Modifying
     @Transactional

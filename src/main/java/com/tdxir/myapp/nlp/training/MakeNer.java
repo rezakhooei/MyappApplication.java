@@ -5,7 +5,7 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.sequences.SeqClassifierFlags;
 import edu.stanford.nlp.util.StringUtils;
-
+import java.util.regex.*;
 import java.io.File;
 import java.util.Properties;
 
@@ -32,8 +32,23 @@ public class MakeNer {
     public CRFClassifier getModel(String modelPath) {
         return CRFClassifier.getClassifierNoExceptions(modelPath);
     }
-    public void doTagging(CRFClassifier model, String input) {
+    public String doTagging(CRFClassifier model, String input) {
         input = input.trim();
-        System.out.println(input + "=>"  +  model.classifyToString(input));
+
+
+
+        String sentence = "قیمت قابلمه چند دلار است";
+        Pattern pattern = Pattern.compile("قیمت قابلمه (\\d+) دلار");
+        Matcher matcher = pattern.matcher(sentence);
+
+        if (matcher.find()) {
+            String price = matcher.group(1);
+            System.out.println("قیمت قابلمه " + price + " دلار است");
+        }
+
+
+
+       // System.out.println(input + "=>"  +  model.classifyToString(input));
+        return /*input + "=>"  + */ model.classifyToString(input);
     }
 }

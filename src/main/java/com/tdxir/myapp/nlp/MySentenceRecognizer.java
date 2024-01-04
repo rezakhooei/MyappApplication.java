@@ -98,7 +98,7 @@ public class MySentenceRecognizer {
     public List<String> recognizeNer(String text){
 
          // kind of noun ... city or person ...
-        StanfordCoreNLP stanfordCoreNLP =Pipeline.getPipeline();
+        StanfordCoreNLP stanfordCoreNLP =MyPipeline.getPipeline();
         //text="Obama lives in Berlin";
         CoreDocument coreDocument=new CoreDocument(text);
         stanfordCoreNLP.annotate(coreDocument);
