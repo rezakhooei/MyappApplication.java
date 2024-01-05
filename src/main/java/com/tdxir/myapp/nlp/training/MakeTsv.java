@@ -107,13 +107,13 @@ public class MakeTsv {
         BufferedWriter bufferTxt=new BufferedWriter(new  FileWriter(file));
         for(Mahak mL:mahakList)  {
          //   String strTemp="کد"+"\tO\n"+String.valueOf(mL.getCode())+"\tcode\n"+"نام"+"\tO\n"+mL.getName()+"\tname\n"+"قیمت"+"\tO\n"+String.valueOf(mL.getPrice())+"\tprice\n"+"تومان"+"\tO\n" +"تعداد"+"\tO\n"+String.valueOf(mL.getStock())+"\tstock\n"+"میباشد"+"\tO\n";
-         String strTemp="قیمت"+"\tPrice\n"+mL.getName()+"\tNameShop\n"+"چنده"+"\tWhQ\n"+"?"+"\tQsign\n"+//قیمت .. چنده؟
-                        "قیمت"+"\tPrice\n"+mL.getName()+"\tNameShop\n"+"چند"+"\tWhQ\n"+"?"+"\tQsign\n"+//قیمت...چند؟
-                        "قیمت"+"\tPrice\n"+mL.getName()+"\tNameShop\n"+"چقدره"+"\tWhQ\n"+"?"+"\tQsign\n"+//قیمت ....چقدره
-                        mL.getName()+"\tNameShop\n"+"چنده"+"\tWhQ\n"+"قیمتش"+"\tPrice\n"+"?"+"\tQsign\n"+//....چنده قیمتش؟
-                        mL.getName()+"\tNameShop\n"+"چقدره"+"\tWhQ\n"+"قیمتش"+"\tPrice\n"+"?"+"\tQsign\n"+//....چقدره قیمتش؟
-                        mL.getName()+"\tNameShop\n"+"چند"+"\tWhQ\n"+"?"+"\tQsign\n"+//....چند؟
-                        mL.getName()+"\tNameShop\n"+"چنده"+"\tWhQ\n"+"قیمتش"+"\tPrice\n"+"?"+"\tQsign\n";//....چنده قیمتش؟
+         String strTemp="قیمت"+"\tPrice\n"+mL.getName()+"\tNameShop\n"+/*"چنده"+"\tWhQ\n"+*/"?"+"\tQsign\n"+//قیمت .. چنده؟
+                        "قیمت"+"\tPrice\n"+mL.getName()+"\tNameShop\n"+/*"چند"+"\tWhQ\n"+*/"?"+"\tQsign\n"+//قیمت...چند؟
+                        "قیمت"+"\tPrice\n"+mL.getName()+"\tNameShop\n"+/*"چقدره"+"\tWhQ\n"+*/"?"+"\tQsign\n"+//قیمت ....چقدره
+                        mL.getName()+"\tNameShop\n"+/*"چنده"+"\tWhQ\n"+*/"قیمتش"+"\tPrice\n"+"?"+"\tQsign\n"+//....چنده قیمتش؟
+                        mL.getName()+"\tNameShop\n"+/*"چقدره"+"\tWhQ\n"+*/"قیمتش"+"\tPrice\n"+"?"+"\tQsign\n"+//....چقدره قیمتش؟
+                        mL.getName()+"\tNameShop\n"/*+"چند"+"\tWhQ\n"*/+"?"+"\tQsign\n"+//....چند؟
+                        mL.getName()+"\tNameShop\n"/*+"چنده"+"\tWhQ\n"*/+"قیمتش"+"\tPrice\n"+"?"+"\tQsign\n";//....چنده قیمتش؟
 
         bufferTxt.write(strTemp);
         }

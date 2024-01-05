@@ -156,6 +156,7 @@ public class RecordAndProccessMessageService {
         //  message = makeNer.doTagging(model, tests[0]);
         SentenceRecognizer sentenceRecognizer = new SentenceRecognizer();
         ArrayList<String> temp3 = sentenceRecognizer.recognizeNer(message);//tests[0]);
+      //  List<String> temp4 = sentenceRecognizer.recognizePos(message);
         String sentence = "";
         for (int i = 1; i <= temp3.size() - 1; ++i)
         {
@@ -168,8 +169,8 @@ public class RecordAndProccessMessageService {
 //  if sentence is question
         if (matcher1.find())
         {
-            Pattern pattern2 = Pattern.compile("NameShop WhQ");
-            Pattern pattern3 = Pattern.compile("WhQ NameShop");
+            Pattern pattern2 = Pattern.compile("NameShop Price");
+            Pattern pattern3 = Pattern.compile("Price NameShop");
             Matcher matcher2 = pattern2.matcher(sentence);
             Matcher matcher3 = pattern3.matcher(sentence);
             if (matcher2.find() || matcher3.find())
@@ -179,8 +180,8 @@ public class RecordAndProccessMessageService {
                 {
                     String strTemp = new String(temp3.get(++i));
                     if (strTemp.equals("NameShop"))
-                    {
-                        List<String> postIds = wkhPostsRepository.PostId(temp3.get(i - 1)+"%");
+                    {   strTemp=temp3.get(i-1);
+                        List<String> postIds = wkhPostsRepository.PostId("%"+strTemp+"%");
                         if (postIds.size() != 0)
                         {
                             List<String> pricelist = new ArrayList<>();
