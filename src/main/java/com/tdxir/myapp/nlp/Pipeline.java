@@ -13,8 +13,8 @@ import java.util.Properties;
 
 public class Pipeline {
     private   static Properties properties;
-    @Value("${app.file.resource-dir-win}")
-    private   static final   String pathProps = "f://opt/tomcat//resource//";
+   // @Value("${app.file.resource-dir-win}")
+   // private   static final   String pathProps = "f://opt//tomcat//resource//";
     private  static  String propertiesName="tokenize,ssplit,pos,lemma,ner";//,parse,sentiment";
     private static StanfordCoreNLP stanfordCoreNLP;
     private Pipeline(){}
@@ -32,10 +32,10 @@ public class Pipeline {
             properties.load(new FileInputStream(catalogConfigPath));
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }*/
+        }
 
 
-        //@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        //@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
     }
 

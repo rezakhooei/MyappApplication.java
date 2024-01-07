@@ -51,7 +51,7 @@ public class ReciveMessageController {
          String message = recordAndProccessMessageService.storeInfs(file, inf1, inf2, inf3, inf4);
           System.out.println(authentication.getName());
 
-         if(authentication.getName().equals("javadghane18@gmail.com")) {
+         if(!authentication.getName().equals("javadghane18@gmail.com")) {
              JSONObject jsonObjectMain = new JSONObject();
              JSONObject jsonObject = new JSONObject();
              List<String> processList=recordAndProccessMessageService.proccessMessage(message);

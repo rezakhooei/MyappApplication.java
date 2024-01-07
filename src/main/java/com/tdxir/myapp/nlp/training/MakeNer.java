@@ -37,18 +37,7 @@ public class MakeNer {
 
 
 
-        String sentence = "قیمت قابلمه چند دلار است";
-        Pattern pattern = Pattern.compile("قیمت قابلمه (\\d+) دلار");
-        Matcher matcher = pattern.matcher(sentence);
 
-        if (matcher.find()) {
-            String price = matcher.group(1);
-            System.out.println("قیمت قابلمه " + price + " دلار است");
-        }
-
-
-
-       // System.out.println(input + "=>"  +  model.classifyToString(input));
         return /*input + "=>"  + */ model.classifyToString(input);
     }
 }

@@ -62,10 +62,7 @@ public class MakeTsv {
             //File fileTok = new File("f:\\opt\\tomcat\\my-nlp\\stanfordexample\\jane-austen-emma-ch2.tok");//ner_training.tok");
             //File fileTsv = new File("f:\\opt\\tomcat\\my-nlp\\stanfordexample\\jane-austen-emma-ch2.tsv");//ner_training.tsv");
             File fileTsv =new File(SERVER_LOCATION + File.separator + file.getOriginalFilename() +".tsv");
-            /*If file gets created then the createNewFile()
-             * method would return true or if the file is
-             * already present it would return false
-             */
+
 
             if(!fileTok.exists())
                 fileTok.createNewFile();//.createNewFile();

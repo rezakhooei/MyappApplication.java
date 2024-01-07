@@ -13,7 +13,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.tdxir.myapp.model.UsersData;
-import com.tdxir.myapp.nlp.MySentenceRecognizer;
 import com.tdxir.myapp.nlp.SentenceRecognizer;
 import com.tdxir.myapp.nlp.training.MakeNer;
 import com.tdxir.myapp.repository.UsersDataRepository;
@@ -117,8 +116,9 @@ public class RecordAndProccessMessageService {
 
 
             //  String transcription=service.createTranscription(request,filereply).getText();//.createTranscription((request,file).getText();
-           // inf1 = "رژ چنده؟";//transcription;
+            inf1="قیمت رژ چنده؟";//= transcription;
 
+            System.out.println(inf1);
             inf2 = "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد رضا";
 
 
@@ -149,14 +149,28 @@ public class RecordAndProccessMessageService {
         CRFClassifier model;
         model = makeNer.getModel("F:\\opt\\tomcat\\resource\\ner-model.ser.gz");
         // String[] tests = new String[]{"apple watch", "samsung mobile phones", " lcd 52 inch tv"};
-        String[] tests = new String[]{message};//{"فرش قرمز 1500 تومان است","سال 1389 چه سالی بود؟","جیمی ولز نامبیا دسامبر 2001", "من پنکک سفید نمیخوام شانه قرمز میخوام قیمتش چنده؟","برس زرد 1000 تومان است","1000","من"};
+       // String[] tests = new String[]{"قیمت","رژ","چنده", };//"؟","برس زرد 1000 تومان است","1000","من"};
        /* for (String item : tests) {
-            makeNer.doTagging(model, item);
+           System.out.println(makeNer.doTagging(model, item));
         }*/
-        //  message = makeNer.doTagging(model, tests[0]);
-        SentenceRecognizer sentenceRecognizer = new SentenceRecognizer();
-        ArrayList<String> temp3 = sentenceRecognizer.recognizeNer(message);//tests[0]);
-      //  List<String> temp4 = sentenceRecognizer.recognizePos(message);
+          String messageTagged=makeNer.doTagging(model, message);
+        /*SentenceRecognizer sentenceRecognizer = new SentenceRecognizer();
+
+        ArrayList<String> temp3= sentenceRecognizer.recognizeNer(message);////tests[0]);
+        List<String> temp4= sentenceRecognizer.recognizePos(message);*/
+        ArrayList<String> temp3=new ArrayList<>();
+        temp3.clear();
+        String[] substrings = messageTagged.split(" ");
+        for (String s : substrings)
+        {
+            String[] substrings1 = s.split("/");
+            temp3.add(substrings1[0]);
+            temp3.add(substrings1[1]);
+
+            System.out.println(s);
+        }
+
+        //  List<String> temp4 = sentenceRecognizer.recognizePos(message);
         String sentence = "";
         for (int i = 1; i <= temp3.size() - 1; ++i)
         {
@@ -199,7 +213,9 @@ public class RecordAndProccessMessageService {
 
             }
         }
-        return null;
+        ArrayList<String> message1=new ArrayList<String>();
+        message1.add(message);
+        return message1;
     }
 
 }

@@ -65,23 +65,6 @@ public class SentenceRecognizer {
            // stringList.add("\tdetected entity: \t"+em.text()+"\t"+em.entityType());
             System.out.println("\tdetected entity: \t"+em.text()+"\t"+em.entityType());
         }
-/*
-        System.out.println("---");
-        System.out.println("tokens and ner tags");
-        String tokensAndNERTags = coreDocument.tokens().stream().map(token -> "("+token.word()+","+token.ner()+")").collect(
-                Collectors.joining(" "));
-        System.out.println(tokensAndNERTags);
-
-        List<CoreLabel> coreLabelList=coreDocument.tokens();
-
-
-        for (CoreLabel coreLabel:coreLabelList)
-        {
-            stringList.add(coreLabel.get(CoreAnnotations.NamedEntityTagAnnotation.class));
-            System.out.println(coreLabel.originalText());
-
-
-        }*/
 
 
         return stringList;
