@@ -119,15 +119,15 @@ public class RecordAndProccessMessageService {
 
             File filereply = new File(targetLocation.toString());
 
-            if(MyappApplication.WinLinux==1) {
+          //  if(MyappApplication.WinLinux==1) {
 
                inf1="قیمت رژ چنده؟";
-            }
-            else {
+           // }
+          /*  else {
 
                   String transcription=service.createTranscription(request,filereply).getText();//.createTranscription((request,file).getText();
                    inf1= transcription;
-            }
+            }*/
 
 
             System.out.println(inf1);
