@@ -76,11 +76,11 @@ public class ReciveMessageController {
              //inf1="";
              //for (int i=0;i<=5;++i)
 
-             String fileName="monshi.mp3";
+             String fileName="receivedmessage.wav";//"monshi.mp3";
             // inf1 = "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد";
              UploadResponse uploadResponse = new UploadResponse(fileName, inf1, inf2, inf3, inf4);
 
-             String image = "file";//fileName;//"file";
+             String image = fileName;//"file";
              File filereply = new File(SERVER_LOCATION + File.separator + image);//+ EXTENSION);
 
              HttpHeaders header = new HttpHeaders();

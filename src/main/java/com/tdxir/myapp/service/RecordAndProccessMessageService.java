@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.tdxir.myapp.MyappApplication;
 import com.tdxir.myapp.model.UsersData;
 import com.tdxir.myapp.nlp.SentenceRecognizer;
 import com.tdxir.myapp.nlp.training.MakeNer;
@@ -37,6 +38,10 @@ public class RecordAndProccessMessageService {
     private ChatGPTService serviceSpeecToText;
     @Value("${openai.api.key}")
     private String apikey;
+    @Value("${app.file.resource-dir-win}")
+    private String pathWin;
+    @Value("${app.file.resource-dir-linux}")
+    private String pathLinux;
     private final Path fileStorageLocation;
 
     //private final UsersDataRepository repository;
@@ -114,9 +119,16 @@ public class RecordAndProccessMessageService {
 
             File filereply = new File(targetLocation.toString());
 
+            if(MyappApplication.WinLinux==1) {
 
-            //  String transcription=service.createTranscription(request,filereply).getText();//.createTranscription((request,file).getText();
-            inf1="قیمت رژ چنده؟";//= transcription;
+               inf1="قیمت رژ چنده؟";
+            }
+            else {
+
+                  String transcription=service.createTranscription(request,filereply).getText();//.createTranscription((request,file).getText();
+                   inf1= transcription;
+            }
+
 
             System.out.println(inf1);
             inf2 = "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد رضا";
@@ -147,7 +159,14 @@ public class RecordAndProccessMessageService {
     public List<String> proccessMessage(String message) {
         MakeNer makeNer = new MakeNer();
         CRFClassifier model;
-        model = makeNer.getModel("F:\\opt\\tomcat\\resource\\ner-model.ser.gz");
+        if(MyappApplication.WinLinux==1) {
+
+            model = makeNer.getModel(pathWin+"ner-model.ser.gz");
+        }
+        else {
+
+            model = makeNer.getModel(pathLinux+"ner-model.ser.gz");
+        }
         // String[] tests = new String[]{"apple watch", "samsung mobile phones", " lcd 52 inch tv"};
        // String[] tests = new String[]{"قیمت","رژ","چنده", };//"؟","برس زرد 1000 تومان است","1000","من"};
        /* for (String item : tests) {

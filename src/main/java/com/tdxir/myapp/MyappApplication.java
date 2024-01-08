@@ -13,6 +13,7 @@ public class MyappApplication extends SpringBootServletInitializer {
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder){
 		return builder.sources(MyappApplication.class);
 	}
+	public static final int WinLinux=0;//  0 for linux  1 for windows
 	public static void main(String[] args) {
 		SpringApplication.run(MyappApplication.class, args);
 	}
