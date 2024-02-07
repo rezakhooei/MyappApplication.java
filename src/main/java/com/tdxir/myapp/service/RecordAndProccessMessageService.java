@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.tdxir.myapp.MyappApplication;
+import com.tdxir.myapp.auth.OpenApiKeyValidation;
 import com.tdxir.myapp.model.UsersData;
 import com.tdxir.myapp.nlp.SentenceRecognizer;
 import com.tdxir.myapp.nlp.training.MakeNer;
@@ -32,12 +33,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class RecordAndProccessMessageService {
+
     @Autowired
     private ChatGPTService chatGPTService;
     @Autowired
     private ChatGPTService serviceSpeecToText;
     @Value("${openai.api.key}")
     private String apikey;
+    @Autowired
+    private OpenApiKeyValidation openApiKeyValidation;
     @Value("${app.file.resource-dir-win}")
     private String pathWin;
     @Value("${app.file.resource-dir-linux}")
@@ -90,11 +94,7 @@ public class RecordAndProccessMessageService {
         fileName = authentication.getName() + '-' + date_str + '-' + fileName;
 
         //openAi API key="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"
-        OpenAiService service = new OpenAiService(apikey);
 
-        CreateTranscriptionRequest request = new CreateTranscriptionRequest();
-        request.setModel("whisper-1");//gpt-3.5-turbo
-        request.setLanguage("FA");
 
         // String output =    new Date().getTime() + "-file." + getFileExtension(file.getOriginalFilename());
 /*
@@ -120,12 +120,25 @@ public class RecordAndProccessMessageService {
 
             if(MyappApplication.WinLinux==1) {
 
-               inf1="قیمت رژ چنده؟";
+               inf1=inf1;//"قیمت رژ چنده؟"
             }
             else {
+               try //if(openApiKeyValidation.checkApi(apikey))
 
+                {
+                    OpenAiService service = new OpenAiService(apikey);
+
+                    CreateTranscriptionRequest request = new CreateTranscriptionRequest();
+                    request.setModel("whisper-1");//gpt-3.5-turbo
+                    request.setLanguage("FA");
                   String transcription=service.createTranscription(request,filereply).getText();//.createTranscription((request,file).getText();
                    inf1= transcription;
+                }
+               catch (Exception e) {
+                   inf3 = "apikey not valid";
+               }
+
+
             }
 
 
@@ -172,10 +185,10 @@ public class RecordAndProccessMessageService {
            System.out.println(makeNer.doTagging(model, item));
         }*/
           String messageTagged=makeNer.doTagging(model, message);
-        /*SentenceRecognizer sentenceRecognizer = new SentenceRecognizer();
+        SentenceRecognizer sentenceRecognizer = new SentenceRecognizer();
 
-        ArrayList<String> temp3= sentenceRecognizer.recognizeNer(message);////tests[0]);
-        List<String> temp4= sentenceRecognizer.recognizePos(message);*/
+        ArrayList<String> temp33= sentenceRecognizer.recognizeNer(message);////tests[0]);
+        List<String> temp4= sentenceRecognizer.recognizePos(message);
         ArrayList<String> temp3=new ArrayList<>();
         temp3.clear();
         String[] substrings = messageTagged.split(" ");
@@ -187,22 +200,26 @@ public class RecordAndProccessMessageService {
 
             System.out.println(s);
         }
-
-        //  List<String> temp4 = sentenceRecognizer.recognizePos(message);
+        for(int i=0;i<temp3.size();++i)
+        if (String.valueOf(temp3.get(i))!=String.valueOf(temp33.get(i))) {
+            System.out.println(String.valueOf(i) +temp3.get(i)+","+temp33.get(i)+ "error");
+        }
+        //  List<String> temp44 = sentenceRecognizer.recognizePos(message);
+      //  List<String> temp444 = sentenceRecognizer.recognizeWords(message);
         String sentence = "";
         for (int i = 1; i <= temp3.size() - 1; ++i)
         {
             sentence += temp3.get(i++);
             sentence += " ";
         }
-        Pattern pattern1 = Pattern.compile("Qsign");
+        Pattern pattern1 = Pattern.compile("علامت");
 
         Matcher matcher1 = pattern1.matcher(sentence);
 //  if sentence is question
         if (matcher1.find())
         {
-            Pattern pattern2 = Pattern.compile("NameShop Price");
-            Pattern pattern3 = Pattern.compile("Price NameShop");
+            Pattern pattern2 = Pattern.compile("نام گیمت");
+            Pattern pattern3 = Pattern.compile("گیمت نام");
             Matcher matcher2 = pattern2.matcher(sentence);
             Matcher matcher3 = pattern3.matcher(sentence);
             if (matcher2.find() || matcher3.find())
@@ -211,7 +228,7 @@ public class RecordAndProccessMessageService {
                 for (int i = 0; i <= temp3.size() - 1; ++i)
                 {
                     String strTemp = new String(temp3.get(++i));
-                    if (strTemp.equals("NameShop"))
+                    if (strTemp.equals("نام"))
                     {   strTemp=temp3.get(i-1);
                         List<String> postIds = wkhPostsRepository.PostId("%"+strTemp+"%");
                         if (postIds.size() != 0)
@@ -233,7 +250,7 @@ public class RecordAndProccessMessageService {
         }
         ArrayList<String> message1=new ArrayList<String>();
         message1.add(message);
-        return message1;
+        return temp3;//message1;
     }
 
 }

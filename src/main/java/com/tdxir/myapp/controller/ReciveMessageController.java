@@ -2,9 +2,11 @@ package com.tdxir.myapp.controller;
 
 //import com.google.gson.JsonObject;
 import com.tdxir.myapp.nlp.training.MakeTsv;
+import com.tdxir.myapp.service.GoogleSpeech;
 import com.tdxir.myapp.service.RecordAndProccessMessageService;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
@@ -32,6 +34,7 @@ public class ReciveMessageController {
 
     private final RecordAndProccessMessageService recordAndProccessMessageService;
 
+    private final GoogleSpeech googleSpeech = new GoogleSpeech();
     private  MakeTsv makeTsv;
     private static final String EXTENSION = ".wav";
     private static final String SERVER_LOCATION = "/opt/tomcat/uploads";
@@ -44,14 +47,17 @@ public class ReciveMessageController {
     @PostMapping
     public ResponseEntity<JSONObject> uploadFile(
             @RequestParam(name = "file", required = false) MultipartFile file,
-            @RequestParam("inf1") String inf1 ,@RequestParam("inf2") String inf2,@RequestParam("inf3") String inf3,@RequestParam("inf4") String inf4 )throws IOException
-     {
+            @RequestParam("inf1") String inf1 ,@RequestParam("inf2") String inf2,@RequestParam("inf3") String inf3,@RequestParam("inf4") String inf4 ) throws Exception
+     {   //googleSpeech.initialize();
+
+         String strTemp=googleSpeech.transcribeSpeech("f:\\opt\\tomcat\\uploads\\reza@yahoo.com-20231204002912-file1.mp3");//receivedmessage.wav");
 
          Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
          String message = recordAndProccessMessageService.storeInfs(file, inf1, inf2, inf3, inf4);
           System.out.println(authentication.getName());
 
-         if(!authentication.getName().equals("javadghane18@gmail.com")) {
+
+        if(!authentication.getName().equals("javadghane18@gmail.com")) {
              JSONObject jsonObjectMain = new JSONObject();
              JSONObject jsonObject = new JSONObject();
              List<String> processList=recordAndProccessMessageService.proccessMessage(message);

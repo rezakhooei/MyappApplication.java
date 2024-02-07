@@ -37,7 +37,7 @@ public class MakeNer {
 
 
 
-
+        
         return /*input + "=>"  + */ model.classifyToString(input);
     }
 }

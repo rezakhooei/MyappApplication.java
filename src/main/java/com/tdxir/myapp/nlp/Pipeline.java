@@ -23,7 +23,7 @@ public class Pipeline {
         properties.setProperty("annotators",propertiesName);
         properties.setProperty("ner.useSUTime", "false");
         properties.setProperty("lang","fa");
-        properties.setProperty("pos.model","F:\\opt\\tomcat\\resource\\persian.tagger");//english-left3words-distsim.tagger");//langdetect-183.bin");//"F:\\opt\\tomcat\\resource\\en_ewt_tagger.pt");//
+        //properties.setProperty("pos.model","F:\\opt\\tomcat\\resource\\persian.tagger");//english-left3words-distsim.tagger");//langdetect-183.bin");//"F:\\opt\\tomcat\\resource\\en_ewt_tagger.pt");//
         properties.setProperty("ner.model","F:\\opt\\tomcat\\resource\\ner-model.ser.gz");
        //@@@@@@@@@@@@@@  austen.prop
        /* String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
