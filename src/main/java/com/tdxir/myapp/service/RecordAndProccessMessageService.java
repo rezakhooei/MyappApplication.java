@@ -263,6 +263,7 @@ if(inf1 != "apikey not valid") {
             }
         }*/
         ArrayList<String> message1=new ArrayList<String>();
+
         message1.add(message);
         return message1;//temp3;
     }
