@@ -33,7 +33,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class RecordAndProccessMessageService {
-
+    @Autowired
+    private final GoogleSpeech googleSpeech = new GoogleSpeech();
     @Autowired
     private ChatGPTService chatGPTService;
     @Autowired
@@ -120,9 +121,14 @@ public class RecordAndProccessMessageService {
 
             if(MyappApplication.WinLinux==1) {
 
-               inf1=inf1;//"قیمت رژ چنده؟"
+               inf1=inf1;//googleSpeech.transcribeSpeech(filereply);
+
+
+              // "قیمت رژ چنده؟";
             }
             else {
+                //  @@@@    below code is for using openAI Speech to text
+                /*
                try //if(openApiKeyValidation.checkApi(apikey))
 
                 {
@@ -132,10 +138,21 @@ public class RecordAndProccessMessageService {
                     request.setModel("whisper-1");//gpt-3.5-turbo
                     request.setLanguage("FA");
                   String transcription=service.createTranscription(request,filereply).getText();//.createTranscription((request,file).getText();
+                    String strTemp=googleSpeech.transcribeSpeech("f:\\opt\\tomcat\\uploads\\reza@yahoo.com-20231204002912-file1.mp3");//receivedmessage.wav");
                    inf1= transcription;
+                }*/
+                //  @@@ below code is for using GOOGLE Speech to text instead of above code
+
+               try
+
+                {
+
+
+                    inf1=inf1;//googleSpeech.transcribeSpeech(filereply);
+
                 }
                catch (Exception e) {
-                   inf3 = "apikey not valid";
+                   inf1 = "apikey not valid";
                }
 
 
@@ -145,21 +162,21 @@ public class RecordAndProccessMessageService {
             System.out.println(inf1);
             inf2 = "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد رضا";
 
+if(inf1 != "apikey not valid") {
+    var userData = UsersData.builder()
 
-            var userData = UsersData.builder()
+            .date(date)
+            .userid(authentication.getName())
+            .filename(fileName)
+            .inf1(inf1)
+            .inf2(inf2)
+            .inf3(inf3)
+            .inf4(inf4)
+            .build();
+    //userData.setUserid(authentication.getName());
+    usersDataRepository.save(userData);// repository.save(userData);
 
-                    .date(date)
-                    .userid(authentication.getName())
-                    .filename(fileName)
-                    .inf1(inf1)
-                    .inf2(inf2)
-                    .inf3(inf3)
-                    .inf4(inf4)
-                    .build();
-            //userData.setUserid(authentication.getName());
-            usersDataRepository.save(userData);// repository.save(userData);
-
-
+                      }
             // till record db
 
             return inf1;//fileName;
@@ -200,26 +217,26 @@ public class RecordAndProccessMessageService {
 
             System.out.println(s);
         }
-        for(int i=0;i<temp3.size();++i)
+        // قطعه زیر برای چک makener.doTaging  و recognizener بود که موقتا حذف شد
+   /*     for(int i=0;i<temp3.size();++i)
         if (String.valueOf(temp3.get(i))!=String.valueOf(temp33.get(i))) {
             System.out.println(String.valueOf(i) +temp3.get(i)+","+temp33.get(i)+ "error");
         }
-        //  List<String> temp44 = sentenceRecognizer.recognizePos(message);
-      //  List<String> temp444 = sentenceRecognizer.recognizeWords(message);
+*/
         String sentence = "";
         for (int i = 1; i <= temp3.size() - 1; ++i)
         {
             sentence += temp3.get(i++);
             sentence += " ";
         }
-        Pattern pattern1 = Pattern.compile("علامت");
+        Pattern pattern1 = Pattern.compile("Qsign");
 
         Matcher matcher1 = pattern1.matcher(sentence);
 //  if sentence is question
         if (matcher1.find())
         {
-            Pattern pattern2 = Pattern.compile("نام گیمت");
-            Pattern pattern3 = Pattern.compile("گیمت نام");
+            Pattern pattern2 = Pattern.compile("NameShop Price");
+            Pattern pattern3 = Pattern.compile("Price NameShop");
             Matcher matcher2 = pattern2.matcher(sentence);
             Matcher matcher3 = pattern3.matcher(sentence);
             if (matcher2.find() || matcher3.find())
@@ -228,7 +245,7 @@ public class RecordAndProccessMessageService {
                 for (int i = 0; i <= temp3.size() - 1; ++i)
                 {
                     String strTemp = new String(temp3.get(++i));
-                    if (strTemp.equals("نام"))
+                    if (strTemp.equals("NameShop"))
                     {   strTemp=temp3.get(i-1);
                         List<String> postIds = wkhPostsRepository.PostId("%"+strTemp+"%");
                         if (postIds.size() != 0)

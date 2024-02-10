@@ -50,14 +50,14 @@ public class ReciveMessageController {
             @RequestParam("inf1") String inf1 ,@RequestParam("inf2") String inf2,@RequestParam("inf3") String inf3,@RequestParam("inf4") String inf4 ) throws Exception
      {   //googleSpeech.initialize();
 
-         String strTemp=googleSpeech.transcribeSpeech("f:\\opt\\tomcat\\uploads\\reza@yahoo.com-20231204002912-file1.mp3");//receivedmessage.wav");
+
 
          Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
          String message = recordAndProccessMessageService.storeInfs(file, inf1, inf2, inf3, inf4);
           System.out.println(authentication.getName());
 
 
-        if(!authentication.getName().equals("javadghane18@gmail.com")) {
+        if(!authentication.getName().equals("javadghane18@gmail.com")&&(message != "apikey not valid")) {
              JSONObject jsonObjectMain = new JSONObject();
              JSONObject jsonObject = new JSONObject();
              List<String> processList=recordAndProccessMessageService.proccessMessage(message);
