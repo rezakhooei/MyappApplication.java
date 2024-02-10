@@ -186,7 +186,7 @@ if(inf1 != "apikey not valid") {
     }
 
     public List<String> proccessMessage(String message) {
-        MakeNer makeNer = new MakeNer();
+      /* MakeNer makeNer = new MakeNer();
         CRFClassifier model;
         if(MyappApplication.WinLinux==1) {
 
@@ -196,11 +196,7 @@ if(inf1 != "apikey not valid") {
 
             model = makeNer.getModel(pathLinux+"ner-model.ser.gz");
         }
-        // String[] tests = new String[]{"apple watch", "samsung mobile phones", " lcd 52 inch tv"};
-       // String[] tests = new String[]{"قیمت","رژ","چنده", };//"؟","برس زرد 1000 تومان است","1000","من"};
-       /* for (String item : tests) {
-           System.out.println(makeNer.doTagging(model, item));
-        }*/
+
           String messageTagged=makeNer.doTagging(model, message);
         SentenceRecognizer sentenceRecognizer = new SentenceRecognizer();
 
@@ -216,13 +212,14 @@ if(inf1 != "apikey not valid") {
             temp3.add(substrings1[1]);
 
             System.out.println(s);
-        }
+        }*/
         // قطعه زیر برای چک makener.doTaging  و recognizener بود که موقتا حذف شد
    /*     for(int i=0;i<temp3.size();++i)
         if (String.valueOf(temp3.get(i))!=String.valueOf(temp33.get(i))) {
             System.out.println(String.valueOf(i) +temp3.get(i)+","+temp33.get(i)+ "error");
         }
 */
+        /*
         String sentence = "";
         for (int i = 1; i <= temp3.size() - 1; ++i)
         {
@@ -264,10 +261,10 @@ if(inf1 != "apikey not valid") {
 
 
             }
-        }
+        }*/
         ArrayList<String> message1=new ArrayList<String>();
         message1.add(message);
-        return temp3;//message1;
+        return message1;//temp3;
     }
 
 }
