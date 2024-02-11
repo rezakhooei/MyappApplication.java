@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class Pipeline {
+
     private   static Properties properties;
    // @Value("${app.file.resource-dir-win}")
    // private   static final   String pathProps = "f://opt//tomcat//resource//";
@@ -20,6 +21,7 @@ public class Pipeline {
     private static StanfordCoreNLP stanfordCoreNLP;
     private Pipeline(){}
     static {
+
         properties=new Properties();
         properties.setProperty("annotators",propertiesName);
         properties.setProperty("ner.useSUTime", "false");

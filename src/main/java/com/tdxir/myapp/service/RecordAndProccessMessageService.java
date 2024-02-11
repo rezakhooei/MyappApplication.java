@@ -148,7 +148,7 @@ public class RecordAndProccessMessageService {
                 {
 
 
-                    inf1=inf1;//googleSpeech.transcribeSpeech(filereply);
+                    inf1=googleSpeech.transcribeSpeech(filereply);
 
                 }
                catch (Exception e) {
@@ -268,7 +268,7 @@ if(inf1 != "apikey not valid") {
         ArrayList<String> message1=new ArrayList<String>();
         System.out.println("for test github");
         message1.add(message);
-        return temp3;//message1;
+        return message1;//temp3;
     }
 
 }
