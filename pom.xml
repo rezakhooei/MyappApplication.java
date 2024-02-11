@@ -145,6 +145,11 @@
                 <version>4.5.5</version>
                 <classifier>models</classifier>
             </dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.10.0</version>
+		</dependency>
 		<!--<dependency>
 			<groupId>edu.stanford.nlp</groupId>
 			<artifactId>stanford-persian-ner</artifactId>
