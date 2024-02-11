@@ -244,11 +244,7 @@ if(inf1 != "apikey not valid") {
                     String strTemp = new String(temp3.get(++i));
                     if (strTemp.equals("NameShop"))
                     {   strTemp=temp3.get(i-1);
-                        ArrayList<String> message1=new ArrayList<String>();
-                        System.out.println("for test github");
-                        message1.add(message);
-                        return temp3;//message1;
-                        /*
+
                         List<String> postIds = wkhPostsRepository.PostId("%"+strTemp+"%");
 
                         if (postIds.size() != 0)
@@ -261,7 +257,7 @@ if(inf1 != "apikey not valid") {
                             }
                             return pricelist;
                         }
-                        */
+
                     }
 
                 }
