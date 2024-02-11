@@ -188,7 +188,7 @@ if(inf1 != "apikey not valid") {
     public List<String> proccessMessage(String message) {
        MakeNer makeNer = new MakeNer();
         CRFClassifier model;
-      /*  if(MyappApplication.WinLinux==1) {
+       if(MyappApplication.WinLinux==1) {
 
             model = makeNer.getModel(pathWin+"ner-model.ser.gz");
         }
@@ -196,8 +196,8 @@ if(inf1 != "apikey not valid") {
 
             model = makeNer.getModel(pathLinux+"ner-model.ser.gz");
         }
-*/
-          String messageTagged="قیمت/Price مو/NameShop چنده/O ?/Qsign";//makeNer.doTagging(model, message);
+
+          String messageTagged=makeNer.doTagging(model, message);//"قیمت/Price مو/NameShop چنده/O ?/Qsign";
         SentenceRecognizer sentenceRecognizer = new SentenceRecognizer();
 
         ArrayList<String> temp33= sentenceRecognizer.recognizeNer(message);////tests[0]);
@@ -244,7 +244,13 @@ if(inf1 != "apikey not valid") {
                     String strTemp = new String(temp3.get(++i));
                     if (strTemp.equals("NameShop"))
                     {   strTemp=temp3.get(i-1);
+                        ArrayList<String> message1=new ArrayList<String>();
+                        System.out.println("for test github");
+                        message1.add(message);
+                        return temp3;//message1;
+                        /*
                         List<String> postIds = wkhPostsRepository.PostId("%"+strTemp+"%");
+
                         if (postIds.size() != 0)
                         {
                             List<String> pricelist = new ArrayList<>();
@@ -255,6 +261,7 @@ if(inf1 != "apikey not valid") {
                             }
                             return pricelist;
                         }
+                        */
                     }
 
                 }

@@ -4,6 +4,7 @@ package com.tdxir.myapp.nlp;
 
 //import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
+import com.tdxir.myapp.MyappApplication;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -24,7 +25,12 @@ public class Pipeline {
         properties.setProperty("ner.useSUTime", "false");
         properties.setProperty("lang","fa");
         //properties.setProperty("pos.model","F:\\opt\\tomcat\\resource\\persian.tagger");//english-left3words-distsim.tagger");//langdetect-183.bin");//"F:\\opt\\tomcat\\resource\\en_ewt_tagger.pt");//
-        properties.setProperty("ner.model","F:\\opt\\tomcat\\resource\\ner-model.ser.gz");
+        if(MyappApplication.WinLinux==1) {
+            properties.setProperty("ner.model", "F:\\opt\\tomcat\\resource\\ner-model.ser.gz");
+        }
+        else{
+            properties.setProperty("ner.model", "/opt/tomcat/resource/ner-model.ser.gz");
+        }
        //@@@@@@@@@@@@@@  austen.prop
        /* String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
         String catalogConfigPath = pathProps+ "austen.prop";
