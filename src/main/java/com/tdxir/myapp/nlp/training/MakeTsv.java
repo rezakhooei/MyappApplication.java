@@ -104,13 +104,27 @@ public class MakeTsv {
         BufferedWriter bufferTxt=new BufferedWriter(new  FileWriter(file));
         for(Mahak mL:mahakList)  {
          //   String strTemp="کد"+"\tO\n"+String.valueOf(mL.getCode())+"\tcode\n"+"نام"+"\tO\n"+mL.getName()+"\tname\n"+"قیمت"+"\tO\n"+String.valueOf(mL.getPrice())+"\tprice\n"+"تومان"+"\tO\n" +"تعداد"+"\tO\n"+String.valueOf(mL.getStock())+"\tstock\n"+"میباشد"+"\tO\n";
-         String strTemp="قیمت"+"\tPrice\n"+mL.getName()+"\tProduct\n"+"چنده"+"\tO\n"+"?"+"\tQsign\n"+"\n"+//قیمت .. چنده؟
-                        "قیمت"+"\tPrice\n"+mL.getName()+"\tProduct\n"+"چند"+"\tO\n"+"?"+"\tQsign\n"+"\n"+//قیمت...چند؟
-                        "قیمت"+"\tPrice\n"+mL.getName()+"\tProduct\n"+"چقدره"+"\tO\n"+"?"+"\tQsign\n"+"\n"+//قیمت ....چقدره
-                        mL.getName()+"\tProduct\n"+"چنده"+"\tO\n"+"قیمتش"+"\tPrice\n"+"?"+"\tQsign\n"+"\n"+//....چنده قیمتش؟
-                        mL.getName()+"\tProduct\n"+"چقدره"+"\tO\n"+"قیمتش"+"\tPrice\n"+"?"+"\tQsign\n"+"\n"+//....چقدره قیمتش؟
-                        mL.getName()+"\tProduct\n"+"چند"+"\tO\n"+"?"+"\tQsign\n"+"\n"+//....چند؟
-                        mL.getName()+"\tProduct\n"+"چنده"+"\tO\n"+"قیمتش"+"\tPrice\n"+"?"+"\tQsign\n"+"\n";//....چنده قیمتش؟
+         String strTemp="قیمت"+"\tPrice\n"+mL.getName()+"\tProduct\n"+"چنده"+"\tO\n"+"؟"+"\tQsign\n"+"\n"+//قیمت .. چنده؟
+                        "قیمت"+"\tPrice\n"+mL.getCode()+"\tCode\n"+"چنده"+"\tO\n"+"؟"+"\tQsign\n"+"\n"+//قیمت .. چنده؟
+                        "نام"+"\tName\n"+mL.getCode()+"\tCode\n"+"چیه"+"\tO\n"+"؟"+"\tQsign\n"+"\n"+
+                        "تعداد"+"\tStock\n"+mL.getCode()+"\tCode\n"+"چنده"+"\tO\n"+"؟"+"\tQsign\n"+"\n"+
+                        "عکس"+"\tPic\n"+mL.getCode()+"\tCode\n"+"چنده"+"\tO\n"+"؟"+"\tQsign\n"+"\n"+
+                        "تصویر"+"\tPic\n"+mL.getCode()+"\tCode\n"+"چنده"+"\tO\n"+"؟"+"\tQsign\n"+"\n"+
+                        "اسم"+"\tName\n"+mL.getCode()+"\tCode\n"+"چیه"+"\tO\n"+"؟"+"\tQsign\n"+"\n"+
+                        "موجودی"+"\tStock\n"+mL.getCode()+"\tCode\n"+"چنده"+"\tO\n"+"؟"+"\tQsign\n"+"\n"+
+
+                        "قیمت"+"\tPrice\n"+mL.getName()+"\tProduct\n"+"چند"+"\tO\n"+"؟"+"\tQsign\n"+"\n"+//قیمت...چند؟
+                        "قیمت"+"\tPrice\n"+mL.getCode()+"\tCode\n"+"چند"+"\tO\n"+"؟"+"\tQsign\n"+"\n"+//قیمت...چند؟
+                        "قیمت"+"\tPrice\n"+mL.getName()+"\tProduct\n"+"چقدره"+"\tO\n"+"؟"+"\tQsign\n"+"\n"+//قیمت ....چقدره
+                        "قیمت"+"\tPrice\n"+mL.getCode()+"\tCode\n"+"چقدره"+"\tO\n"+"؟"+"\tQsign\n"+"\n"+//قیمت ....چقدره
+                        mL.getName()+"\tProduct\n"+"چنده"+"\tO\n"+"قیمتش"+"\tPrice\n"+"؟"+"\tQsign\n"+"\n"+//....چنده قیمتش؟
+                        mL.getCode()+"\tCode\n"+"چنده"+"\tO\n"+"قیمتش"+"\tPrice\n"+"؟"+"\tQsign\n"+"\n"+//....چنده قیمتش؟
+                        mL.getName()+"\tProduct\n"+"چقدره"+"\tO\n"+"قیمتش"+"\tPrice\n"+"؟"+"\tQsign\n"+"\n"+//....چقدره قیمتش؟
+                        mL.getCode()+"\tCode\n"+"چقدره"+"\tO\n"+"قیمتش"+"\tPrice\n"+"؟"+"\tQsign\n"+"\n"+//....چقدره قیمتش؟
+                        mL.getName()+"\tProduct\n"+"چند"+"\tO\n"+"؟"+"\tQsign\n"+"\n"+//....چند؟
+                        mL.getCode()+"\tCode\n"+"چند"+"\tO\n"+"؟"+"\tQsign\n"+"\n"+//....چند؟
+                        mL.getName()+"\tProduct\n"+"چنده"+"\tO\n"+"قیمتش"+"\tPrice\n"+"؟"+"\tQsign\n"+"\n"+//....چنده قیمتش؟
+                        mL.getCode()+"\tCode\n"+"چنده"+"\tO\n"+"قیمتش"+"\tPrice\n"+"؟"+"\tQsign\n"+"\n";//....چنده قیمتش؟
 
         bufferTxt.write(strTemp);
         }

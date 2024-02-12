@@ -213,12 +213,16 @@ if(inf1 != "apikey not valid") {
 
             System.out.println(s);
         }
-        // قطعه زیر برای چک makener.doTaging  و recognizener بود که موقتا حذف شد
-   /*     for(int i=0;i<temp3.size();++i)
+        // قطعه زیر برای چک makener.doTaging  و recognizener بود که موقتا حذف نشد
+       for(int i=0;i<temp3.size();++i)
         if (String.valueOf(temp3.get(i))!=String.valueOf(temp33.get(i))) {
-            System.out.println(String.valueOf(i) +temp3.get(i)+","+temp33.get(i)+ "error");
+            ArrayList<String> message1=new ArrayList<String>();
+            System.out.println("for test ner and dotag");
+            message1.add(String.valueOf(i) +temp3.get(i)+","+temp33.get(i)+ "doTagging with ner difference error");
+            return message1;//temp3;
+
         }
-*/
+
 
         String sentence = "";
         for (int i = 1; i <= temp3.size() - 1; ++i)
@@ -232,8 +236,8 @@ if(inf1 != "apikey not valid") {
 //  if sentence is question
         if (matcher1.find())
         {
-            Pattern pattern2 = Pattern.compile("NameShop Price");
-            Pattern pattern3 = Pattern.compile("Price NameShop");
+            Pattern pattern2 = Pattern.compile("Product Price");
+            Pattern pattern3 = Pattern.compile("Price Product");
             Matcher matcher2 = pattern2.matcher(sentence);
             Matcher matcher3 = pattern3.matcher(sentence);
             if (matcher2.find() || matcher3.find())
@@ -266,9 +270,9 @@ if(inf1 != "apikey not valid") {
             }
         }
         ArrayList<String> message1=new ArrayList<String>();
-        System.out.println("for test github");
+        System.out.println("for test google");
         message1.add(message);
-        return message1;//temp3;
+        return temp3;//message1;//
     }
 
 }
