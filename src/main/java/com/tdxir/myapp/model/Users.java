@@ -24,6 +24,7 @@ public class Users implements UserDetails {
     private  String firstname;
     private  String lastname;
     private  String mobile;
+    private int kind;// Store 0,Sport 1,Person 2
     private  boolean active;
     @Column(unique=true)
     private String email;
