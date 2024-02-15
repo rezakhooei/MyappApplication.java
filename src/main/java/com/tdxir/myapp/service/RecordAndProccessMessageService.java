@@ -200,7 +200,7 @@ public class RecordAndProccessMessageService {
           String messageTagged=makeNer.doTagging(model, message);//"قیمت/Price مو/NameShop چنده/O ?/Qsign";
         SentenceRecognizer sentenceRecognizer = new SentenceRecognizer();
 
-        ArrayList<String> temp33= sentenceRecognizer.recognizeNer(message);////tests[0]);
+       // ArrayList<String> temp33= sentenceRecognizer.recognizeNer(message);////tests[0]);
         List<String> temp4= sentenceRecognizer.recognizePos(message);
         ArrayList<String> temp3=new ArrayList<>();
         temp3.clear();
@@ -214,7 +214,7 @@ public class RecordAndProccessMessageService {
             System.out.println(s);
         }
         // قطعه زیر برای چک makener.doTaging  و recognizener بود که موقتا حذف نشد
-       for(int i=0;i<temp3.size();++i)
+   /*    for(int i=0;i<temp3.size();++i)
         if (String.valueOf(temp3.get(i))!=String.valueOf(temp33.get(i))) {
             ArrayList<String> message1=new ArrayList<String>();
             System.out.println("for test ner and dotag");
@@ -222,7 +222,7 @@ public class RecordAndProccessMessageService {
             return message1;//temp3;
 
         }
-
+*/
 
         String sentence = "";
         for (int i = 1; i <= temp3.size() - 1; ++i)

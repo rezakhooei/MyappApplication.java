@@ -52,22 +52,21 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user=repository.findByEmail(request.getEmail())
+        var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
         if (!user.isActive()) return null;
-        var jwtToken=jwtService.generateToken(user);
+        var jwtToken = jwtService.generateToken(user);
 
-        if(user.getKind()==0)            //User Shop
+        if (user.getKind() == 0)            //User Shop
         {
-            if(user.getRole()==ADMIN){
+            if (user.getRole() == ADMIN) {
                 return AuthenticationResponse.builder()
                         .token(jwtToken)
                         .paramCount("4")
                         .paramTime(("300"))
                         .build();
 
-            }
-            else if (user.getRole()==USER) {
+            } else if (user.getRole() == USER) {
 
                 return AuthenticationResponse.builder()
                         .token(jwtToken)
@@ -77,23 +76,41 @@ public class AuthenticationService {
             }
 
         }
-        if(user.getKind()==1)            // User Sport
+        if (user.getKind() == 1)            // User Sport
         {
-            if(user.getRole()==ADMIN){}
-            else if (user.getRole()==USER) {}
+            if (user.getRole() == ADMIN) {
+                return AuthenticationResponse.builder()
+                        .token(jwtToken)
+                        .paramCount("2")
+                        .paramTime(("30"))
+                        .build();
+            } else if (user.getRole() == USER) {
+                return AuthenticationResponse.builder()
+                        .token(jwtToken)
+                        .paramCount("2")
+                        .paramTime(("30"))
+                        .build();
+            }
 
         }
-        if(user.getKind()==2)            //Person
+        if (user.getKind() == 2)            //Person
         {
-            if(user.getRole()==ADMIN){}
-            else if (user.getRole()==USER) {}
-
+            if (user.getRole() == ADMIN) {
+                return AuthenticationResponse.builder()
+                        .token(jwtToken)
+                        .paramCount("2")
+                        .paramTime(("30"))
+                        .build();
+            } else if (user.getRole() == USER) {
+                return AuthenticationResponse.builder()
+                        .token(jwtToken)
+                        .paramCount("2")
+                        .paramTime(("30"))
+                        .build();
+            }
         }
+    return null;
 
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .paramCount("2")
-                .paramTime(("30"))
-                .build();
     }
+
 }
