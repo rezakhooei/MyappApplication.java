@@ -13,6 +13,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static com.tdxir.myapp.model.Role.ADMIN;
+import static com.tdxir.myapp.model.Role.USER;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -29,7 +32,7 @@ public class AuthenticationService {
                .active(false)
                .email(request.getEmail())
                .password(passwordEncoder.encode(request.getPassword()))
-               .role(Role.USER)
+               .role(USER)
                .kind(0)//Shop kind
                .build();
        repository.save(user);
@@ -53,6 +56,40 @@ public class AuthenticationService {
                 .orElseThrow();
         if (!user.isActive()) return null;
         var jwtToken=jwtService.generateToken(user);
+
+        if(user.getKind()==0)            //User Shop
+        {
+            if(user.getRole()==ADMIN){
+                return AuthenticationResponse.builder()
+                        .token(jwtToken)
+                        .paramCount("4")
+                        .paramTime(("300"))
+                        .build();
+
+            }
+            else if (user.getRole()==USER) {
+
+                return AuthenticationResponse.builder()
+                        .token(jwtToken)
+                        .paramCount("0")
+                        .paramTime(("60"))
+                        .build();
+            }
+
+        }
+        if(user.getKind()==1)            // User Sport
+        {
+            if(user.getRole()==ADMIN){}
+            else if (user.getRole()==USER) {}
+
+        }
+        if(user.getKind()==2)            //Person
+        {
+            if(user.getRole()==ADMIN){}
+            else if (user.getRole()==USER) {}
+
+        }
+
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .paramCount("2")

@@ -152,7 +152,7 @@ public class RecordAndProccessMessageService {
 
                 }
                catch (Exception e) {
-                   inf1 = "apikey not valid";
+                   inf1 = "apikey not valid OR google didn't reply";
                }
 
 
@@ -162,7 +162,7 @@ public class RecordAndProccessMessageService {
             System.out.println(inf1);
             inf2 = "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد رضا";
 
-if(inf1 != "apikey not valid") {
+//if(inf1 != "apikey not valid") {
     var userData = UsersData.builder()
 
             .date(date)
@@ -176,7 +176,7 @@ if(inf1 != "apikey not valid") {
     //userData.setUserid(authentication.getName());
     usersDataRepository.save(userData);// repository.save(userData);
 
-                      }
+               //       }
             // till record db
 
             return inf1;//fileName;
@@ -276,63 +276,6 @@ if(inf1 != "apikey not valid") {
     }
 
 }
-
-
-
-
-
-
-
-        // inf1="I love hassan but he doesn't so";
-        // inf1="Reza has a session on sunday 2 pm in Berlin. after that i should call my mam";//"من و حسن با هم غذا میخوریم و پیراشکی هم دوست داریم";
-          /*
-            SentenceRecognizer sentenceRecognizer=new SentenceRecognizer();
-
-            String line=null;
-            try {
-               // File fileText = new File("f:\\opt\\tomcat\\my-nlp\\stanfordexample\\jane-austen-emma-ch2.txt");//ner_training_data.txt");
-                String fileText="f:\\opt\\tomcat\\my-nlp\\stanfordexample\\jane-austen-emma-ch2.txt";
-                //if (fileText.exists()) {
-                  //  System.out.println("****** Reading file ... ******");
-                  //  BufferedReader buffer = new BufferedReader(new FileReader(fileText));
-
-                  //  line = buffer.readLine();
-                    String data = "";
-                    data = new String(
-                            Files.readAllBytes(Paths.get(targetLocation.toString())));//fileText)));
-                    inf1=data;
-                    System.out.println("****** Finish Reading file ******");
-
-
-                   // List<String> temp0=mySentenceRecognizer.recognizeWords(data);
-               // }else{
-                  //  System.out.println(fileText.getAbsolutePath()+" not exist");
-               // }
-
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-         //   inf1="افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلانه به تصمیمات مان فکر کنیم. و به همین دلیل، ارزش ها، روابط و شغل هایی نامناسب نصیب مان می شود. ";
-
-           // List<String> temp0=mySentenceRecognizer.recognizeWords(inf1);
-          //  List<String> temp=sentenceRecognizer.recognizeSentence(inf1);
-        //    List<String> temp1=sentenceRecognizer.recognizeWords(inf1);
-          //  List<String> temp2=sentenceRecognizer.recognizePos(inf1);
-            List<String> temp3=sentenceRecognizer.recognizeNer(inf1);
-           // inf2=temp3.toString();
-          //  List<String> temp4=sentenceRecognizer.recognizeLemma(inf1);
-           // List<String> temp5=sentenceRecognizer.recognizeSentiment(inf1);
-
-            /*
-            inf2=temp.get(0);
-            if (temp.size()>1) inf3=temp.get(1);*/
-        //   ChatGPTResponse chatCPTResponse = chatGPTService.getChatCPTResponse(inf1);//chatbotInputRequest.getMessage());
-        //inf2=chatCPTResponse.getChoices().get(0).getMessage().getContent();
 
 
 

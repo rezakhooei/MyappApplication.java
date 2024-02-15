@@ -57,7 +57,7 @@ public class ReciveMessageController {
           System.out.println(authentication.getName());
 
 
-        if(!authentication.getName().equals("javadghane18@gmail.com")&&(message != "apikey not valid")) {
+        if(!authentication.getName().equals("javadghane18@gmail.com")&&(message != "apikey not valid OR google didn't reply")) {
              JSONObject jsonObjectMain = new JSONObject();
              JSONObject jsonObject = new JSONObject();
              List<String> processList=recordAndProccessMessageService.proccessMessage(message);
