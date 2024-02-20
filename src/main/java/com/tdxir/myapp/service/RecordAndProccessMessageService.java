@@ -148,7 +148,7 @@ public class RecordAndProccessMessageService {
                 {
 
 
-                    inf1=googleSpeech.transcribeSpeech(filereply);
+                    inf1="قیمت رژ چند است ؟";//googleSpeech.transcribeSpeech(filereply);
 
                 }
                catch (Exception e) {
