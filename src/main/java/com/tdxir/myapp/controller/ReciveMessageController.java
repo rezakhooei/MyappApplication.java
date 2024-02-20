@@ -1,9 +1,14 @@
 package com.tdxir.myapp.controller;
 
 //import com.google.gson.JsonObject;
+import com.tdxir.myapp.model.UserKind;
+import com.tdxir.myapp.model.Users;
 import com.tdxir.myapp.nlp.training.MakeTsv;
+import com.tdxir.myapp.repository.UserRepository;
 import com.tdxir.myapp.service.GoogleSpeech;
+import com.tdxir.myapp.service.ProccessMessage;
 import com.tdxir.myapp.service.RecordAndProccessMessageService;
+import com.tdxir.myapp.service.SecurityConfigration;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +16,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +37,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/uploadFile")
 public class ReciveMessageController {
+    @Autowired
+    UserRepository userRepository;
 
     private final RecordAndProccessMessageService recordAndProccessMessageService;
 
@@ -52,7 +60,11 @@ public class ReciveMessageController {
 
 
 
+
          Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
+         Users user= userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
          String message = recordAndProccessMessageService.storeInfs(file, inf1, inf2, inf3, inf4);
           System.out.println(authentication.getName());
 
@@ -61,7 +73,12 @@ public class ReciveMessageController {
              JSONObject jsonObjectMain = new JSONObject();
              JSONObject jsonObject = new JSONObject();
              //message="کد 902 چند تا داریم و برای چیست و چقدر بخریم ؟";
-             List<String> processList=recordAndProccessMessageService.proccessMessage(message);
+             //List<String> processList=recordAndProccessMessageService.proccessMessage(message,user.getUserKind());
+
+
+            ProccessMessage proccessMessage=new ProccessMessage(user.getUserKind());
+
+            List<String> processList=proccessMessage.proccess(message,user.getUserKind());
 
              JSONArray array = new JSONArray();
 

@@ -24,13 +24,14 @@ public class Users implements UserDetails {
     private  String firstname;
     private  String lastname;
     private  String mobile;
-    private int kind;// Store 0,Sport 1,Person 2
+    @Enumerated(EnumType.STRING)
+    private UserKind userKind=UserKind.PERSON;// Store 0,Sport 1,Person 2
     private  boolean active;
     @Column(unique=true)
     private String email;
     private  String password;
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role=Role.USER;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
@@ -65,4 +66,6 @@ public class Users implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

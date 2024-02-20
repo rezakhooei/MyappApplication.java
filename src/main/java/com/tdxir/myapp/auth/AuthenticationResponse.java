@@ -1,5 +1,6 @@
 package com.tdxir.myapp.auth;
 
+import com.tdxir.myapp.model.UserKind;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,4 +14,5 @@ public class AuthenticationResponse {
     private String token;
     private String paramCount;
     private  String paramTime;
+
 }

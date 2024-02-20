@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 import com.tdxir.myapp.MyappApplication;
 import com.tdxir.myapp.auth.OpenApiKeyValidation;
+import com.tdxir.myapp.model.UserKind;
 import com.tdxir.myapp.model.UsersData;
 import com.tdxir.myapp.nlp.SentenceRecognizer;
 import com.tdxir.myapp.nlp.training.MakeNer;
@@ -30,6 +31,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import static com.tdxir.myapp.MyappApplication.*;
 
 @Service
 public class RecordAndProccessMessageService {
@@ -185,7 +188,8 @@ public class RecordAndProccessMessageService {
         }
     }
 
-    public List<String> proccessMessage(String message) {
+    public List<String> proccessMessage(String message, UserKind userKind) {
+
        MakeNer makeNer = new MakeNer();
         CRFClassifier model;
        if(MyappApplication.WinLinux==1) {
@@ -201,7 +205,7 @@ public class RecordAndProccessMessageService {
         SentenceRecognizer sentenceRecognizer = new SentenceRecognizer();
 
        // ArrayList<String> temp33= sentenceRecognizer.recognizeNer(message);////tests[0]);
-        List<String> temp4= sentenceRecognizer.recognizePos(message);
+        //List<String> temp4= sentenceRecognizer.recognizePos(message);
         ArrayList<String> temp3=new ArrayList<>();
         temp3.clear();
         String[] substrings = messageTagged.split(" ");
@@ -235,29 +239,25 @@ public class RecordAndProccessMessageService {
         Matcher matcher1 = pattern1.matcher(sentence);
 //  if sentence is question
         if (matcher1.find())
-        {
+        {   if (userKind==UserKind.SHOP) {
             Pattern pattern2 = Pattern.compile("Product Price");
             Pattern pattern3 = Pattern.compile("Price Product");
             Matcher matcher2 = pattern2.matcher(sentence);
             Matcher matcher3 = pattern3.matcher(sentence);
-            if (matcher2.find() || matcher3.find())
-            {  //     if sentence is question about price by name of product
+            if (matcher2.find() || matcher3.find()) {  //     if sentence is question about price by name of product
 
-                for (int i = 0; i <= temp3.size() - 1; ++i)
-                {
+                for (int i = 0; i <= temp3.size() - 1; ++i) {
                     String strTemp = new String(temp3.get(++i));
-                    if (strTemp.equals("NameShop"))
-                    {   strTemp=temp3.get(i-1);
+                    if (strTemp.equals("NameShop")) {
+                        strTemp = temp3.get(i - 1);
 
-                        List<String> postIds = wkhPostsRepository.PostId("%"+strTemp+"%");
+                        List<String> postIds = wkhPostsRepository.PostId("%" + strTemp + "%");
 
-                        if (postIds.size() != 0)
-                        {
+                        if (postIds.size() != 0) {
                             List<String> pricelist = new ArrayList<>();
-                            for (String post_id : postIds)
-                            {
+                            for (String post_id : postIds) {
 
-                                pricelist.add(String.valueOf(post_id.substring(0,post_id.indexOf(",")))+"-"+String.valueOf(wkhPostMetaRepository.price(String.valueOf(post_id.substring(post_id.indexOf(",")+1))))+"ریال");
+                                pricelist.add(String.valueOf(post_id.substring(0, post_id.indexOf(","))) + "-" + String.valueOf(wkhPostMetaRepository.price(String.valueOf(post_id.substring(post_id.indexOf(",") + 1)))) + "ریال");
                             }
                             return pricelist;
                         }
@@ -269,6 +269,18 @@ public class RecordAndProccessMessageService {
 
             }
         }
+        else if (userKind==UserKind.SPORT){}
+        else if(userKind==UserKind.PERSON){}
+        else {}
+        }
+        else
+        {
+            ArrayList<String> message1=new ArrayList<String>();
+            System.out.println("for test google");
+            message1.add("Message Recorded");
+            return message1;//temp3;
+        }
+
         ArrayList<String> message1=new ArrayList<String>();
         System.out.println("for test google");
         message1.add(message);
