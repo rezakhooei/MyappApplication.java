@@ -249,7 +249,7 @@ public class RecordAndProccessMessageService {
                     if (strTemp.equals("NameShop"))
                     {   strTemp=temp3.get(i-1);
 
-                        List<String> postIds = wkhPostsRepository.PostId("%"+strTemp+"%");
+                        List<String> postIds = null;//wkhPostsRepository.PostId("%"+strTemp+"%");
 
                         if (postIds.size() != 0)
                         {
