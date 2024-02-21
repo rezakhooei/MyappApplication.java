@@ -124,7 +124,7 @@ public class RecordAndProccessMessageService {
 
             if(MyappApplication.WinLinux==1) {
 
-               inf1=inf1;//googleSpeech.transcribeSpeech(filereply);
+               inf1=googleSpeech.transcribeSpeech(filereply);
 
 
               // "قیمت رژ چنده؟";
