@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> {
 
@@ -21,6 +22,9 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Query("select w1.meta_value from wkh_postmeta w1 where w1.post_id=:post_id and w1.meta_key='_price'")
 
     public long price (@Param("post_id") String post_id);
+    @Query("select wm1.meta_value  from wkh_postmeta wm1 where wm1.meta_key='_price' and wm1.post_id in (select wm2.post_id from wkh_postmeta wm2 where wm2.meta_key='_sku' and wm2.meta_value=:code)")
+
+    public List<String> PostIdCode (@Param("code") String code);
 
     @Modifying
     @Transactional

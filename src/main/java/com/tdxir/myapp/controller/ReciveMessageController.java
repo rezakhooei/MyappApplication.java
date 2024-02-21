@@ -1,14 +1,12 @@
 package com.tdxir.myapp.controller;
 
 //import com.google.gson.JsonObject;
-import com.tdxir.myapp.model.UserKind;
 import com.tdxir.myapp.model.Users;
 import com.tdxir.myapp.nlp.training.MakeTsv;
 import com.tdxir.myapp.repository.UserRepository;
 import com.tdxir.myapp.service.GoogleSpeech;
 import com.tdxir.myapp.service.ProccessMessage;
 import com.tdxir.myapp.service.RecordAndProccessMessageService;
-import com.tdxir.myapp.service.SecurityConfigration;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,15 +37,17 @@ public class ReciveMessageController {
     UserRepository userRepository;
 
     private final RecordAndProccessMessageService recordAndProccessMessageService;
-
+    @Autowired
+    private ProccessMessage proccessMessage;
     private final GoogleSpeech googleSpeech = new GoogleSpeech();
     private  MakeTsv makeTsv;
     private static final String EXTENSION = ".wav";
     private static final String SERVER_LOCATION = "/opt/tomcat/uploads";
 
-    public ReciveMessageController(RecordAndProccessMessageService recordAndProccessMessageService ) {
+    public ReciveMessageController(RecordAndProccessMessageService recordAndProccessMessageService, ProccessMessage proccessMessage) {
 
         this.recordAndProccessMessageService = recordAndProccessMessageService;
+        this.proccessMessage = proccessMessage;
     }
 
     @PostMapping
@@ -76,10 +74,10 @@ public class ReciveMessageController {
              //List<String> processList=recordAndProccessMessageService.proccessMessage(message,user.getUserKind());
 
 
-            ProccessMessage proccessMessage=new ProccessMessage(user.getUserKind());
-
+          //  ProccessMessage proccessMessage=new ProccessMessage(user.getUserKind());
+            //proccessMessage.(user.getUserKind());
             List<String> processList=proccessMessage.proccess(message,user.getUserKind());
-
+             if(processList.equals(null)) processList.add(" پاسخی پیدا نکردم");
              JSONArray array = new JSONArray();
 
              for (int i = 1; i <= processList.size(); ++i) {

@@ -251,7 +251,7 @@ public class RecordAndProccessMessageService {
                     if (strTemp.equals("NameShop")) {
                         strTemp = temp3.get(i - 1);
 
-                        List<String> postIds = wkhPostsRepository.PostId("%" + strTemp + "%");
+                        List<String> postIds = wkhPostsRepository.PostIdName("%" + strTemp + "%");
 
                         if (postIds.size() != 0) {
                             List<String> pricelist = new ArrayList<>();
