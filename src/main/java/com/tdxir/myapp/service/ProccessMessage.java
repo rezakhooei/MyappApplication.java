@@ -48,7 +48,7 @@ public class ProccessMessage {
 
     }
     public List<String> proccessMessageShop(String message) {
-        message="قیمت 902 چنده";
+       // message="قیمت 902 چنده";
         message+=" ؟";
         MakeNer makeNer = new MakeNer();
         CRFClassifier model;
