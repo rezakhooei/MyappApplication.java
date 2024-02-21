@@ -124,10 +124,7 @@ public class RecordAndProccessMessageService {
 
             if(MyappApplication.WinLinux==1) {
 
-               inf1=googleSpeech.transcribeSpeech(filereply);
-
-
-              // "قیمت رژ چنده؟";
+               inf1="قیمت رژ چنده؟";
             }
             else {
                 //  @@@@    below code is for using openAI Speech to text
@@ -151,7 +148,7 @@ public class RecordAndProccessMessageService {
                 {
 
 
-                    inf1="قیمت رژ چند است ؟";//googleSpeech.transcribeSpeech(filereply);
+                    inf1=googleSpeech.transcribeSpeech(filereply);
 
                 }
                catch (Exception e) {
