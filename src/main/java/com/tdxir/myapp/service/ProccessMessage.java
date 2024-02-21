@@ -48,6 +48,7 @@ public class ProccessMessage {
 
     }
     public List<String> proccessMessageShop(String message) {
+        message="قیمت 902 چنده";
         message+=" ؟";
         MakeNer makeNer = new MakeNer();
         CRFClassifier model;
@@ -60,9 +61,10 @@ public class ProccessMessage {
         }
 
         String messageTagged = makeNer.doTagging(model, message);//"قیمت/Price مو/NameShop چنده/O ?/Qsign";
-        SentenceRecognizer sentenceRecognizer = new SentenceRecognizer();
 
-        ArrayList<String> temp33= sentenceRecognizer.recognizeNer(message);////tests[0]);
+        // SentenceRecognizer sentenceRecognizer = new SentenceRecognizer();
+        //ArrayList<String> temp33= sentenceRecognizer.recognizeNer(message);////tests[0]);
+
         //List<String> temp4= sentenceRecognizer.recognizePos(message);
         ArrayList<String> temp3 = new ArrayList<>();
         temp3.clear();
