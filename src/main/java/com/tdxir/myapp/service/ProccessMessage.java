@@ -38,8 +38,8 @@ public class ProccessMessage {
             case SPORT:System.out.println("I AM SPORTER");
                 return  proccessMessageSport(message);
             case PERSON:System.out.println("I am Person");
-                return  proccessMessageShop(message);
-               // return  proccessMessagePerson(message);
+               // return  proccessMessageShop(message);
+                return  proccessMessagePerson(message);
         }
         ArrayList<String> message1=new ArrayList<String>();
         System.out.println("Nothing to select kind");
