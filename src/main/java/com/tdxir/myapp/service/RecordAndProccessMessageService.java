@@ -150,6 +150,7 @@ public class RecordAndProccessMessageService {
 
                     inf1=googleSpeech.transcribeSpeech(filereply);
 
+
                 }
                catch (Exception e) {
                    inf1 = "apikey not valid OR google didn't reply";

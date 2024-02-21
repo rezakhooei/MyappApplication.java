@@ -48,7 +48,7 @@ public class ProccessMessage {
 
     }
     public List<String> proccessMessageShop(String message) {
-
+        message+=" ؟";
         MakeNer makeNer = new MakeNer();
         CRFClassifier model;
         if (MyappApplication.WinLinux == 1) {
