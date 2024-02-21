@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -77,12 +78,15 @@ public class ReciveMessageController {
           //  ProccessMessage proccessMessage=new ProccessMessage(user.getUserKind());
             //proccessMessage.(user.getUserKind());
             List<String> processList=proccessMessage.proccess(message,user.getUserKind());
-             if(processList.equals(null)) processList.add(" پاسخی پیدا نکردم");
-             JSONArray array = new JSONArray();
+             if((processList) ==null) {
+                 processList=new ArrayList<>();
+                 processList.add(" پاسخی پیدا نکردم");
+             }
+                 JSONArray array = new JSONArray();
 
              for (int i = 1; i <= processList.size(); ++i) {
-                 jsonObject.put("inf_id", String.valueOf(i));
-                 jsonObject.put("inf_text", String.valueOf(i) + processList.get(i-1));
+                 jsonObject.put("inf_id", "");//String.valueOf(i));
+                 jsonObject.put("inf_text",  processList.get(i-1));
                  array.add(new JSONObject(jsonObject));
                  jsonObject.clear();
              }

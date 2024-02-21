@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.tdxir.myapp.MyappApplication.WinLinux;
+
 @Service
 public class ProccessMessage {
     UserKind userKind;
@@ -52,7 +55,7 @@ public class ProccessMessage {
         message+=" ؟";
         MakeNer makeNer = new MakeNer();
         CRFClassifier model;
-        if (MyappApplication.WinLinux == 1) {
+        if (WinLinux == 1) {
 
             model = makeNer.getModel(pathWin + "ner-model.ser.gz");
         } else {
@@ -115,7 +118,7 @@ public class ProccessMessage {
                                 List<String> pricelist = new ArrayList<>();
                                 for (String post_id : postIds)
                                 {
-                                    pricelist.add(post_id +"   "+ "ریال");
+                                    pricelist.add("قیمت کد"+strTemp+" "+post_id +"   "+ "ریال است ");
                                   // for name was  pricelist.add(String.valueOf(post_id.substring(0, post_id.indexOf(","))) + "-" + String.valueOf(wkhPostMetaRepository.price(String.valueOf(post_id.substring(post_id.indexOf(",") + 1)))) + "ریال");
                                 }
                                 return pricelist;
@@ -132,7 +135,7 @@ public class ProccessMessage {
 
                             MakeNer makeNer = new MakeNer();
                             CRFClassifier model;
-                            if(MyappApplication.WinLinux==1) {
+                            if(WinLinux==1) {
 
                                 model = makeNer.getModel(pathWin+"ner-model.ser.gz");
                             }
