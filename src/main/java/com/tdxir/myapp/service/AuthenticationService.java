@@ -71,7 +71,7 @@ public class AuthenticationService {
 
                 return AuthenticationResponse.builder()
                         .token(jwtToken)
-                        .paramCount("0")
+                        .paramCount("2")
                         .paramTime(("60"))
                         .build();
             }

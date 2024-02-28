@@ -84,7 +84,7 @@ public class RecordAndProccessMessageService {
         return fileNameParts[fileNameParts.length - 1];
     }
 
-    public String storeInfs(MultipartFile file, String inf1, String inf2, String inf3, String inf4) {
+    public String storeInfs(MultipartFile file1,MultipartFile file2 , List<String> inf) {
         Date date = new Date();
         // for record db
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -93,7 +93,7 @@ public class RecordAndProccessMessageService {
         //String currentUserName = authentication.getName();
         // Normalize file name
         String date_str = new SimpleDateFormat("yyyyMMddHHmmss").format(date);
-        String fileName = file.getOriginalFilename();
+        String fileName = file1.getOriginalFilename();
         //  File oldFile = new File(fileName);
         fileName = authentication.getName() + '-' + date_str + '-' + fileName;
 
@@ -118,13 +118,13 @@ public class RecordAndProccessMessageService {
             }
 
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file1.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             File filereply = new File(targetLocation.toString());
 
             if(MyappApplication.WinLinux==1) {
 
-               inf1="قیمت رژ چنده؟";
+               inf.add(0,"قیمت رژ چنده؟");//[0]=;
             }
             else {
                 //  @@@@    below code is for using openAI Speech to text
@@ -148,31 +148,32 @@ public class RecordAndProccessMessageService {
                 {
 
 
-                    inf1=googleSpeech.transcribeSpeech(filereply);
+                    inf.add(0,googleSpeech.transcribeSpeech(filereply));
 
 
                 }
                catch (Exception e) {
-                   inf1 = "apikey not valid OR google didn't reply";
+                   inf.add(0,"apikey not valid OR google didn't reply");
                }
 
 
             }
 
 
-            System.out.println(inf1);
-            inf2 = "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد رضا";
-
+            System.out.println(inf.get(0));
+            inf.add(1, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد رضا");//
+            for(int i=inf.size();i<=3;++i)
+                inf.add("");
 //if(inf1 != "apikey not valid") {
     var userData = UsersData.builder()
 
             .date(date)
             .userid(authentication.getName())
             .filename(fileName)
-            .inf1(inf1)
-            .inf2(inf2)
-            .inf3(inf3)
-            .inf4(inf4)
+            .inf1(inf.get(0))
+            .inf2(inf.get(1))
+            .inf3(inf.get(2))
+            .inf4(inf.get(3))
             .build();
     //userData.setUserid(authentication.getName());
     usersDataRepository.save(userData);// repository.save(userData);
@@ -180,7 +181,7 @@ public class RecordAndProccessMessageService {
                //       }
             // till record db
 
-            return inf1;//fileName;
+            return inf.get(0);//fileName;
         } catch (IOException ex) {
             throw new RuntimeException("Could not store file " + fileName + ". Please try again!", ex);
         }
