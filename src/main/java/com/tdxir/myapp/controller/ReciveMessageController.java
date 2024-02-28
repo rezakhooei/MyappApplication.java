@@ -179,36 +179,54 @@ public class ReciveMessageController {
              String fileName = recordAndProccessMessageService.storeInfs(fileSound,filePic, inf);
              fileName="monshi.mp3";
              inf.add(0,"افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد") ;
-             UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
+             //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
 
              String image = fileName;//"file";
              File filereply = new File(SERVER_LOCATION + File.separator + image);//+ EXTENSION);
 
-             HttpHeaders header = new HttpHeaders();
+             /*HttpHeaders header = new HttpHeaders();
              header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
 
              header.add("Cache-Control", "no-cache, no-store, must-revalidate");
              header.add("Pragma", "no-cache");
              header.add("Expires", "0");
-
+*/
              Path path = Paths.get(filereply.getAbsolutePath());
              ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
              byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
 
              jsonObjectMain.put("file_content", resource.getByteArray());
-             // array.add(new JSONObject(jsonObject));
-             // jsonObject.clear();
 
-             InputStream is = new ByteArrayInputStream(encoder);
-             InputStreamResource resource1 = new InputStreamResource(is);
+
+
+            String image1 = "img.jpg";
+            File filereplyImg = new File(SERVER_LOCATION + File.separator + image1);//+ EXTENSION);
+
+             /*HttpHeaders header = new HttpHeaders();
+             header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
+
+             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+             header.add("Pragma", "no-cache");
+             header.add("Expires", "0");
+*/
+            Path path1 = Paths.get(filereplyImg.getAbsolutePath());
+            ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
+
+            byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
+
+            jsonObjectMain.put("file_content1", resource1.getByteArray());
+
+
+             //InputStream is = new ByteArrayInputStream(encoder);
+            // InputStreamResource resource1 = new InputStreamResource(is);
 
              HttpHeaders headers = new HttpHeaders();
              headers.setContentType(MediaType.APPLICATION_JSON);
 
              // ContentDisposition disposition = ContentDisposition.attachment().filename("monshi.mp3").build();
-             ContentDisposition disposition = ContentDisposition.attachment().filename(filereply.getName()).build();
-             headers.setContentDisposition(disposition);
+            // ContentDisposition disposition = ContentDisposition.attachment().filename(filereply.getName()).build();
+             //headers.setContentDisposition(disposition);
 
              return new ResponseEntity<>(jsonObjectMain, headers, HttpStatus.OK);
 
