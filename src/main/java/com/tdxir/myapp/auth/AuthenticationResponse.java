@@ -14,5 +14,8 @@ public class AuthenticationResponse {
     private String token;
     private String paramCount;
     private  String paramTime;
+    private  Boolean img;
+    private  String checkBoxCount;
+    private  String radioButtonCount;
 
 }
