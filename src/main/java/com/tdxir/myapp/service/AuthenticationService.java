@@ -13,6 +13,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.tdxir.myapp.MyappApplication.*;
 import static com.tdxir.myapp.model.Role.ADMIN;
 import static com.tdxir.myapp.model.Role.USER;
@@ -68,11 +71,20 @@ public class AuthenticationService {
                         .build();
 
             } else if (user.getRole() == USER) {
+                List<String[]> radioButtons=new ArrayList<>();
 
+
+                String[] rdBtn1=new String[]{"rdBtn1","rdBtn2","rdBtn3"};
+                String[] rdBtn2=new String[]{"rdBtn11","rdBtn22"};
+                radioButtons.add(rdBtn1);
+                radioButtons.add(rdBtn2);
+                String[] checkBoxes=new String[]{"chkBox1","chkBox2","chkBox3","chkBox4"};
                 return AuthenticationResponse.builder()
                         .token(jwtToken)
                         .paramCount("2")
                         .paramTime(("60"))
+                        .checkBoxes(checkBoxes)
+                        .radioButtons(radioButtons)
                         .build();
             }
 

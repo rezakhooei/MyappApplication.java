@@ -54,12 +54,13 @@ public class ReciveMessageController {
     @PostMapping
     public ResponseEntity<JSONObject> uploadFile(
             @RequestParam(name = "fileSound", required = false) MultipartFile fileSound,@RequestParam(name = "filePic", required = false) MultipartFile filePic,
-            @RequestParam("inf") List<String> inf ) throws Exception
+            @RequestParam("inf1") String inf1, @RequestParam("inf2") String inf2,@RequestParam("inf3") String inf3,@RequestParam("inf4")String inf4,@RequestParam("rdButton1") String rdButton1 ) throws Exception
      {   //googleSpeech.initialize();
 
 
+         List<String> inf = null;
 
-
+         inf.add(inf1);inf.add(inf2);inf.add(inf3);inf.add(inf4);
          Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 
@@ -174,34 +175,15 @@ public class ReciveMessageController {
              jsonObjectMain.put("inf", array);
              // array.add(jsonObject);
 
+            if(rdButton1=="ImageANdVoice") {
 
+                String fileName = recordAndProccessMessageService.storeInfs(fileSound, filePic, inf);
+                fileName = "monshi.mp3";
+                inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
+                //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
 
-             String fileName = recordAndProccessMessageService.storeInfs(fileSound,filePic, inf);
-             fileName="monshi.mp3";
-             inf.add(0,"افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد") ;
-             //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
-
-             String image = fileName;//"file";
-             File filereply = new File(SERVER_LOCATION + File.separator + image);//+ EXTENSION);
-
-             /*HttpHeaders header = new HttpHeaders();
-             header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
-
-             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
-             header.add("Pragma", "no-cache");
-             header.add("Expires", "0");
-*/
-             Path path = Paths.get(filereply.getAbsolutePath());
-             ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
-
-             byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
-
-             jsonObjectMain.put("file_content", resource.getByteArray());
-
-
-
-            String image1 = "img.jpg";
-            File filereplyImg = new File(SERVER_LOCATION + File.separator + image1);//+ EXTENSION);
+                String image = fileName;//"file";
+                File filereply = new File(SERVER_LOCATION + File.separator + image);//+ EXTENSION);
 
              /*HttpHeaders header = new HttpHeaders();
              header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
@@ -210,25 +192,85 @@ public class ReciveMessageController {
              header.add("Pragma", "no-cache");
              header.add("Expires", "0");
 */
-            Path path1 = Paths.get(filereplyImg.getAbsolutePath());
-            ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
+                Path path = Paths.get(filereply.getAbsolutePath());
+                ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
-            byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
+                byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
 
-            jsonObjectMain.put("file_content1", resource1.getByteArray());
+                jsonObjectMain.put("file_content1", resource.getByteArray());
 
 
-             //InputStream is = new ByteArrayInputStream(encoder);
-            // InputStreamResource resource1 = new InputStreamResource(is);
+                String image1 = "img.jpg";
+                File filereplyImg = new File(SERVER_LOCATION + File.separator + image1);//+ EXTENSION);
 
-             HttpHeaders headers = new HttpHeaders();
-             headers.setContentType(MediaType.APPLICATION_JSON);
+             /*HttpHeaders header = new HttpHeaders();
+             header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
 
-             // ContentDisposition disposition = ContentDisposition.attachment().filename("monshi.mp3").build();
-            // ContentDisposition disposition = ContentDisposition.attachment().filename(filereply.getName()).build();
-             //headers.setContentDisposition(disposition);
+             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+             header.add("Pragma", "no-cache");
+             header.add("Expires", "0");
+*/
+                Path path1 = Paths.get(filereplyImg.getAbsolutePath());
+                ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
 
-             return new ResponseEntity<>(jsonObjectMain, headers, HttpStatus.OK);
+                byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
+
+                jsonObjectMain.put("file_content2", resource1.getByteArray());
+            }
+            else if(rdButton1=="Voice"){                String fileName = recordAndProccessMessageService.storeInfs(fileSound, filePic, inf);
+                fileName = "monshi.mp3";
+                inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
+                //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
+
+                String image = fileName;//"file";
+                File filereply = new File(SERVER_LOCATION + File.separator + image);//+ EXTENSION);
+
+             /*HttpHeaders header = new HttpHeaders();
+             header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
+
+             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+             header.add("Pragma", "no-cache");
+             header.add("Expires", "0");
+*/
+                Path path = Paths.get(filereply.getAbsolutePath());
+                ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+
+                byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
+
+                jsonObjectMain.put("file_content1", resource.getByteArray());
+
+            }
+            else if(rdButton1=="Image"){                String image1 = "img.jpg";
+                File filereplyImg = new File(SERVER_LOCATION + File.separator + image1);//+ EXTENSION);
+
+             /*HttpHeaders header = new HttpHeaders();
+             header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
+
+             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+             header.add("Pragma", "no-cache");
+             header.add("Expires", "0");
+*/
+                Path path1 = Paths.get(filereplyImg.getAbsolutePath());
+                ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
+
+                byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
+
+                jsonObjectMain.put("file_content2", resource1.getByteArray());
+
+            }
+                //InputStream is = new ByteArrayInputStream(encoder);
+                // InputStreamResource resource1 = new InputStreamResource(is);
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+
+                // ContentDisposition disposition = ContentDisposition.attachment().filename("monshi.mp3").build();
+                // ContentDisposition disposition = ContentDisposition.attachment().filename(filereply.getName()).build();
+                //headers.setContentDisposition(disposition);
+
+                return new ResponseEntity<>(jsonObjectMain, headers, HttpStatus.OK);
+
+
 
 
          }

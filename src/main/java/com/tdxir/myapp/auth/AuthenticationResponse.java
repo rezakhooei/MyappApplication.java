@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -15,8 +17,8 @@ public class AuthenticationResponse {
     private String paramCount;
     private  String paramTime;
 
-    private  String paramPanelRadioButton;
-    private  String paramCheckBox;
+    private  List<String[]> radioButtons;
+    private String[] checkBoxes;
 
 
 }
