@@ -1,11 +1,12 @@
 package com.tdxir.myapp.auth;
 
-import com.tdxir.myapp.model.UserKind;
+import com.tdxir.myapp.model.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -17,8 +18,8 @@ public class AuthenticationResponse {
     private String paramCount;
     private  String paramTime;
 
-    private  List<String[]> radioButtons;
-    private String[] checkBoxes;
-
+    private Panels radioButtonList;
+    //private Panel panel;
+    private ArrayList<CheckBox> checkBoxes;
 
 }
