@@ -187,16 +187,19 @@ public class ReciveMessageController {
              header.add("Cache-Control", "no-cache, no-store, must-revalidate");
              header.add("Pragma", "no-cache");
              header.add("Expires", "0");
-*/
+*/              try{
                 Path path = Paths.get(filereply.getAbsolutePath());
                 ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
                 byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
 
                 jsonObjectMain.put("file_content1", resource.getByteArray());
+            }
+                catch (IOException ex) {
+                errorMsg= ex.getMessage();
+            }
 
-
-                String image1 = "replyimage1.jpg";
+                String image1 = "replyimage.jpg";
 
                     File filereplyImg = new File(SERVER_LOCATION + File.separator + image1);//+ EXTENSION);
 
@@ -233,13 +236,17 @@ public class ReciveMessageController {
              header.add("Cache-Control", "no-cache, no-store, must-revalidate");
              header.add("Pragma", "no-cache");
              header.add("Expires", "0");
-*/
+*/              try{
                 Path path = Paths.get(filereply.getAbsolutePath());
                 ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
                 byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
 
                 jsonObjectMain.put("file_content1", resource.getByteArray());
+            }
+                catch (IOException ex) {
+                errorMsg= ex.getMessage();
+            }
 
             }
             else if (panel2.equals("Rd2")){    // Server will reply only Image to android app
@@ -253,13 +260,17 @@ public class ReciveMessageController {
              header.add("Cache-Control", "no-cache, no-store, must-revalidate");
              header.add("Pragma", "no-cache");
              header.add("Expires", "0");
-*/
+*/              try{
                 Path path1 = Paths.get(filereplyImg.getAbsolutePath());
                 ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
 
                 byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
 
                 jsonObjectMain.put("file_content2", resource1.getByteArray());
+            }
+                catch (IOException ex) {
+                errorMsg= ex.getMessage();
+            }
 
             }
             else if (panel2.equals("Rd4") || panel2.equals("noFile")){
