@@ -25,6 +25,7 @@ public class UsersData {
     private  String inf2;
     private  String inf3;
     private  String inf4;
-    private String filename;
+    private String voiceFileName;
+    private String imageFileName;
 
 }

@@ -79,7 +79,7 @@ public class DownloadFile {
 
 
 
-            image = usersData.get(lastrecordindex - info).getFilename();//.indexOf(33)[u].getFilename();
+            image = usersData.get(lastrecordindex - info).getVoiceFileName();//.indexOf(33)[u].getFilename();
 
             File filereply1 = new File(SERVER_LOCATION + File.separator + image);//+ EXTENSION);
             Path path1 = Paths.get(filereply1.getAbsolutePath());

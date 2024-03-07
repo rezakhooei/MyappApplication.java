@@ -84,7 +84,7 @@ public class RecordAndProccessMessageService {
         return fileNameParts[fileNameParts.length - 1];
     }
 
-    public String storeInfs(MultipartFile file1,MultipartFile file2 , List<String> inf) {
+    public String storeInfs(MultipartFile voiceFile,MultipartFile imageFile , List<String> inf) {
         Date date = new Date();
         // for record db
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -93,14 +93,17 @@ public class RecordAndProccessMessageService {
         //String currentUserName = authentication.getName();
         // Normalize file name
         String date_str = new SimpleDateFormat("yyyyMMddHHmmss").format(date);
-        String fileName = file1.getOriginalFilename();
-        //  File oldFile = new File(fileName);
-        fileName = authentication.getName() + '-' + date_str + '-' + fileName;
+        String voiceFileName ="";
+        String imageFileName ="";
+        if(voiceFile!=null) {
+            voiceFileName = voiceFile.getOriginalFilename();
+            //  File oldFile = new File(fileName);
+            voiceFileName = authentication.getName() + '-' + date_str + '-' + voiceFileName;
 
-        //openAi API key="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"
+            //openAi API key="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"
 
 
-        // String output =    new Date().getTime() + "-file." + getFileExtension(file.getOriginalFilename());
+            // String output =    new Date().getTime() + "-file." + getFileExtension(file.getOriginalFilename());
 /*
         File newFile = new File(fileName);
 
@@ -110,17 +113,57 @@ public class RecordAndProccessMessageService {
             System.out.println("Failed to rename the file.");
         }
 */
-        try {
-            // Check if the filename contains invalid characters
-            if (fileName.contains("..")) {
-                throw new RuntimeException(
-                        "Sorry! Filename contains invalid path sequence " + fileName);
+            try {
+                // Check if the filename contains invalid characters
+                if (voiceFileName.contains("..")) {
+                    throw new RuntimeException(
+                            "Sorry! Filename contains invalid path sequence " + voiceFileName);
+                }
+
+                Path targetLocation = this.fileStorageLocation.resolve(voiceFileName);
+                Files.copy(voiceFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+                File filereply = new File(targetLocation.toString());
+
+            } catch (IOException ex) {
+                throw new RuntimeException("Could not store file " + voiceFileName + ". Please try again!", ex);
             }
+        }
+        if(imageFile!=null) {
+            imageFileName = imageFile.getOriginalFilename();
+            //  File oldFile = new File(fileName);
+            imageFileName = authentication.getName() + '-' + date_str + '-' + imageFileName;
 
-            Path targetLocation = this.fileStorageLocation.resolve(fileName);
-            Files.copy(file1.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+            //openAi API key="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"
 
-            File filereply = new File(targetLocation.toString());
+
+            // String output =    new Date().getTime() + "-file." + getFileExtension(file.getOriginalFilename());
+/*
+        File newFile = new File(fileName);
+
+        if(oldFile.renameTo(newFile)) {
+            System.out.println("File renamed successfully!");  // Output: File renamed successfully!
+        } else {
+            System.out.println("Failed to rename the file.");
+        }
+*/
+            try {
+                // Check if the filename contains invalid characters
+                if (imageFileName.contains("..")) {
+                    throw new RuntimeException(
+                            "Sorry! Filename contains invalid path sequence " + imageFileName);
+                }
+
+                Path targetLocation = this.fileStorageLocation.resolve(imageFileName);
+                Files.copy(imageFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+                File filereply = new File(targetLocation.toString());
+
+            } catch (IOException ex) {
+                throw new RuntimeException("Could not store file " + imageFileName + ". Please try again!", ex);
+            }
+        }
+
 
             if(MyappApplication.WinLinux==1) {
 
@@ -148,7 +191,7 @@ public class RecordAndProccessMessageService {
                 {
 
 
-                    inf.add(0,googleSpeech.transcribeSpeech(filereply));
+               //     inf.add(0,googleSpeech.transcribeSpeech(filereply));
 
 
                 }
@@ -169,7 +212,8 @@ public class RecordAndProccessMessageService {
 
             .date(date)
             .userid(authentication.getName())
-            .filename(fileName)
+            .voiceFileName(voiceFileName)
+            .imageFileName(imageFileName)
             .inf1(inf.get(0))
             .inf2(inf.get(1))
             .inf3(inf.get(2))
@@ -182,9 +226,7 @@ public class RecordAndProccessMessageService {
             // till record db
 
             return inf.get(0);//fileName;
-        } catch (IOException ex) {
-            throw new RuntimeException("Could not store file " + fileName + ". Please try again!", ex);
-        }
+
     }
 
     public List<String> proccessMessage(String message, UserKind userKind) {

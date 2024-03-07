@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -53,14 +54,18 @@ public class ReciveMessageController {
 
     @PostMapping
     public ResponseEntity<JSONObject> uploadFile(
-            @RequestParam(name = "fileSound", required = false) MultipartFile fileSound,@RequestParam(name = "filePic", required = false) MultipartFile filePic,
-            @RequestParam("inf1") String inf1, @RequestParam("inf2") String inf2,@RequestParam("inf3") String inf3,@RequestParam("inf4")String inf4,@RequestParam("rdButton1") String rdButton1 ) throws Exception
+            @RequestParam(name = "voiceFile", required = false) MultipartFile voiceFile,
+            @RequestParam(name = "imageFile", required = false) MultipartFile imageFile,
+            @RequestParam("inf1") String inf1, @RequestParam("inf2") String inf2,@RequestParam("inf3") String inf3,@RequestParam("inf4")String inf4,@RequestParam("panel1") String panel1 ,@RequestParam("panel2") String panel2 ,@RequestParam("panel3") String panel3 ,
+            @RequestParam("checkBox1") String checkBox1,@RequestParam("checkBox2") String checkBox2,
+            @RequestParam("checkBox3") String checkBox3) throws Exception
      {   //googleSpeech.initialize();
 
 
-         List<String> inf = null;
+        List<String> inf=null;
+        inf=new ArrayList<>();
 
-         inf.add(inf1);inf.add(inf2);inf.add(inf3);inf.add(inf4);
+         inf.add(new String(inf1));inf.add(new String(inf2));inf.add(new String(inf3));inf.add(new String(inf4));
          Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 
@@ -166,6 +171,14 @@ public class ReciveMessageController {
 
              for (int i = 1; i <= 3; ++i) {
                  jsonObject.put("inf_id", String.valueOf(i));
+                 if(i==1){
+                     String chkBoxStr="";
+                     if(checkBox1.equals("true")) chkBoxStr="check box1 selected"+"\n";
+                     if(checkBox2.equals("true")) chkBoxStr+="check box2 selected"+"\n";
+                     if(checkBox3.equals("true")) chkBoxStr+="check box3 selected"+"\n";
+                     jsonObject.put("inf_text",chkBoxStr);
+                 }
+                 else
                  jsonObject.put("inf_text", String.valueOf(i) + "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلانه به تصمیمات مان فکر کنیم. و به همین دلیل، ارزش ها، روابط و شغل هایی نامناسب نصیب مان می شود. افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد. او دریافته بود که بسیاری از نظرات و قضاوت های ما از تفکرات جامعه نشأت می گیرد، از چیزی که یونانی ها آن را «دوکسا» یا «عقل جمعی حاکم» می نامند. افلاطون در 36 کتابی که نوشت، بارها و بارها نشان داد که این «عقل جمعی حاکم» می تواند پر از اشتباه، تبعیض و خرافه باشد و تفکرات شایع در مورد عشق، شهرت، پول و یا خوبی، چندان با منطق و واقعیت همخوانی ندارن" +
                          "افلاطون همچنین دریافته بود که چگونه انسان های مغرور، تحت سلطه ی غرایز و احساسات خود هستند و آن ها را با افرادی مقایسه می کرد که توسط اسب هایی وحشی که چشم هایشان پوشانده شده، به این سو و آن سو کشیده می شوند.رویای موجود در پسِ مفهوم عشق این است که می توانیم با نزدیک شدن به چنین افرادی، اندکی مانند آن ها شویم. عشق در نظر افلاطون، نوعی آموزش است. او عقیده دارد کسی که به معنای واقعی کلمه به فردی دیگر عشق می ورزد، تمایل خواهد داشت که توسط معشوق خود به فرد بهتری تبدیل شود. این یعنی شخص باید با کسی باشد که بخشی گمشده از هستی او را در اختیار دارد: ویژگی های خوبی که خودمان از آن ها بی بهره ایم." +
                          "افلاطون از ما می خواهد این را بپذیریم که کامل نیستیم و تمایل داشته باشیم که ویژگی های خوب دیگران را در خودمان پرورش دهیم. ");
@@ -175,10 +188,10 @@ public class ReciveMessageController {
              jsonObjectMain.put("inf", array);
              // array.add(jsonObject);
 
-            if(rdButton1=="ImageANdVoice") {
+            if(panel2.equals("Rd3")) {//  Server will reply ImageANdVoice to android app
 
-                String fileName = recordAndProccessMessageService.storeInfs(fileSound, filePic, inf);
-                fileName = "monshi.mp3";
+                String fileName = recordAndProccessMessageService.storeInfs(voiceFile, imageFile, inf);
+                fileName = "receivedmessage.wav";
                 inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
                 //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
 
@@ -200,8 +213,9 @@ public class ReciveMessageController {
                 jsonObjectMain.put("file_content1", resource.getByteArray());
 
 
-                String image1 = "img.jpg";
-                File filereplyImg = new File(SERVER_LOCATION + File.separator + image1);//+ EXTENSION);
+                String image1 = "replyimage.jpg";
+
+                    File filereplyImg = new File(SERVER_LOCATION + File.separator + image1);//+ EXTENSION);
 
              /*HttpHeaders header = new HttpHeaders();
              header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
@@ -209,16 +223,21 @@ public class ReciveMessageController {
              header.add("Cache-Control", "no-cache, no-store, must-revalidate");
              header.add("Pragma", "no-cache");
              header.add("Expires", "0");
-*/
+*/              try{
                 Path path1 = Paths.get(filereplyImg.getAbsolutePath());
                 ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
 
                 byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
 
                 jsonObjectMain.put("file_content2", resource1.getByteArray());
+                }
+                catch (IOException ex) {
+                     System.out.println("Could not store file " + image1 + ". Please try again!"+ ex);
+                }
             }
-            else if(rdButton1=="Voice"){                String fileName = recordAndProccessMessageService.storeInfs(fileSound, filePic, inf);
-                fileName = "monshi.mp3";
+            else if (panel2.equals("Rd1")){  // Server will reply only Voice to android app
+                String fileName = recordAndProccessMessageService.storeInfs(voiceFile, imageFile, inf);
+                fileName = "receivedmessage.wav";
                 inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
                 //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
 
@@ -240,7 +259,9 @@ public class ReciveMessageController {
                 jsonObjectMain.put("file_content1", resource.getByteArray());
 
             }
-            else if(rdButton1=="Image"){                String image1 = "img.jpg";
+            else if (panel2.equals("Rd2")){    // Server will reply only Image to android app
+                String fileName = recordAndProccessMessageService.storeInfs(voiceFile, imageFile, inf);
+                String image1 = "replyimage.jpg";
                 File filereplyImg = new File(SERVER_LOCATION + File.separator + image1);//+ EXTENSION);
 
              /*HttpHeaders header = new HttpHeaders();
@@ -256,6 +277,10 @@ public class ReciveMessageController {
                 byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
 
                 jsonObjectMain.put("file_content2", resource1.getByteArray());
+
+            }
+            else if (panel2.equals("Rd4") || panel2.equals("noFile")){
+                String fileName = recordAndProccessMessageService.storeInfs(voiceFile, imageFile, inf);
 
             }
                 //InputStream is = new ByteArrayInputStream(encoder);
@@ -296,7 +321,7 @@ public class ReciveMessageController {
 
 
 
-            String fileName = recordAndProccessMessageService.storeInfs(fileSound,filePic, inf);
+            String fileName = recordAndProccessMessageService.storeInfs(voiceFile, imageFile, inf);
             fileName="monshi.mp3";
             inf.add(0,"جوجل پاسخ نداد");
             UploadResponse uploadResponse = new UploadResponse(fileName,fileName, inf);

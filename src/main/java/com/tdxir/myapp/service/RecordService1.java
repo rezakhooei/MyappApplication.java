@@ -37,7 +37,7 @@ public class RecordService1 {
                 .inf4(inf4)
                 .build();
        // userData.setUserid();
-        userData.setFilename(filename);
+        userData.setVoiceFileName(filename);
         userData.setUserid(authentication.getName());
          repository.save(userData);
 
