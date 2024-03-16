@@ -53,14 +53,43 @@ public class ReciveMessageController {
         this.proccessMessage = proccessMessage;
     }
 
+
     @PostMapping
     public ResponseEntity<JSONObject> uploadFile(
-            @RequestParam(name = "voiceFile", required = false) MultipartFile voiceFile,
-            @RequestParam(name = "imageFile", required = false) MultipartFile imageFile,
-            @RequestParam("inf1") String inf1, @RequestParam("inf2") String inf2,@RequestParam("inf3") String inf3,@RequestParam("inf4")String inf4,@RequestParam("panel1") String panel1 ,@RequestParam("panel2") String panel2 ,@RequestParam("panel3") String panel3 ,
-            @RequestParam("checkBox1") String checkBox1,@RequestParam("checkBox2") String checkBox2,
-            @RequestParam("checkBox3") String checkBox3) throws Exception
+            @RequestParam(name = "fileVoice", required = false) MultipartFile voiceFile,
+            @RequestParam(name = "fileImage", required = false) MultipartFile imageFile,
+            @RequestParam("inf1") String inf1, @RequestParam("inf2") String inf2,@RequestParam("inf3") String inf3,@RequestParam("inf4")String inf4,
+            @RequestParam("selected_rds") String selected_rds ,@RequestParam("selected_chks") String selected_chks
+                     ) throws Exception
      {   //googleSpeech.initialize();
+         String checkBox1="false",checkBox2="false",checkBox3="false",checkBox4="false",panel1="",panel2="";
+
+         String[] panels = selected_rds.split(",");
+         String[] panel11 = panels[0].split("-");
+         String[] panel22 = panels[1].split("-");
+         if(panel11[0].equals("panel1")){
+             if(panel11[1].equals("1")){
+                 panel1="Rd1";}
+             else
+             if(panel11[1].equals("2")){panel1="Rd2";}
+             else
+             if(panel11[1].equals("3")){panel1="Rd3";}
+             else
+                 if(panel11[1].equals("4")){panel1="Rd4";}
+         }
+         if(panel22[0].equals("panel2")){
+             if(panel22[1].equals("1")){panel2="Rd1";}if(panel22[1].equals("2")){panel2="Rd2";}
+             if(panel22[1].equals("3")){panel2="Rd3";}if(panel22[1].equals("4")){panel2="Rd4";}
+         }
+         String[] checkBoxes = selected_chks.split(",");
+         for (int i=0;i<=checkBoxes.length-1;++i){
+             if(checkBoxes[i].equals(String.valueOf(1))) checkBox1="true";
+             if(checkBoxes[i].equals(String.valueOf(2))) checkBox2="true";
+             if(checkBoxes[i].equals(String.valueOf(3))) checkBox3="true";
+             if(checkBoxes[i].equals(String.valueOf(4))) checkBox4="true";
+
+         }
+
 
 
         List<String> inf=null;
