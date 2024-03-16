@@ -104,7 +104,7 @@ public class AuthenticationService {
                         array1.add(new JSONObject(jsonObject));
                     }
 
-                jsonObjectPanel.put("گزینه های ارسال",array1);
+                jsonObjectPanel.put("panel1",array1);
 
                     jsonObject.clear();
                 JSONArray array2= new JSONArray();
@@ -127,7 +127,7 @@ public class AuthenticationService {
                     array2.add(new JSONObject(jsonObject));
                 }
 
-                jsonObjectPanel.put("گزینه های پاسخ",array2);
+                jsonObjectPanel.put("panel2",array2);
                 jsonObjectMain.put("radioButtonsList", jsonObjectPanel);
                /* Panel panel=new Panel();
                 ArrayList<RadioButton> rdTest=new ArrayList<>();
