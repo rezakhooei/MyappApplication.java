@@ -88,7 +88,15 @@ public class AuthenticationService {
 
                     for(int i=1;i<=4;++i) {
                         jsonObject.put("id", i);//String.valueOf(i));
-                        jsonObject.put("name", "Rd"+String.valueOf(i));
+                        if(i==1)
+                        jsonObject.put("name", "صدا");
+                        if(i==2)
+                            jsonObject.put("name", "عکس");
+                        if(i==3)
+                            jsonObject.put("name", "صداوعکس");
+                        if(i==4)
+                            jsonObject.put("name", "هیچکدام");
+
                         if(i==1)
                         jsonObject.put("isSelct", true);
                         else jsonObject.put("isSelct", false);
@@ -103,7 +111,15 @@ public class AuthenticationService {
                     //array.clear();
                 for(int i=1;i<=4;++i) {
                     jsonObject.put("id", i);//String.valueOf(i));
-                    jsonObject.put("name", "Rd"+String.valueOf(i)+String.valueOf(i));
+
+                    if(i==1)
+                        jsonObject.put("name", "صدا");
+                    if(i==2)
+                        jsonObject.put("name", "عکس");
+                    if(i==3)
+                        jsonObject.put("name", "صداوعکس");
+                    if(i==4)
+                        jsonObject.put("name", "هیچکدام");
                     if(i==1)
                         jsonObject.put("isSelct", true);
                     else jsonObject.put("isSelct", false);
@@ -140,9 +156,9 @@ public class AuthenticationService {
                 */
                 ArrayList<CheckBox> checkBoxes=new ArrayList<CheckBox>();
 
-                checkBoxes.add(new CheckBox(1,"chkBox1",false));
-                checkBoxes.add(new CheckBox(2,"chkBox2",false));
-                checkBoxes.add(new CheckBox(3,"chkBox3",false));
+                checkBoxes.add(new CheckBox(1,"انتخاب 1",false));
+                checkBoxes.add(new CheckBox(2,"انتخاب 2",false));
+                checkBoxes.add(new CheckBox(3,"انتخاب 3",false));
                 jsonObjectMain.put("checkBoxes",checkBoxes);
 
 
