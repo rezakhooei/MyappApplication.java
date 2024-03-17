@@ -47,7 +47,7 @@ public class DownloadFile {
 
         //select filename from users_data where userid=userid;
         int lastrecordindex =usersData.size();
-         String image;
+         String fileImage,fileVoice;
          String userid;
 
         JSONArray final_array=new JSONArray();
@@ -79,15 +79,27 @@ public class DownloadFile {
 
 
 
-            image = usersData.get(lastrecordindex - info).getVoiceFileName();//.indexOf(33)[u].getFilename();
+            fileVoice = usersData.get(lastrecordindex - info).getVoiceFileName();//.indexOf(33)[u].getFilename();
+           if(fileVoice.equals(""))
+               jsonInfo.put("fileContentVoice",null);
+           else {
+               File filereply1 = new File(SERVER_LOCATION + File.separator + fileVoice);//+ EXTENSION);
+               Path path1 = Paths.get(filereply1.getAbsolutePath());
+               ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
+               byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
+               jsonInfo.put("fileContentVoice", resource1.getByteArray());
+           }
 
-            File filereply1 = new File(SERVER_LOCATION + File.separator + image);//+ EXTENSION);
-            Path path1 = Paths.get(filereply1.getAbsolutePath());
-            ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
-            byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
-
-
-            jsonInfo.put("file_content",resource1.getByteArray());
+            fileImage = usersData.get(lastrecordindex - info).getImageFileName();//.indexOf(33)[u].getFilename();
+            if(fileImage.equals(""))
+                jsonInfo.put("fileContentImage",null);
+            else {
+                File filereply11 = new File(SERVER_LOCATION + File.separator + fileImage);//+ EXTENSION);
+                Path path11 = Paths.get(filereply11.getAbsolutePath());
+                ByteArrayResource resource11 = new ByteArrayResource(Files.readAllBytes(path11));
+                byte[] encoder11 = Base64.getEncoder().encode(resource11.getByteArray());
+                jsonInfo.put("fileContentImage", resource11.getByteArray());
+            }
             final_array.add(jsonInfo);
 
 

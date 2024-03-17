@@ -147,6 +147,12 @@ public class AuthenticationService {
                 checkBoxes.add(new CheckBox(3,"انتخاب 3",false));
                 jsonObjectMain.put("checkBoxes",checkBoxes);
 
+                ArrayList<Inf> infs=new ArrayList<Inf>();
+
+                infs.add(new Inf(1,"inf1","اطلاعات1"));
+                infs.add(new Inf(2,"inf2","اطلاعات2"));
+                infs.add(new Inf(3,"inf3","اطلاعات3"));
+                jsonObjectMain.put("infs",infs);
 
                 return jsonObjectMain;
 

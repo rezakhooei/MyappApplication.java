@@ -222,7 +222,7 @@ public class ReciveMessageController {
 
                 byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
 
-                jsonObjectMain.put("file_content1", resource.getByteArray());
+                jsonObjectMain.put("fileContentVoice", resource.getByteArray());
             }
                 catch (IOException ex) {
                 errorMsg= ex.getMessage();
@@ -244,7 +244,7 @@ public class ReciveMessageController {
 
                 byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
 
-                jsonObjectMain.put("file_content2", resource1.getByteArray());
+                jsonObjectMain.put("fileContentImage", resource1.getByteArray());
                 }
                 catch (IOException ex) {
                      errorMsg= ex.getMessage();
@@ -270,8 +270,8 @@ public class ReciveMessageController {
                 ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
                 byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
-
-                jsonObjectMain.put("file_content1", resource.getByteArray());
+                jsonObjectMain.put("fileContentImage", null);
+                jsonObjectMain.put("fileContentVoice", resource.getByteArray());
             }
                 catch (IOException ex) {
                 errorMsg= ex.getMessage();
@@ -294,8 +294,8 @@ public class ReciveMessageController {
                 ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
 
                 byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
-
-                jsonObjectMain.put("file_content2", resource1.getByteArray());
+                jsonObjectMain.put("fileContentVoice", null);
+                jsonObjectMain.put("fileContentImage", resource1.getByteArray());
             }
                 catch (IOException ex) {
                 errorMsg= ex.getMessage();
@@ -304,6 +304,8 @@ public class ReciveMessageController {
             }
             else if (panel2.equals("Rd4") || panel2.equals("noFile")){
                 String fileName = recordAndProccessMessageService.storeInfs(voiceFile, imageFile, inf);
+                jsonObjectMain.put("fileContentVoice", null);
+                jsonObjectMain.put("fileContentImage", null);
 
             }
             JSONArray array = new JSONArray();
