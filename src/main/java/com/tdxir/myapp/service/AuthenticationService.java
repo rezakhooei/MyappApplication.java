@@ -75,85 +75,71 @@ public class AuthenticationService {
                         .build();*/
 
             } else if (user.getRole() == USER) {
+               ArrayList<JSONObject> jsonObjectRdList = new ArrayList<JSONObject>();
                 JSONObject jsonObjectMain = new JSONObject();
-                JSONObject jsonObjectPanel = new JSONObject();
+                ArrayList<JSONObject> jsonObjectItems = new ArrayList<JSONObject>();
                 jsonObjectMain.put("token",jwtToken);
                 jsonObjectMain.put("paramCount",2);
                 jsonObjectMain.put("paramTime",60);
 
 
-                JSONObject jsonObject = new JSONObject();
-
+                JSONObject jsonObjectRd = new JSONObject();
+                JSONObject jsonObjectPanel = new JSONObject();
                 JSONArray array1 = new JSONArray();
 
                     for(int i=1;i<=4;++i) {
-                        jsonObject.put("id", i);//String.valueOf(i));
+                        jsonObjectRd.put("id", i);//String.valueOf(i));
                         if(i==1)
-                        jsonObject.put("name", "صدا");
+                        jsonObjectRd.put("name", "Rd1");
                         if(i==2)
-                            jsonObject.put("name", "عکس");
+                            jsonObjectRd.put("name", "Rd2");
                         if(i==3)
-                            jsonObject.put("name", "صداوعکس");
+                            jsonObjectRd.put("name", "Rd3");
                         if(i==4)
-                            jsonObject.put("name", "هیچکدام");
+                            jsonObjectRd.put("name", "Rd4");
 
                         if(i==1)
-                        jsonObject.put("isSelct", true);
-                        else jsonObject.put("isSelct", false);
+                        jsonObjectRd.put("isSelct", true);
+                        else jsonObjectRd.put("isSelct", false);
 
-                        array1.add(new JSONObject(jsonObject));
+                        jsonObjectItems.add(new JSONObject(jsonObjectRd));
                     }
 
-                jsonObjectPanel.put("panel1",array1);
+                    jsonObjectPanel.put("name","panel1");
+                    jsonObjectPanel.put("items",jsonObjectItems);
+                    jsonObjectRdList.add(jsonObjectPanel);
 
-                    jsonObject.clear();
-                JSONArray array2= new JSONArray();
-                    //array.clear();
+                    jsonObjectRd.clear();
+                     //jsonObjectItems.clear();
+
+                JSONObject jsonObjectRd1 = new JSONObject();
+                JSONObject jsonObjectPanel1 = new JSONObject();
+                ArrayList<JSONObject> jsonObjectItems1 = new ArrayList<JSONObject>();
+
                 for(int i=1;i<=4;++i) {
-                    jsonObject.put("id", i);//String.valueOf(i));
-
+                    jsonObjectRd1.put("id", i);//String.valueOf(i));
                     if(i==1)
-                        jsonObject.put("name", "صدا");
+                        jsonObjectRd1.put("name", "Rd11");
                     if(i==2)
-                        jsonObject.put("name", "عکس");
+                        jsonObjectRd1.put("name", "Rd22");
                     if(i==3)
-                        jsonObject.put("name", "صداوعکس");
+                        jsonObjectRd1.put("name", "Rd33");
                     if(i==4)
-                        jsonObject.put("name", "هیچکدام");
-                    if(i==1)
-                        jsonObject.put("isSelct", true);
-                    else jsonObject.put("isSelct", false);
+                        jsonObjectRd1.put("name", "Rd44");
 
-                    array2.add(new JSONObject(jsonObject));
+                    if(i==1)
+                        jsonObjectRd1.put("isSelct", true);
+                    else jsonObjectRd1.put("isSelct", false);
+
+                    jsonObjectItems1.add(new JSONObject(jsonObjectRd1));
                 }
 
-                jsonObjectPanel.put("panel2",array2);
-                jsonObjectMain.put("radioButtonsList", jsonObjectPanel);
-               /* Panel panel=new Panel();
-                ArrayList<RadioButton> rdTest=new ArrayList<>();
-                rdTest.add(new RadioButton(1,"rdBtn1",true));
-                rdTest.add(new RadioButton(2,"rdBtn2",false));
-                rdTest.add(new RadioButton(3,"rdBtn3",false));
-                List<RadioButton> radioButton1=new ArrayList<>();
-                radioButton1.add(new RadioButton(1,"rdBtn1",true));
-                radioButton1.add(new RadioButton(2,"rdBtn2",false));
-                radioButton1.add(new RadioButton(3,"rdBtn3",false));
 
-                ArrayList<List<RadioButton>>  radioBottonList=new ArrayList<>();
-                radioBottonList.add(radioButton1);
-                panel.setId(1);
-                panel.setPanel(rdTest);
+                jsonObjectPanel1.put("name","panel2");
+                jsonObjectPanel1.put("items",jsonObjectItems1);
+                jsonObjectRdList.add(jsonObjectPanel1);
+                jsonObjectMain.put("radioButtonsList", jsonObjectRdList);
 
-                ArrayList<RadioButton> radioButton2=new ArrayList<>();
-                radioButton2.add(new RadioButton(1,"rdBtn11",true));
-                radioButton2.add(new RadioButton(2,"rdBtn22",false));
-              //  radioButton2.add(new RadioButton(3,"rdBtn33",false));
-                panel
-                panel.setId(2);
-                panel.setPanel(radioButton2);
-
-
-                */
                 ArrayList<CheckBox> checkBoxes=new ArrayList<CheckBox>();
 
                 checkBoxes.add(new CheckBox(1,"انتخاب 1",false));
