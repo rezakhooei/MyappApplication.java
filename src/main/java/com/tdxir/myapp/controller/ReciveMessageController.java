@@ -64,6 +64,7 @@ public class ReciveMessageController {
      {   //googleSpeech.initialize();
          String checkBox1="false",checkBox2="false",checkBox3="false",checkBox4="false",panel1="",panel2="";
 
+
          String[] panels = selected_rds.split(",");
          String[] panel11 = panels[0].split("-");
          String[] panel22 = panels[1].split("-");
@@ -104,6 +105,9 @@ public class ReciveMessageController {
         // message= recordAndProccessMessageService.storeInfs(file, inf1, inf2, inf3, inf4);
           System.out.println(authentication.getName());
 
+
+         String fileNameTemp = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
+         inf1=fileNameTemp;
 
         if(!authentication.getName().equals("javadghane18@gmail.com")&&(message != "apikey not valid OR google didn't reply")) {
              JSONObject jsonObjectMain = new JSONObject();
