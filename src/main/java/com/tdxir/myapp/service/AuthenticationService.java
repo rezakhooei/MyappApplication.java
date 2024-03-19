@@ -138,6 +138,10 @@ public class AuthenticationService {
                 jsonObjectPanel1.put("name","panel2");
                 jsonObjectPanel1.put("items",jsonObjectItems1);
                 jsonObjectRdList.add(jsonObjectPanel1);
+
+
+
+
                 jsonObjectMain.put("radioButtonsList", jsonObjectRdList);
 
                 ArrayList<CheckBox> checkBoxes=new ArrayList<CheckBox>();
