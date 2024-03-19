@@ -57,10 +57,10 @@ public class DownloadFile {
             JSONArray arrayInfo=new JSONArray();
             for (int id=1;id<=3;++id){
                 JSONObject jsonId = new JSONObject();
-                jsonId.put("inf_id"+String.valueOf(info),id);
+                jsonId.put("inf_id"+String.valueOf(id),id);
                 if(userid.equals("javadghane18@gmail.com")){
 
-                    jsonId.put("inf_text","اطلاعات شماره "+String.valueOf(info) );
+                    jsonId.put("inf_text","اطلاعات شماره "+String.valueOf(id) );
                 }
                 else {
                     if(id==1)
