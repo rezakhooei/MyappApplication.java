@@ -69,19 +69,19 @@ public class ReciveMessageController {
          String[] panels = selected_rds.split(",");
          String[] panel11 = panels[0].split("-");
          String[] panel22 = panels[1].split("-");
-         if(panel11[0].equals("panel1")){
+         if(panel11[0].equals("panel2")){
              if(panel11[1].equals("1")){
-                 panel1="Rd1";}
+                 panel2="Rd1";}
              else
-             if(panel11[1].equals("2")){panel1="Rd2";}
+             if(panel11[1].equals("2")){panel2="Rd2";}
              else
-             if(panel11[1].equals("3")){panel1="Rd3";}
+             if(panel11[1].equals("3")){panel2="Rd3";}
              else
-                 if(panel11[1].equals("4")){panel1="Rd4";}
+                 if(panel11[1].equals("4")){panel2="Rd4";}
          }
-         if(panel22[0].equals("panel2")){
-             if(panel22[1].equals("1")){panel2="Rd1";}if(panel22[1].equals("2")){panel2="Rd2";}
-             if(panel22[1].equals("3")){panel2="Rd3";}if(panel22[1].equals("4")){panel2="Rd4";}
+         if(panel22[0].equals("panel1")){
+             if(panel22[1].equals("1")){panel1="Rd1";}if(panel22[1].equals("2")){panel1="Rd2";}
+             if(panel22[1].equals("3")){panel1="Rd3";}if(panel22[1].equals("4")){panel1="Rd4";}
          }
          String[] checkBoxes = selected_chks.split(",");
          for (int i=0;i<=checkBoxes.length-1;++i){
