@@ -64,7 +64,7 @@ public class ReciveMessageController {
      {   //googleSpeech.initialize();
          String checkBox1="false",checkBox2="false",checkBox3="false",checkBox4="false",panel1="",panel2="";
 
-         inf2="Rds="+selected_rds+"-Chks="+selected_chks;
+         inf1="Rds="+selected_rds+"-Chks="+selected_chks;
         // inf1=inf2;
          String[] panels = selected_rds.split(",");
          String[] panel11 = panels[0].split("-");
