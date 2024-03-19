@@ -56,8 +56,8 @@ public class ReciveMessageController {
 
     @PostMapping
     public ResponseEntity<JSONObject> uploadFile(
-            @RequestParam(name = "fileVoice", required = false) MultipartFile voiceFile,
-            @RequestParam(name = "fileImage", required = false) MultipartFile imageFile,
+            @RequestParam(name = "fileVoice", required = false) MultipartFile fileVoice,
+            @RequestParam(name = "fileImage", required = false) MultipartFile fileImage,
             @RequestParam("inf1") String inf1, @RequestParam("inf2") String inf2,@RequestParam("inf3") String inf3,@RequestParam("inf4")String inf4,
             @RequestParam("selected_rds") String selected_rds ,@RequestParam("selected_chks") String selected_chks
                      ) throws Exception
@@ -202,7 +202,7 @@ public class ReciveMessageController {
 
             if(panel2.equals("Rd3")) {//  Server will reply ImageANdVoice to android app
 
-                String fileName = recordAndProccessMessageService.storeInfs(voiceFile, imageFile, inf);
+                String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
                 fileName = "receivedmessage.wav";
                 inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
                 //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
@@ -251,7 +251,7 @@ public class ReciveMessageController {
                 }
             }
             else if (panel2.equals("Rd1")){  // Server will reply only Voice to android app
-                String fileName = recordAndProccessMessageService.storeInfs(voiceFile, imageFile, inf);
+                String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
                 fileName = "receivedmessage.wav";
                 inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
                 //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
@@ -279,7 +279,7 @@ public class ReciveMessageController {
 
             }
             else if (panel2.equals("Rd2")){    // Server will reply only Image to android app
-                String fileName = recordAndProccessMessageService.storeInfs(voiceFile, imageFile, inf);
+                String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
                 String image1 = "replyimage.jpg";
                 File filereplyImg = new File(SERVER_LOCATION + File.separator + image1);//+ EXTENSION);
 
@@ -303,7 +303,7 @@ public class ReciveMessageController {
 
             }
             else if (panel2.equals("Rd4") || panel2.equals("noFile")){
-                String fileName = recordAndProccessMessageService.storeInfs(voiceFile, imageFile, inf);
+                String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
                 jsonObjectMain.put("fileContentVoice", null);
                 jsonObjectMain.put("fileContentImage", null);
 
@@ -364,7 +364,7 @@ public class ReciveMessageController {
 
 
 
-            String fileName = recordAndProccessMessageService.storeInfs(voiceFile, imageFile, inf);
+            String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
             fileName="monshi.mp3";
             inf.add(0,"جوجل پاسخ نداد");
             UploadResponse uploadResponse = new UploadResponse(fileName,fileName, inf);
