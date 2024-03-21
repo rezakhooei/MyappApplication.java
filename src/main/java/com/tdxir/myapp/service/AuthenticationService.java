@@ -116,6 +116,15 @@ public class AuthenticationService {
                         .build();*/
             }
         }
+        else if (user.getUserKind() ==UserKind.TEST )
+        {
+            infList=new String[]{"اطلاعات 1","اطلاعات 2","اطلاعات 3","اطلاعات 4"};
+            checkBoxesList=new String[]{"chk1","chk2","chk3"};
+            panels=new String[][]{{"panel1","panel2"},{"Rd1","Rd2","Rd3","Rd4"},{"Rd11","Rd22","Rd33","RD44"}};
+
+            return  sendAuthConfig(infList,checkBoxesList,panels,jwtToken);
+
+        }
     return null;
 
     }
