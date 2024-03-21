@@ -64,18 +64,22 @@ public class AuthenticationService {
                 .orElseThrow();
         if (!user.isActive()) return null;
         var jwtToken = jwtService.generateToken(user);
+        String[] infList,checkBoxesList;
 
+        String[][] panels;
         if (user.getUserKind() == UserKind.SHOP)            //User Shop
         {
-            if (user.getRole() == ADMIN) {/*
-                return AuthenticationResponse.builder()
-                        .token(jwtToken)
-                        .paramCount("4")
-                        .paramTime(("300"))
-                        .build();*/
+            if (user.getRole() == ADMIN) {
+
+
 
             } else if (user.getRole() == USER) {
-               ArrayList<JSONObject> jsonObjectRdList = new ArrayList<JSONObject>();
+                infList=new String[]{"اطلاعات 1","اطلاعات 2","اطلاعات 3","اطلاعات 4"};
+                checkBoxesList=new String[]{"chk1","chk2","chk3"};
+                panels=new String[][]{{"panel1","panel2"},{"Rd1","Rd2","Rd3","Rd4"},{"Rd11","Rd22","Rd33","RD44"}};
+
+                return  sendAuthConfig(infList,checkBoxesList,panels,jwtToken);
+               /*ArrayList<JSONObject> jsonObjectRdList = new ArrayList<JSONObject>();
                 JSONObject jsonObjectMain = new JSONObject();
                 ArrayList<JSONObject> jsonObjectItems = new ArrayList<JSONObject>();
                 jsonObjectMain.put("token",jwtToken);
@@ -159,7 +163,7 @@ public class AuthenticationService {
                 infs.add(new Inf(3,"inf3","اطلاعات 4"));
                 jsonObjectMain.put("infs",infs);
 
-                return jsonObjectMain;
+                return jsonObjectMain;*/
 
                 /*AuthenticationResponse.builder()
                         .token(jwtToken)
@@ -209,6 +213,61 @@ public class AuthenticationService {
 
     }
 
+JSONObject sendAuthConfig(String infList[],String[] checkBoxesList,String[][] panels,String jwtToken){
 
+    ArrayList<JSONObject> jsonObjectRdList = new ArrayList<JSONObject>();
+    JSONObject jsonObjectMain = new JSONObject();
+    ArrayList<JSONObject> jsonObjectItems = new ArrayList<JSONObject>();
+    jsonObjectMain.put("token",jwtToken);
+    jsonObjectMain.put("paramCount",2);
+    jsonObjectMain.put("paramTime",60);
+
+for(int panelNum=1;panelNum<=panels[0].length;++panelNum)
+{
+    JSONObject jsonObjectRd = new JSONObject();
+    JSONObject jsonObjectPanel = new JSONObject();
+    JSONArray array1 = new JSONArray();
+
+    for (int rdNum = 1; rdNum <= panels[panelNum].length; ++rdNum) {
+        jsonObjectRd.put("id", rdNum);//String.valueOf(i));
+        jsonObjectRd.put("name", panels[panelNum][rdNum-1]);
+
+        if (rdNum == 1)
+            jsonObjectRd.put("isSelct", true);
+        else jsonObjectRd.put("isSelct", false);
+
+        jsonObjectItems.add(new JSONObject(jsonObjectRd));
+    }
+
+    jsonObjectPanel.put("name", panels[0][panelNum - 1]);
+    jsonObjectPanel.put("items", jsonObjectItems);
+    jsonObjectRdList.add(jsonObjectPanel);
+
+    jsonObjectRd.clear();
+    //jsonObjectItems.clear();
+}
+
+
+
+
+
+    jsonObjectMain.put("radioButtonsList", jsonObjectRdList);
+
+    ArrayList<CheckBox> checkBoxes=new ArrayList<CheckBox>();
+    for(int i=1;i<=checkBoxesList.length;++i)
+    checkBoxes.add(new CheckBox(i,checkBoxesList[i-1],false));
+    jsonObjectMain.put("checkBoxes",checkBoxes);
+
+    ArrayList<Inf> infs=new ArrayList<Inf>();
+
+    infs.add(new Inf(1,"inf1",infList[0]));
+    infs.add(new Inf(2,"inf2",infList[1]));
+    infs.add(new Inf(3,"inf3",infList[2]));
+    infs.add(new Inf(3,"inf3",infList[3]));
+    jsonObjectMain.put("infs",infs);
+
+
+    return jsonObjectMain;
+}
 
 }
