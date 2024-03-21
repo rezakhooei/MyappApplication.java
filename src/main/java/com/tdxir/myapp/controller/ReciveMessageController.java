@@ -94,8 +94,8 @@ public class ReciveMessageController {
           System.out.println(authentication.getName());
 
 // below added for test 14021229
-         String fileNameTemp = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
-        inf1=fileNameTemp;
+      //   String fileNameTemp = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
+       // inf1=fileNameTemp;
 
         if(!authentication.getName().equals("javadghane18@gmail.com")&&(message != "apikey not valid OR google didn't reply")) {
              JSONObject jsonObjectMain = new JSONObject();
