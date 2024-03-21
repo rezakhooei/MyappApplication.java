@@ -70,7 +70,11 @@ public class AuthenticationService {
         if (user.getUserKind() == UserKind.SHOP)            //User Shop
         {
             if (user.getRole() == ADMIN) {
+                infList=new String[]{"اطلاعات 1","اطلاعات 2","اطلاعات 3","اطلاعات 4"};
+                checkBoxesList=new String[]{"قیمت","تعداد","کد"};
+                panels=new String[][]{{"نحوه ارسال","پاسخ دریافتی","دستور"},{"صدا","عکس","صداوعکس","هیچکدام"},{"صدا","عکس","صداوعکس","هیچکدام"},{"ثبت کالا","تغییر موجودی"}};
 
+                return  sendAuthConfig(infList,checkBoxesList,panels,jwtToken);
 
 
             } else if (user.getRole() == USER) {
