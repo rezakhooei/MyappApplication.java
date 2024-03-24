@@ -71,8 +71,8 @@ public class AuthenticationService {
         {
             if (user.getRole() == ADMIN) {
                 infList=new String[]{"اطلاعات 1","اطلاعات 2","اطلاعات 3","اطلاعات 4"};
-                checkBoxesList=new String[]{"قیمت","تعداد","کد"};
-                panels=new String[][]{{"نحوه ارسال","پاسخ دریافتی","دستور"},{"صدا","عکس","صداوعکس","هیچکدام"},{"صدا","عکس","صداوعکس","هیچکدام"},{"ثبت کالا","تغییر موجودی"}};
+                checkBoxesList=new String[]{"chk1","chk2","chk3"};
+                panels=new String[][]{{"نحوه ارسال","پاسخ دریافتی","پنل 3"},{"صدا","عکس","صداوعکس","هیچکدام"},{"صدا","عکس","صداوعکس","هیچکدام"},{"رادیو باتن 1","رادیو باتن 2"}};
 
                 return  sendAuthConfig(infList,checkBoxesList,panels,jwtToken);
 
