@@ -106,20 +106,6 @@ public class ReciveMessageController {
 
           //  ProccessMessage proccessMessage=new ProccessMessage(user.getUserKind());
             //proccessMessage.(user.getUserKind());
-            List<String> processList=proccessMessage.proccess(message,user.getUserKind());
-             if((processList) ==null) {
-                 processList=new ArrayList<>();
-                 processList.add(" پاسخی پیدا نکردم");
-             }
-                 JSONArray array = new JSONArray();
-
-             for (int i = 1; i <= processList.size(); ++i) {
-                 jsonObject.put("inf_id", "");//String.valueOf(i));
-                 jsonObject.put("inf_text",  processList.get(i-1));
-                 array.add(new JSONObject(jsonObject));
-                 jsonObject.clear();
-             }
-             jsonObjectMain.put("inf", array);
              // array.add(jsonObject);
 
           /*   MakeTsv makeTsv;//=new MakeTsv(new MahakRepository()) ;
@@ -128,43 +114,149 @@ public class ReciveMessageController {
 */
 
 
-             //inf1="";
-             //for (int i=0;i<=5;++i)
 
-             String fileName="receivedmessage.wav";//"monshi.mp3";
-            // inf1 = "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد";
-             UploadResponse uploadResponse = new UploadResponse(fileName,fileName, inf);
 
-             String image = fileName;//"file";
-             File filereply = new File(SERVER_LOCATION + File.separator + image);//+ EXTENSION);
+            if(panel2.equals("Rd3")) {//  Server will reply ImageANdVoice to android app
 
-             HttpHeaders header = new HttpHeaders();
+                String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
+                fileName = "receivedmessage.wav";
+                inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
+                //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
+
+                String image = fileName;//"file";
+                File filereply = new File(SERVER_LOCATION + File.separator + image);//+ EXTENSION);
+
+             /*HttpHeaders header = new HttpHeaders();
              header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
 
              header.add("Cache-Control", "no-cache, no-store, must-revalidate");
              header.add("Pragma", "no-cache");
              header.add("Expires", "0");
+*/              try{
+                    Path path = Paths.get(filereply.getAbsolutePath());
+                    ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
-             Path path = Paths.get(filereply.getAbsolutePath());
-             ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+                    byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
 
-             byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
+                    jsonObjectMain.put("fileContentVoice", resource.getByteArray());
+                }
+                catch (IOException ex) {
+                    errorMsg= ex.getMessage();
+                }
 
-             jsonObjectMain.put("file_content", resource.getByteArray());
-             // array.add(new JSONObject(jsonObject));
-             // jsonObject.clear();
+                String image1 = "replyimage.jpg";
 
-             InputStream is = new ByteArrayInputStream(encoder);
-             InputStreamResource resource1 = new InputStreamResource(is);
+                File filereplyImg = new File(SERVER_LOCATION + File.separator + image1);//+ EXTENSION);
 
-             HttpHeaders headers = new HttpHeaders();
-             headers.setContentType(MediaType.APPLICATION_JSON);
+             /*HttpHeaders header = new HttpHeaders();
+             header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
 
-             // ContentDisposition disposition = ContentDisposition.attachment().filename("monshi.mp3").build();
-             ContentDisposition disposition = ContentDisposition.attachment().filename(filereply.getName()).build();
-             headers.setContentDisposition(disposition);
+             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+             header.add("Pragma", "no-cache");
+             header.add("Expires", "0");
+*/              try{
+                    Path path1 = Paths.get(filereplyImg.getAbsolutePath());
+                    ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
 
-             return new ResponseEntity<>(jsonObjectMain, headers, HttpStatus.OK);
+                    byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
+
+                    jsonObjectMain.put("fileContentImage", resource1.getByteArray());
+                }
+                catch (IOException ex) {
+                    errorMsg= ex.getMessage();
+                }
+            }
+            else if (panel2.equals("Rd1")){  // Server will reply only Voice to android app
+                String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
+                fileName = "receivedmessage.wav";
+                inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
+                //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
+
+                String image = fileName;//"file";
+                File filereply = new File(SERVER_LOCATION + File.separator + image);//+ EXTENSION);
+
+             /*HttpHeaders header = new HttpHeaders();
+             header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
+
+             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+             header.add("Pragma", "no-cache");
+             header.add("Expires", "0");
+*/              try{
+                    Path path = Paths.get(filereply.getAbsolutePath());
+                    ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+
+                    byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
+                    jsonObjectMain.put("fileContentImage", null);
+                    jsonObjectMain.put("fileContentVoice", resource.getByteArray());
+                }
+                catch (IOException ex) {
+                    errorMsg= ex.getMessage();
+                }
+
+            }
+            else if (panel2.equals("Rd2")){    // Server will reply only Image to android app
+                String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
+                String image1 = "replyimage.jpg";
+                File filereplyImg = new File(SERVER_LOCATION + File.separator + image1);//+ EXTENSION);
+
+             /*HttpHeaders header = new HttpHeaders();
+             header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
+
+             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+             header.add("Pragma", "no-cache");
+             header.add("Expires", "0");
+*/              try{
+                    Path path1 = Paths.get(filereplyImg.getAbsolutePath());
+                    ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
+
+                    byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
+                    jsonObjectMain.put("fileContentVoice", null);
+                    jsonObjectMain.put("fileContentImage", resource1.getByteArray());
+                }
+                catch (IOException ex) {
+                    errorMsg= ex.getMessage();
+                }
+
+            }
+            else if (panel2.equals("Rd4") || panel2.equals("noFile")){
+                String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
+                jsonObjectMain.put("fileContentVoice", null);
+                jsonObjectMain.put("fileContentImage", null);
+
+            }
+            List<String> processList=proccessMessage.proccess(message,user.getUserKind());
+            if((processList) ==null) {
+                processList=new ArrayList<>();
+                processList.add(" پاسخی پیدا نکردم");
+            }
+            JSONArray array = new JSONArray();
+
+            for (int i = 1; i <= processList.size(); ++i) {
+                jsonObject.put("inf_id", "");//String.valueOf(i));
+                if(i==1){
+                    String chkBoxStr="";
+                    if(checkBox1.equals("true")) chkBoxStr="check box1 selected"+"\n";
+                    if(checkBox2.equals("true")) chkBoxStr+="check box2 selected"+"\n";
+                    if(checkBox3.equals("true")) chkBoxStr+="check box3 selected"+"\n";
+                    chkBoxStr+=errorMsg;
+                    jsonObject.put("inf_text",chkBoxStr);
+                }
+                else
+
+                jsonObject.put("inf_text",  processList.get(i-1));
+                array.add(new JSONObject(jsonObject));
+                jsonObject.clear();
+            }
+            jsonObjectMain.put("inf", array);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            // ContentDisposition disposition = ContentDisposition.attachment().filename("monshi.mp3").build();
+            // ContentDisposition disposition = ContentDisposition.attachment().filename(filereply.getName()).build();
+            //headers.setContentDisposition(disposition);
+
+            return new ResponseEntity<>(jsonObjectMain, headers, HttpStatus.OK);
 
 
          }
