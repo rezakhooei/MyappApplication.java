@@ -232,7 +232,7 @@ public class ReciveMessageController {
             JSONArray array = new JSONArray();
 
             for (int i = 1; i <= processList.size(); ++i) {
-                jsonObject.put("inf_id", "");//String.valueOf(i));
+                jsonObject.put("inf_id", String.valueOf(i));
                 if(i==1){
                     String chkBoxStr="";
                     if(checkBox1.equals("true")) chkBoxStr="check box1 selected"+"\n";
