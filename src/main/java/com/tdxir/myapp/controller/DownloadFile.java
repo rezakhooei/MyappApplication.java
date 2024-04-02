@@ -51,7 +51,7 @@ public class DownloadFile {
          String userid;
 
         JSONArray final_array=new JSONArray();
-        for(int info=1;info<=3;++info) {
+        for(int info=1;info<=50;++info) {
             userid=usersData.get(lastrecordindex-info).getUserid();
             JSONObject jsonInfo = new JSONObject();
             JSONArray arrayInfo=new JSONArray();
