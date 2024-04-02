@@ -123,7 +123,7 @@ public class AuthenticationService {
         else if (user.getUserKind() ==UserKind.TEST )
         {
             infList=new String[]{"کد کالا","موجودی","قیمت(ریال)","اطلاعات 4"};
-            checkBoxesList=new String[]{"chk1","chk2","chk3"};
+            checkBoxesList=new String[]{};//"chk1","chk2","chk3"};
             panels=new String[][]{{"نحوه ارسال","نحوه دریافت"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"}};
 
             return  sendAuthConfig(infList,checkBoxesList,panels,jwtToken);
