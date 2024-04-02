@@ -139,7 +139,7 @@ JSONObject sendAuthConfig(String infList[],String[] checkBoxesList,String[][] pa
     JSONObject jsonObjectMain = new JSONObject();
 
     jsonObjectMain.put("token",jwtToken);
-    jsonObjectMain.put("paramCount",3);
+    jsonObjectMain.put("paramCount",4);
     jsonObjectMain.put("paramTime",60);
 
 for(int panelNum=1;panelNum<=panels[0].length;++panelNum)
