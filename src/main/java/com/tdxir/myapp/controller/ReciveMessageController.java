@@ -64,7 +64,7 @@ public class ReciveMessageController {
      {   //googleSpeech.initialize();
          String checkBox1="false",checkBox2="false",checkBox3="false",checkBox4="false",panel1="",panel2="",panel3="";
 
-         inf1="Rds="+selected_rds+"-Chks="+selected_chks;
+        // inf1="Rds="+selected_rds+"-Chks="+selected_chks;
         // inf1=inf2;
          panel1="Rd"+selected_rds.substring(selected_rds.indexOf("panel1-")+7,selected_rds.indexOf("panel1-")+8);
          panel2="Rd"+selected_rds.substring(selected_rds.indexOf("panel2-")+7,selected_rds.indexOf("panel2-")+8);
