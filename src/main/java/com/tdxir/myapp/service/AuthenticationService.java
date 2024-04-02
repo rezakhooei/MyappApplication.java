@@ -122,9 +122,9 @@ public class AuthenticationService {
         }
         else if (user.getUserKind() ==UserKind.TEST )
         {
-            infList=new String[]{"اطلاعات 1","اطلاعات 2","اطلاعات 3","اطلاعات 4"};
+            infList=new String[]{"کد کالا","موجودی","قیمت(ریال)","اطلاعات 4"};
             checkBoxesList=new String[]{"chk1","chk2","chk3"};
-            panels=new String[][]{{"panel1","panel2"},{"Rd1","Rd2","Rd3","Rd4"},{"Rd11","Rd22","Rd33","RD44"}};
+            panels=new String[][]{{"نحوه ارسال","نحوه دریافت"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"}};
 
             return  sendAuthConfig(infList,checkBoxesList,panels,jwtToken);
 
@@ -139,7 +139,7 @@ JSONObject sendAuthConfig(String infList[],String[] checkBoxesList,String[][] pa
     JSONObject jsonObjectMain = new JSONObject();
 
     jsonObjectMain.put("token",jwtToken);
-    jsonObjectMain.put("paramCount",2);
+    jsonObjectMain.put("paramCount",3);
     jsonObjectMain.put("paramTime",60);
 
 for(int panelNum=1;panelNum<=panels[0].length;++panelNum)
