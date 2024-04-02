@@ -124,7 +124,7 @@ public class AuthenticationService {
         {
             infList=new String[]{"نام کالا","کد کالا","موجودی","قیمت(ریال)"};
             checkBoxesList=new String[]{};//"chk1","chk2","chk3"};
-            panels=new String[][]{{"نحوه ارسال","نحوه دریافت"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"ذخیره","بررسی"}};
+            panels=new String[][]{{"نحوه ارسال","نحوه دریافت","دستور"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"ذخیره","بررسی"}};
 
             return  sendAuthConfig(infList,checkBoxesList,panels,jwtToken);
 
