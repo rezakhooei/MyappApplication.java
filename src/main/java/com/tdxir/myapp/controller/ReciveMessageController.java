@@ -89,7 +89,7 @@ public class ReciveMessageController {
 
 
          Users user= userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
-         String message="";
+         String message=inf2;
         // message= recordAndProccessMessageService.storeInfs(file, inf1, inf2, inf3, inf4);
           System.out.println(authentication.getName());
 
