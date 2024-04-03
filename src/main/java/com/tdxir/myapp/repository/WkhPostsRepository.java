@@ -28,7 +28,7 @@ public interface WkhPostsRepository extends JpaRepository<WkhPosts, Long> {
             "        pm.meta_key = '_thumbnail_id'\n" +
             "LEFT JOIN\n" +
             "    wkh_postmeta am ON\n" +
-            "CAST(am.post_id as char) = CAST(pm.meta_value as char) AND \n"+
+            "am.post_id  = 3977 AND \n"+//pm.meta_value  AND \n"+
 
             "        am.meta_key = '_wp_attached_file'\n" +
             "WHERE\n" +

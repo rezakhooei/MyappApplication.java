@@ -109,20 +109,20 @@ public class ProccessMessage {
                 if (matcher2.find() || matcher3.find()) {  //     if sentence is question about price by name of product
 
                     for (int i = 0; i <= temp3.size() - 1; ++i) {
-                        String strTemp = new String(temp3.get(++i));
-                        if (strTemp.equals("Code")) {
-                            strTemp = temp3.get(i - 1);
+                        String strCode = new String(temp3.get(++i));
+                        if (strCode.equals("Code")) {
+                            strCode = temp3.get(i - 1);
 
                          //   List<String> postIds = wkhPostsRepository.PostIdName("%" + strTemp + "%");
-                            List<String> postIds = wkhPostMetaRepository.PostIdCode(strTemp);
+                            List<String> postIds = wkhPostMetaRepository.PostIdCode(strCode);
                             if (postIds.size() != 0) {
                                 List<String> pricelist = new ArrayList<>();
-                                for (String post_id : postIds)
+                                for (String strPrice : postIds)
                                 {
-                                    pricelist.add("قیمت کد"+strTemp+" "+post_id +"   "+ "ریال است ");
+                                    pricelist.add("قیمت کد"+strCode+" "+strPrice +"   "+ "ریال است ");
                                     if(replyType.equals("Rd2") || replyType.equals("Rd3"))
-                                   pricelist.add("/var/www/tdx.ir/public_html/wp-content/uploads/2024/01/902.jpg");
-                                  //  pricelist.add(wkhPostsRepository.imageUrl(String.valueOf(902)));
+                                  // pricelist.add("/var/www/tdx.ir/public_html/wp-content/uploads/2024/01/902.jpg");
+                                   pricelist.add(wkhPostsRepository.imageUrl(strCode));
                                   // for name was  pricelist.add(String.valueOf(post_id.substring(0, post_id.indexOf(","))) + "-" + String.valueOf(wkhPostMetaRepository.price(String.valueOf(post_id.substring(post_id.indexOf(",") + 1)))) + "ریال");
                                 }
                                 return pricelist;
