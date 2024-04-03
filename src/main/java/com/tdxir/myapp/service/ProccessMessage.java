@@ -32,17 +32,17 @@ public class ProccessMessage {
     /*public ProccessMessage(UserKind userKind){
         this.userKind=userKind;
     }*/
-    public List<String> proccess(String message,UserKind userKind)
+    public List<String> proccess(String message,UserKind userKind,String replyType)
     {
         switch (userKind)
         {
             case SHOP :System.out.println("I AM SHOPPER");
-                return  proccessMessageShop(message);
+                return  proccessMessageShop(message,replyType);
             case SPORT:System.out.println("I AM SPORTER");
-                return  proccessMessageSport(message);
+                return  proccessMessageSport(message,replyType);
             case PERSON:System.out.println("I am Person");
                // return  proccessMessageShop(message);
-                return  proccessMessagePerson(message);
+                return  proccessMessagePerson(message,replyType);
         }
         ArrayList<String> message1=new ArrayList<String>();
         System.out.println("Nothing to select kind");
@@ -50,7 +50,8 @@ public class ProccessMessage {
         return message1;//
 
     }
-    public List<String> proccessMessageShop(String message) {
+
+    public List<String> proccessMessageShop(String message,String replyType) {
        // message="قیمت 902 چنده";
         message+=" ؟";
         MakeNer makeNer = new MakeNer();
@@ -119,6 +120,9 @@ public class ProccessMessage {
                                 for (String post_id : postIds)
                                 {
                                     pricelist.add("قیمت کد"+strTemp+" "+post_id +"   "+ "ریال است ");
+                                    if(replyType.equals("Rd2") || replyType.equals("Rd3"))
+                                   pricelist.add("/var/www/tdx.ir/public_html/wp-content/uploads/2024/01/920.jpg");
+                                  //  pricelist.add(wkhPostsRepository.imageUrl(String.valueOf(902)));
                                   // for name was  pricelist.add(String.valueOf(post_id.substring(0, post_id.indexOf(","))) + "-" + String.valueOf(wkhPostMetaRepository.price(String.valueOf(post_id.substring(post_id.indexOf(",") + 1)))) + "ریال");
                                 }
                                 return pricelist;
@@ -130,7 +134,7 @@ public class ProccessMessage {
         }
         return null;
     }
-    public List<String> proccessMessageSport(String message)
+    public List<String> proccessMessageSport(String message,String replyType)
                         {
 
                             MakeNer makeNer = new MakeNer();
@@ -217,7 +221,7 @@ public class ProccessMessage {
                             }
                             return null;
                         }
-    public List<String> proccessMessagePerson(String message)
+    public List<String> proccessMessagePerson(String message,String replyType)
     {
         ArrayList<String> temp3=new ArrayList<>();
         temp3.clear();

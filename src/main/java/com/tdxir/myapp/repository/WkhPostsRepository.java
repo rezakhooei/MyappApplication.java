@@ -1,6 +1,7 @@
 package com.tdxir.myapp.repository;
 
 import com.tdxir.myapp.model.WkhPosts;
+import com.tdxir.myapp.model.wkh_postmeta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,7 +18,25 @@ public interface WkhPostsRepository extends JpaRepository<WkhPosts, Long> {
     @Query("select w.post_title,w.id   from WkhPosts w where w.post_type='product' and w.post_title like :productName ")
 
     public List<String> PostIdName (@Param("productName") String productName);
+    // /var/www/tdx.ir/public_html
+    @Query("SELECT CONCAT( \"/var/www/tdx.ir/public_html/wp-content/uploads/\", am.meta_value) \n" +
+            "FROM\n" +
+            "    WkhPosts  p\n" +
+            "LEFT JOIN\n" +
+            "    wkh_postmeta pm ON\n" +
+            "        pm.post_id = p.id AND\n" +
+            "        pm.meta_key = '_thumbnail_id'\n" +
+            "LEFT JOIN\n" +
+            "    wkh_postmeta am ON\n" +
+            "CAST(am.post_id as char) = CAST(pm.meta_value as char) AND \n"+
 
+            "        am.meta_key = '_wp_attached_file'\n" +
+            "WHERE\n" +
+            "    p.post_type = 'product'\n" +
+            "    AND p.post_status = 'publish'\n" +
+            "    AND am.meta_value IS NOT NULL\n" +
+            "and p.id=:id")
+    public String imageUrl(@Param("id") String id);
     @Modifying
     @Transactional                 //   _price , _sale_price  , _regular_price , wcwp_wholesale
     @Query(value="update Wkh_Posts  SET post_title=:mahakName  WHERE  id=:meta_post_id", nativeQuery = true )

@@ -331,7 +331,14 @@ public class ReciveMessageController {
         JSONObject jsonObjectMain = new JSONObject();
         JSONObject jsonObject = new JSONObject();
         String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
+             List<String> processList = proccessMessage.proccess(message, userKind,Rd);
+             if ((processList) == null) {
+                 processList = new ArrayList<>();
+                 processList.add(" پاسخی پیدا نکردم");
+             }
         if(Rd.equals("Rd1")) {
+
+
             jsonObjectMain.put("fileContentImage", null);
             fileName = "receivedmessage.wav";
             inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
@@ -360,10 +367,13 @@ public class ReciveMessageController {
 
 
         }
-        else if(Rd.equals("Rd2")){jsonObjectMain.put("fileContentVoice", null);
+        else if(Rd.equals("Rd2")){
 
-            String image1 = "replyimage.jpg";
-            File filereplyImg = new File(SERVER_LOCATION + File.separator + image1);//+ EXTENSION);
+
+            jsonObjectMain.put("fileContentVoice", null);
+
+            String image1 =processList.get(1);// "replyimage.jpg";
+            File filereplyImg = new File(/*SERVER_LOCATION + File.separator +*/ image1);//+ EXTENSION);
 
              /*HttpHeaders header = new HttpHeaders();
              header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
@@ -385,6 +395,8 @@ public class ReciveMessageController {
 
         }
         else if(Rd.equals("Rd3")){
+
+
             fileName = "receivedmessage.wav";
             inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
             //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
@@ -433,16 +445,13 @@ public class ReciveMessageController {
             }
         }
         else if(Rd.equals("Rd4")){
+
             jsonObjectMain.put("fileContentVoice", null);
             jsonObjectMain.put("fileContentImage", null);
         }
 
 
-    List<String> processList = proccessMessage.proccess(message, userKind);
-         if ((processList) == null) {
-        processList = new ArrayList<>();
-        processList.add(" پاسخی پیدا نکردم");
-    }
+
     JSONArray array = new JSONArray();
 
          for (int i = 1; i <= processList.size(); ++i) {

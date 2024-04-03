@@ -21,4 +21,5 @@ public class WkhPosts {
     long id;
     String post_title;
     String post_type;
+    String post_status;
 }
