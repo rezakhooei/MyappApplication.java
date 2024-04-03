@@ -100,7 +100,8 @@ public class ReciveMessageController {
         //   String fileNameTemp = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
         // inf1=fileNameTemp;
 
-        if (!authentication.getName().equals("javadghane18@gmail.com") && (message != "apikey not valid OR google didn't reply")) {
+        if (!authentication.getName().equals("javadghane18@gmail.com") && (message != "apikey not valid OR google didn't reply"))
+        {
 
             //message="کد 902 چند تا داریم و برای چیست و چقدر بخریم ؟";
             //List<String> processList=recordAndProccessMessageService.proccessMessage(message,user.getUserKind());
@@ -123,7 +124,8 @@ public class ReciveMessageController {
             } else if (panel3.equals("Rd3")) {
             }
 
-        } else if (authentication.getName().equals("javadghane18@gmail.com")) {
+        } else if (authentication.getName().equals("javadghane18@gmail.com"))
+        {
             JSONObject jsonObjectMain = new JSONObject();
             JSONObject jsonObject = new JSONObject();
 

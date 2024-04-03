@@ -121,7 +121,7 @@ public class ProccessMessage {
                                 {
                                     pricelist.add("قیمت کد"+strTemp+" "+post_id +"   "+ "ریال است ");
                                     if(replyType.equals("Rd2") || replyType.equals("Rd3"))
-                                   pricelist.add("/var/www/tdx.ir/public_html/wp-content/uploads/2024/01/920.jpg");
+                                   pricelist.add("/var/www/tdx.ir/public_html/wp-content/uploads/2024/01/902.jpg");
                                   //  pricelist.add(wkhPostsRepository.imageUrl(String.valueOf(902)));
                                   // for name was  pricelist.add(String.valueOf(post_id.substring(0, post_id.indexOf(","))) + "-" + String.valueOf(wkhPostMetaRepository.price(String.valueOf(post_id.substring(post_id.indexOf(",") + 1)))) + "ریال");
                                 }
