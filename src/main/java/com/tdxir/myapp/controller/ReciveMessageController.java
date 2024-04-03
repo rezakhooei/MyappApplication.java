@@ -46,7 +46,7 @@ public class ReciveMessageController {
     private  MakeTsv makeTsv;
     private static final String EXTENSION = ".wav";
     private static final String SERVER_LOCATION = "/opt/tomcat/uploads";
-    private static final String SERVER_LOCATION_PRODUCT_IMG = "/var/www/tdx.ir/public_html/wp-content/uploads/";
+    private static final String SERVER_LOCATION_PRODUCT_IMG = "/var/www/tdx.ir/public_html/wp-content/uploads";
     private String errorMsg="";
 
     public ReciveMessageController(RecordAndProccessMessageService recordAndProccessMessageService, ProccessMessage proccessMessage) {
