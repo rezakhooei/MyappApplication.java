@@ -386,7 +386,7 @@ public class ReciveMessageController {
              header.add("Expires", "0");
 */
             try {
-                Path path1 = Paths.get(filereplyImg.getAbsolutePath());
+                Path path1 =Path.of(image1);// Paths.get(filereplyImg.getAbsolutePath());
                 ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
 
                 byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
@@ -394,6 +394,8 @@ public class ReciveMessageController {
                 jsonObjectMain.put("fileContentImage", resource1.getByteArray());
             } catch (IOException ex) {
                 errorMsg = ex.getMessage();
+                jsonObjectMain.put("fileContentVoice", null);
+                jsonObjectMain.put("fileContentImage", null);
             }
 
         }
