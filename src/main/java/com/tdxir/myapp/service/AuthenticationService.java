@@ -70,9 +70,9 @@ public class AuthenticationService {
         if (user.getUserKind() == UserKind.SHOP)            //User Shop
         {
             if (user.getRole() == ADMIN) {
-                infList=new String[]{"اطلاعات 1","اطلاعات 2","اطلاعات 3","اطلاعات 4"};
-                checkBoxesList=new String[]{"chk1","chk2","chk3"};
-                panels=new String[][]{{"نحوه ارسال","پاسخ دریافتی","پنل 3"},{"صدا","عکس","صداوعکس","هیچکدام"},{"صدا","عکس","صداوعکس","هیچکدام"},{"رادیو باتن 1","رادیو باتن 2"}};
+                infList=new String[]{"نام کالا","کد کالا","موجودی","قیمت(ریال)"};
+                checkBoxesList=new String[]{};//"chk1","chk2","chk3"};
+                panels=new String[][]{{"نحوه ارسال","نحوه دریافت","دستور"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"بررسی","ذخیره","سبد خرید"}};
 
                 return  sendAuthConfig(infList,checkBoxesList,panels,jwtToken);
 
@@ -122,9 +122,10 @@ public class AuthenticationService {
         }
         else if (user.getUserKind() ==UserKind.TEST )
         {
-            infList=new String[]{"نام کالا","کد کالا","موجودی","قیمت(ریال)"};
-            checkBoxesList=new String[]{};//"chk1","chk2","chk3"};
-            panels=new String[][]{{"نحوه ارسال","نحوه دریافت","دستور"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"بررسی","ذخیره"}};
+
+            infList=new String[]{"اطلاعات 1","اطلاعات 2","اطلاعات 3","اطلاعات 4"};
+            checkBoxesList=new String[]{"chk1","chk2","chk3"};
+            panels=new String[][]{{"نحوه ارسال","پاسخ دریافتی","پنل 3"},{"صدا","عکس","صداوعکس","هیچکدام"},{"صدا","عکس","صداوعکس","هیچکدام"},{"رادیو باتن 1","رادیو باتن 2"}};
 
             return  sendAuthConfig(infList,checkBoxesList,panels,jwtToken);
 
