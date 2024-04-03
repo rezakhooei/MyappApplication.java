@@ -46,6 +46,7 @@ public class ReciveMessageController {
     private  MakeTsv makeTsv;
     private static final String EXTENSION = ".wav";
     private static final String SERVER_LOCATION = "/opt/tomcat/uploads";
+    private static final String SERVER_LOCATION_PRODUCT_IMG = "/var/www/tdx.ir/public_html/wp-content/uploads/";
     private String errorMsg="";
 
     public ReciveMessageController(RecordAndProccessMessageService recordAndProccessMessageService, ProccessMessage proccessMessage) {
@@ -372,8 +373,8 @@ public class ReciveMessageController {
 
             jsonObjectMain.put("fileContentVoice", null);
 
-            String image1 =processList.get(1);// "replyimage.jpg";
-            File filereplyImg = new File(/*SERVER_LOCATION + File.separator +*/ image1);//+ EXTENSION);
+            String image1 ="902.jpg";//processList.get(1);// "replyimage.jpg";
+            File filereplyImg = new File(SERVER_LOCATION_PRODUCT_IMG + File.separator + image1);//+ EXTENSION);
 
              /*HttpHeaders header = new HttpHeaders();
              header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");

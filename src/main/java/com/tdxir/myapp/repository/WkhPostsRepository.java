@@ -19,7 +19,7 @@ public interface WkhPostsRepository extends JpaRepository<WkhPosts, Long> {
 
     public List<String> PostIdName (@Param("productName") String productName);
     // /var/www/tdx.ir/public_html
-    @Query("SELECT CONCAT( \"/var/www/tdx.ir/public_html/wp-content/uploads/\", am.meta_value) \n" +
+    @Query("SELECT  am.meta_value \n" +
             "FROM\n" +
             "    WkhPosts  p\n" +
             "LEFT JOIN\n" +
