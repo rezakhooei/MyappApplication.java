@@ -447,16 +447,9 @@ public class ReciveMessageController {
 
          for (int i = 1; i <= processList.size(); ++i) {
         jsonObject.put("inf_id", String.valueOf(i));
-        if (i == 1) {
-            String chkBoxStr = "";
-            if (checkBox1.equals("true")) chkBoxStr = "check box1 selected" + "\n";
-            if (checkBox2.equals("true")) chkBoxStr += "check box2 selected" + "\n";
-            if (checkBox3.equals("true")) chkBoxStr += "check box3 selected" + "\n";
-            chkBoxStr += errorMsg;
-            jsonObject.put("inf_text", chkBoxStr);
-        } else
 
-            jsonObject.put("inf_text", processList.get(i - 1));
+
+            jsonObject.put("inf_text", processList.get(i - 1)+"."+errorMsg);
         array.add(new JSONObject(jsonObject));
         jsonObject.clear();
     }
