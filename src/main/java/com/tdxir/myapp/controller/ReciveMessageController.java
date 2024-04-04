@@ -389,10 +389,10 @@ public class ReciveMessageController {
         else if(Rd.equals("Rd2")){
 
             jsonObjectMain.put("fileContentVoice", null);
-            if((processList.size()>1)&&processList.get(1)!=null) {
-                String image1 = FilenameUtils.getName(processList.get(1));//"replyimage.jpg"
+            if((processList.size()>1)&&processList.get(2)!=null) {
+                String image1 = FilenameUtils.getName(processList.get(2));//"replyimage.jpg"
                 if (image1 != null) {
-                    String pathFile = SERVER_LOCATION_PRODUCT_IMG + FilenameUtils.getPath(processList.get(1));
+                    String pathFile = SERVER_LOCATION_PRODUCT_IMG + FilenameUtils.getPath(processList.get(2));
                     File filereplyImg = new File(pathFile + File.separator + image1);//+ EXTENSION);
 
                     try {
