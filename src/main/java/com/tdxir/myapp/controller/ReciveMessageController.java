@@ -375,20 +375,23 @@ public class ReciveMessageController {
             jsonObjectMain.put("fileContentVoice", null);
 
             String image1 =FilenameUtils.getName(processList.get(1));//"replyimage.jpg"
-           String pathFile=SERVER_LOCATION_PRODUCT_IMG+FilenameUtils.getPath(processList.get(1));
-            File filereplyImg = new File(pathFile + File.separator +image1);//+ EXTENSION);
+           if(image1!=null) {
+               String pathFile = SERVER_LOCATION_PRODUCT_IMG + FilenameUtils.getPath(processList.get(1));
+               File filereplyImg = new File(pathFile + File.separator + image1);//+ EXTENSION);
 
-            try {
-                Path path1 = Paths.get(filereplyImg.getAbsolutePath());
-                ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
+               try {
+                   Path path1 = Paths.get(filereplyImg.getAbsolutePath());
+                   ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
 
-                byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
-                //jsonObjectMain.put("fileContentVoice", null);
-                jsonObjectMain.put("fileContentImage", resource1.getByteArray());
-            } catch (IOException ex) {
-                errorMsg = ex.getMessage()+"Path or file isn't correct";
+                   byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
+                   //jsonObjectMain.put("fileContentVoice", null);
+                   jsonObjectMain.put("fileContentImage", resource1.getByteArray());
+               } catch (IOException ex) {
+                   errorMsg = ex.getMessage() + "Path or file isn't correct";
 
-            }
+               }
+           }
+           else jsonObjectMain.put("fileContentImage",null);
 
         }
         else if(Rd.equals("Rd3")){
