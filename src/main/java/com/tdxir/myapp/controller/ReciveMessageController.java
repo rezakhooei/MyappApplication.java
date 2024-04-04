@@ -5,6 +5,7 @@ import com.tdxir.myapp.model.UserKind;
 import com.tdxir.myapp.model.Users;
 import com.tdxir.myapp.nlp.training.MakeTsv;
 import com.tdxir.myapp.repository.UserRepository;
+import com.tdxir.myapp.repository.WkhPostsRepository;
 import com.tdxir.myapp.service.GoogleSpeech;
 import com.tdxir.myapp.service.ProccessMessage;
 import com.tdxir.myapp.service.RecordAndProccessMessageService;
@@ -38,7 +39,8 @@ import org.apache.commons.io.FilenameUtils;
 public class ReciveMessageController {
     @Autowired
     UserRepository userRepository;
-
+    @Autowired
+    private WkhPostsRepository wkhPostsRepository;
     private final RecordAndProccessMessageService recordAndProccessMessageService;
     @Autowired
     private ProccessMessage proccessMessage;
@@ -334,11 +336,21 @@ public class ReciveMessageController {
         JSONObject jsonObjectMain = new JSONObject();
         JSONObject jsonObject = new JSONObject();
         String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
-             List<String> processList = proccessMessage.proccess(message, userKind,Rd);
-             if ((processList) == null) {
+             List<String> processList=new ArrayList<>();
+        if(fileVoice!=null) {
+             processList = proccessMessage.proccess(message, userKind, Rd);
+        }
+        else{
+
+
+                   processList.add(wkhPostsRepository.imageUrl(message));
+
+            }
+             if ((processList == null)|| (processList.size()==0)) {
                  processList = new ArrayList<>();
                  processList.add(" پاسخی پیدا نکردم");
              }
+
         if(Rd.equals("Rd1")) {
 
 
