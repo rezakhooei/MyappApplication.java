@@ -475,14 +475,14 @@ public class ReciveMessageController {
 
            if(i==1) {
                if(processList.get(i - 1)!=null)
-               jsonObject.put("inf_text", "ریال" + processList.get(i - 1) + ":" + "قیمت");
+               jsonObject.put("inf_text", "قیمت : " + processList.get(i - 1) + "ریال");
                else jsonObject.put("inf_text",  "قیمت تعریف نشده است");
 
            }
            else if(i==2)
                    {
                      if(processList.get(i - 1)!=null)
-                       jsonObject.put("inf_text", processList.get(i - 1) + ":" + "تعداد");
+                       jsonObject.put("inf_text", processList.get(i - 1) + "تعداد : ");
                      else jsonObject.put("inf_text",  "موجودی تعریف نشده است");
                      }
            else if(i==3) {
