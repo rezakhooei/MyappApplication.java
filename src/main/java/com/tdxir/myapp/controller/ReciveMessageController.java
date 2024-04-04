@@ -375,17 +375,10 @@ public class ReciveMessageController {
 
             jsonObjectMain.put("fileContentVoice", null);
 
-            String image1 =processList.get(1);// "replyimage.jpg";
+            String image1 ="replyimage.jpg";//processList.get(1);//
             File filereplyImg = new File(image1);//+ EXTENSION);
 
-             /*HttpHeaders header = new HttpHeaders();
-             header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
-
-             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
-             header.add("Pragma", "no-cache");
-             header.add("Expires", "0");
-*/
-            /*try {
+            try {
                 Path path1 =Path.of(image1);// Paths.get(filereplyImg.getAbsolutePath());
                 ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
 
@@ -393,10 +386,9 @@ public class ReciveMessageController {
                 //jsonObjectMain.put("fileContentVoice", null);
                 jsonObjectMain.put("fileContentImage", resource1.getByteArray());
             } catch (IOException ex) {
-                errorMsg = ex.getMessage();*/
-               // jsonObjectMain.put("fileContentVoice", null);
-                jsonObjectMain.put("fileContentImage", null);
-           // }
+                errorMsg = ex.getMessage();
+
+            }
 
         }
         else if(Rd.equals("Rd3")){
