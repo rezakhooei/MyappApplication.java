@@ -386,7 +386,7 @@ public class ReciveMessageController {
                 //jsonObjectMain.put("fileContentVoice", null);
                 jsonObjectMain.put("fileContentImage", resource1.getByteArray());
             } catch (IOException ex) {
-                errorMsg = ex.getMessage();
+                errorMsg = ex.getMessage()+"pl= "+processList.get(1);
 
             }
 
