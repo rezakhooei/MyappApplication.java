@@ -385,18 +385,18 @@ public class ReciveMessageController {
              header.add("Pragma", "no-cache");
              header.add("Expires", "0");
 */
-            try {
+            /*try {
                 Path path1 =Path.of(image1);// Paths.get(filereplyImg.getAbsolutePath());
                 ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
 
                 byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
-                jsonObjectMain.put("fileContentVoice", null);
+                //jsonObjectMain.put("fileContentVoice", null);
                 jsonObjectMain.put("fileContentImage", resource1.getByteArray());
             } catch (IOException ex) {
-                errorMsg = ex.getMessage();
-                jsonObjectMain.put("fileContentVoice", null);
+                errorMsg = ex.getMessage();*/
+               // jsonObjectMain.put("fileContentVoice", null);
                 jsonObjectMain.put("fileContentImage", null);
-            }
+           // }
 
         }
         else if(Rd.equals("Rd3")){
