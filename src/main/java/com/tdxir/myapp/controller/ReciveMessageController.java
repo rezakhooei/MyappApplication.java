@@ -32,7 +32,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-
+import org.apache.commons.io.FilenameUtils;
 @RestController
 @RequestMapping("/api/uploadFile")
 public class ReciveMessageController {
@@ -46,7 +46,7 @@ public class ReciveMessageController {
     private  MakeTsv makeTsv;
     private static final String EXTENSION = ".wav";
     private static final String SERVER_LOCATION = "/opt/tomcat/uploads";
-    private static final String SERVER_LOCATION_PRODUCT_IMG = "/var/www/tdx.ir/public_html/wp-content/uploads";
+    private static  String SERVER_LOCATION_PRODUCT_IMG = "/var/www/tdx.ir/public_html/wp-content/uploads/";
     private String errorMsg="";
 
     public ReciveMessageController(RecordAndProccessMessageService recordAndProccessMessageService, ProccessMessage proccessMessage) {
@@ -372,15 +372,14 @@ public class ReciveMessageController {
         }
         else if(Rd.equals("Rd2")){
 
-
             jsonObjectMain.put("fileContentVoice", null);
-
-            String image1 ="replyimage.jpg";//processList.get(1);//
+            SERVER_LOCATION_PRODUCT_IMG+=FilenameUtils.getPath(processList.get(1));
+            String image1 =FilenameUtils.getName(processList.get(1));//"replyimage.jpg"
            // SERVER_LOCATION_PRODUCT_IMG=processList.get(1)
-            File filereplyImg = new File(SERVER_LOCATION + File.separator +image1);//+ EXTENSION);
+            File filereplyImg = new File(SERVER_LOCATION_PRODUCT_IMG + File.separator +image1);//+ EXTENSION);
 
             try {
-                Path path1 =Path.of(image1);// Paths.get(filereplyImg.getAbsolutePath());
+                Path path1 = Paths.get(filereplyImg.getAbsolutePath());
                 ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
 
                 byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
