@@ -114,7 +114,7 @@ public class ProccessMessage {
                             strCode = temp3.get(i - 1);
 
                          //   List<String> postIds = wkhPostsRepository.PostIdName("%" + strTemp + "%");
-                            List<String> postIds = wkhPostMetaRepository.PostIdCode(strCode);
+                            List<String> postIds = wkhPostMetaRepository.priceIdCode(strCode);
                             if (postIds.size() != 0) {
                                 List<String> pricelist = new ArrayList<>();
                                 for (String strPrice : postIds)

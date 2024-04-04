@@ -5,6 +5,7 @@ import com.tdxir.myapp.model.UserKind;
 import com.tdxir.myapp.model.Users;
 import com.tdxir.myapp.nlp.training.MakeTsv;
 import com.tdxir.myapp.repository.UserRepository;
+import com.tdxir.myapp.repository.WkhPostMetaRepository;
 import com.tdxir.myapp.repository.WkhPostsRepository;
 import com.tdxir.myapp.service.GoogleSpeech;
 import com.tdxir.myapp.service.ProccessMessage;
@@ -41,6 +42,8 @@ public class ReciveMessageController {
     UserRepository userRepository;
     @Autowired
     private WkhPostsRepository wkhPostsRepository;
+    @Autowired
+    private WkhPostMetaRepository wkhPostMetaRepository;
     private final RecordAndProccessMessageService recordAndProccessMessageService;
     @Autowired
     private ProccessMessage proccessMessage;
@@ -342,7 +345,8 @@ public class ReciveMessageController {
         }
         else{
 
-
+                   processList.add(wkhPostMetaRepository.priceIdCode(message).get(0));
+                   processList.add(wkhPostMetaRepository.stockIdCode(message).get(0));
                    processList.add(wkhPostsRepository.imageUrl(message));
 
             }
@@ -469,9 +473,24 @@ public class ReciveMessageController {
          for (int i = 1; i <= processList.size(); ++i) {
         jsonObject.put("inf_id", String.valueOf(i));
 
+           if(i==1) {
+               if(processList.get(i - 1)!=null)
+               jsonObject.put("inf_text", "ریال" + processList.get(i - 1) + ":" + "قیمت");
+               else jsonObject.put("inf_text",  "قیمت تعریف نشده است");
 
-            jsonObject.put("inf_text", processList.get(i - 1)+"."+errorMsg);
-        array.add(new JSONObject(jsonObject));
+           }
+           else if(i==2)
+                   {
+                     if(processList.get(i - 1)!=null)
+                       jsonObject.put("inf_text", processList.get(i - 1) + ":" + "تعداد");
+                     else jsonObject.put("inf_text",  "موجودی تعریف نشده است");
+                     }
+           else if(i==3) {
+               if(processList.get(i - 1)!=null)
+               jsonObject.put("inf_text", processList.get(i - 1) + ":" + "عکس");
+               else jsonObject.put("inf_text",  "عکس  تعریف نشده است");
+           }
+           array.add(new JSONObject(jsonObject));
         jsonObject.clear();
     }
          jsonObjectMain.put("inf", array);

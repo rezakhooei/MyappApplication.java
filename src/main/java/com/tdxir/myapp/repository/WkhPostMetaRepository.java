@@ -24,8 +24,10 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     public long price (@Param("post_id") String post_id);
     @Query("select wm1.meta_value  from wkh_postmeta wm1 where wm1.meta_key='_price' and wm1.post_id in (select wm2.post_id from wkh_postmeta wm2 where wm2.meta_key='_sku' and wm2.meta_value=:code)")
 
-    public List<String> PostIdCode (@Param("code") String code);
+    public List<String> priceIdCode (@Param("code") String code);
+    @Query("select wm1.meta_value  from wkh_postmeta wm1 where wm1.meta_key='_stock' and wm1.post_id in (select wm2.post_id from wkh_postmeta wm2 where wm2.meta_key='_sku' and wm2.meta_value=:code)")
 
+    public List<String> stockIdCode (@Param("code") String code);
     @Modifying
     @Transactional
     @Query(value="update wkh_postmeta  SET meta_value=:mahakStock  WHERE  meta_key='_stock' and  (post_id =:mahakCode )", nativeQuery = true )
