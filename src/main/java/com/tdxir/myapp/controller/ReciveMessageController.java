@@ -376,7 +376,8 @@ public class ReciveMessageController {
             jsonObjectMain.put("fileContentVoice", null);
 
             String image1 ="replyimage.jpg";//processList.get(1);//
-            File filereplyImg = new File(image1);//+ EXTENSION);
+           // SERVER_LOCATION_PRODUCT_IMG=processList.get(1)
+            File filereplyImg = new File(SERVER_LOCATION + File.separator +image1);//+ EXTENSION);
 
             try {
                 Path path1 =Path.of(image1);// Paths.get(filereplyImg.getAbsolutePath());
