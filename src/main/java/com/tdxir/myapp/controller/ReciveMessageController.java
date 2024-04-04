@@ -375,8 +375,8 @@ public class ReciveMessageController {
             jsonObjectMain.put("fileContentVoice", null);
 
             String image1 =FilenameUtils.getName(processList.get(1));//"replyimage.jpg"
-           // SERVER_LOCATION_PRODUCT_IMG=processList.get(1)
-            File filereplyImg = new File(SERVER_LOCATION_PRODUCT_IMG+FilenameUtils.getPath(processList.get(1)) + File.separator +image1);//+ EXTENSION);
+           String pathFile=SERVER_LOCATION_PRODUCT_IMG+FilenameUtils.getPath(processList.get(1));
+            File filereplyImg = new File(pathFile + File.separator +image1);//+ EXTENSION);
 
             try {
                 Path path1 = Paths.get(filereplyImg.getAbsolutePath());
@@ -386,7 +386,7 @@ public class ReciveMessageController {
                 //jsonObjectMain.put("fileContentVoice", null);
                 jsonObjectMain.put("fileContentImage", resource1.getByteArray());
             } catch (IOException ex) {
-                errorMsg = ex.getMessage()+"pl= "+processList.get(1);
+                errorMsg = ex.getMessage()+"Path or file isn't correct";
 
             }
 
