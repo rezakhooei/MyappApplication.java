@@ -344,9 +344,15 @@ public class ReciveMessageController {
              processList = proccessMessage.proccess(message, userKind, Rd);
         }
         else{
+                   String price=wkhPostMetaRepository.priceIdCode(message).get(0);
+                   if(price!=null)
+                   processList.add(price);
+                   else processList.add("-1");
+                   String stock=wkhPostMetaRepository.stockIdCode(message).get(0);
+                   if(stock!=null)
+                   processList.add(stock);
+                   else processList.add("-1");
 
-                   processList.add(wkhPostMetaRepository.priceIdCode(message).get(0));
-                   processList.add(wkhPostMetaRepository.stockIdCode(message).get(0));
                    processList.add(wkhPostsRepository.imageUrl(message));
 
             }
