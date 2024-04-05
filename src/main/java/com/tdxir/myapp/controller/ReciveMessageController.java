@@ -412,7 +412,7 @@ public class ReciveMessageController {
             if((processList.size()>1)&&processList.get(3)!=null) {
                 String image1 = FilenameUtils.getName(processList.get(3));//"replyimage.jpg"
                 if (image1 != null) {
-                    String pathFile = SERVER_LOCATION_PRODUCT_IMG + FilenameUtils.getPath(processList.get(2));
+                    String pathFile = SERVER_LOCATION_PRODUCT_IMG + FilenameUtils.getPath(processList.get(3));
                     File filereplyImg = new File(pathFile + File.separator + image1);//+ EXTENSION);
 
                     try {
