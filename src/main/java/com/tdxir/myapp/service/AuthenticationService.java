@@ -153,7 +153,7 @@ for(int panelNum=1;panelNum<=panels[0].length;++panelNum)
         jsonObjectRd.put("id", rdNum);//String.valueOf(i));
         jsonObjectRd.put("name", panels[panelNum][rdNum-1]);
 
-        if (rdNum == 1)
+        if (rdNum == 4)
             jsonObjectRd.put("isSelct", true);
         else jsonObjectRd.put("isSelct", false);
 
@@ -194,7 +194,7 @@ for(int panelNum=1;panelNum<=panels[0].length;++panelNum)
     infs.add(new Inf(1,"inf1",infList[0]));
     infs.add(new Inf(2,"inf2",infList[1]));
     infs.add(new Inf(3,"inf3",infList[2]));
-    infs.add(new Inf(3,"inf3",infList[3]));
+    infs.add(new Inf(3,"inf4",infList[3]));
     jsonObjectMain.put("infs",infs);
 
 

@@ -338,7 +338,7 @@ public class ReciveMessageController {
          String message=inf.get(1);
         JSONObject jsonObjectMain = new JSONObject();
         JSONObject jsonObject = new JSONObject();
-        String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
+       // String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
              List<String> processList=new ArrayList<>();
         if(fileVoice!=null) {
              processList = proccessMessage.proccess(message, userKind, Rd);
@@ -359,7 +359,7 @@ public class ReciveMessageController {
 
 
             jsonObjectMain.put("fileContentImage", null);
-            fileName = "receivedmessage.wav";
+            String fileName = "receivedmessage.wav";
             inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
             //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
 
@@ -413,7 +413,7 @@ public class ReciveMessageController {
         else if(Rd.equals("Rd3")){
 
 
-            fileName = "receivedmessage.wav";
+            String fileName = "receivedmessage.wav";
             inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
             //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
 
