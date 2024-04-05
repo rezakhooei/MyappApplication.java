@@ -344,13 +344,17 @@ public class ReciveMessageController {
              processList = proccessMessage.proccess(message, userKind, Rd);
         }
         else{
-                   String price=wkhPostMetaRepository.priceIdCode(message).get(0);
-                   if(price!=null)
-                   processList.add(price);
+                   List<String> name=wkhPostMetaRepository.nameIdCode(message);
+                   if(name.size()>0)
+                   processList.add(name.get(0));
                    else processList.add("-1");
-                   String stock=wkhPostMetaRepository.stockIdCode(message).get(0);
-                   if(stock!=null)
-                   processList.add(stock);
+                   List<String> price=wkhPostMetaRepository.priceIdCode(message);
+                   if(price.size()>0)
+                   processList.add(price.get(0));
+                   else processList.add("-1");
+                   List<String> stock=wkhPostMetaRepository.stockIdCode(message);
+                   if(stock.size()>0)
+                   processList.add(stock.get(0));
                    else processList.add("-1");
 
                    processList.add(wkhPostsRepository.imageUrl(message));
@@ -478,20 +482,24 @@ public class ReciveMessageController {
 
          for (int i = 1; i <= processList.size(); ++i) {
         jsonObject.put("inf_id", String.valueOf(i));
-
-           if(i==1) {
+             if(i==1) {
+                 if (processList.get(i - 1) != "-1")
+                     jsonObject.put("inf_text", "نام کالا : " + processList.get(i - 1) );
+                 else jsonObject.put("inf_text", "نام کالا تعریف نشده است");
+             }
+           else if(i==2) {
                if(processList.get(i - 1)!="-1")
                jsonObject.put("inf_text", "قیمت : " + processList.get(i - 1) + "ریال");
                else jsonObject.put("inf_text",  "قیمت تعریف نشده است");
 
            }
-           else if(i==2)
+           else if(i==3)
                    {
                      if(processList.get(i - 1)!="-1")
-                       jsonObject.put("inf_text", processList.get(i - 1) + "تعداد : ");
+                       jsonObject.put("inf_text","تعداد :    " +processList.get(i - 1) );
                      else jsonObject.put("inf_text",  "موجودی تعریف نشده است");
                      }
-           else if(i==3) {
+           else if(i==4) {
                if(processList.get(i - 1)!=null)
                jsonObject.put("inf_text","");//, processList.get(i - 1) + ":" + "عکس");
                else jsonObject.put("inf_text",  "عکس  تعریف نشده است");
