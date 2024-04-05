@@ -35,6 +35,10 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import org.apache.commons.io.FilenameUtils;
+
+import static com.tdxir.myapp.model.Role.ADMIN;
+import static com.tdxir.myapp.model.UserKind.SHOP;
+
 @RestController
 @RequestMapping("/api/uploadFile")
 public class ReciveMessageController {
@@ -120,14 +124,20 @@ public class ReciveMessageController {
              makeTsv = new MakeTsv();
              makeTsv.createTsv(file);//.getResource().getFile());
 */
+          if(user.getUserKind()==SHOP){
+              if (user.getRole()==ADMIN) {
+                  if (panel3.equals("Rd1")) {
 
-            if (panel3.equals("Rd1")) {
+                      return searchProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind());
 
-                return searchProduct(panel2,fileVoice,fileImage,inf,checkBox1,checkBox2,checkBox3,user.getUserKind());
+                  } else if (panel3.equals("Rd2")) {
+                  } else if (panel3.equals("Rd3")) {
+                  }
+              }
+              else{
 
-            } else if (panel3.equals("Rd2")) {
-            } else if (panel3.equals("Rd3")) {
-            }
+              }
+          }
 
         } else if (authentication.getName().equals("javadghane18@gmail.com"))
         {
