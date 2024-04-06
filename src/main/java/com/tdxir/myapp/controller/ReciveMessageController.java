@@ -547,7 +547,7 @@ public class ReciveMessageController {
             {
                 stock=Integer.valueOf(inf.get(2));
             }
-            else stock= Integer.valueOf(-1);
+            else stock= -1;
             if(utils.isNumeric(inf.get(3)))
             {
                 price = Long.valueOf(inf.get(3));
@@ -561,7 +561,7 @@ public class ReciveMessageController {
             if(code!=Long.valueOf(-1)) {
                 postId = wkhPostMetaRepository.existsCode(String.valueOf(code));
                 if (postId != null) {
-                    if(stock!=Integer.valueOf(-1))
+                    if(stock!=-1)
                     flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock), postId);
                     if(price!=Long.valueOf(-1))
                     flag2 = wkhPostMetaRepository.updatePrice(String.valueOf(price), postId);
@@ -588,7 +588,7 @@ public class ReciveMessageController {
                 }
             }
         } catch (Exception e){
-            errorMsg=e.getMessage();
+            errorMsg+=e.getMessage();
 
         }
         JSONObject jsonObjectMain = new JSONObject();
