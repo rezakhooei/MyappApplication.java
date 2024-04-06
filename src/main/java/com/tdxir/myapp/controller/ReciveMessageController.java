@@ -735,8 +735,8 @@ public class ReciveMessageController {
             }
             else if(i==4) {
                 if(processList.get(i - 1)!=null)
-                    jsonObject.put("inf_text","");//, processList.get(i - 1) + ":" + "عکس");
-                else jsonObject.put("inf_text",  "عکس  تعریف نشده است");
+                    jsonObject.put("inf_text",""+errorMsg);//, processList.get(i - 1) + ":" + "عکس");
+                else jsonObject.put("inf_text",  "عکس  تعریف نشده است"+errorMsg);
             }
             array.add(new JSONObject(jsonObject));
             jsonObject.clear();
