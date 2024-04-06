@@ -35,12 +35,20 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Query("select wm1.meta_value  from wkh_postmeta wm1 where wm1.meta_key='_stock' and wm1.post_id in (select wm2.post_id from wkh_postmeta wm2 where wm2.meta_key='_sku' and wm2.meta_value=:code)")
 
     public List<String> stockIdCode (@Param("code") String code);
+
+    @Query("select meta_value from wkh_postmeta where post_id in(select meta_value from wkh_postmeta where\n" +
+            "meta_key='_thumbnail_id' and post_id in(select post_id from wkh_postmeta where meta_key='_sku' and meta_value=:id))\n" +
+            "and meta_key='_wp_attached_file'")
+    public String imageUrl(@Param("id") String id);
+    @Query("select  pm2.meta_value from wkh_postmeta pm2 where pm2.meta_key='_thumbnail_id' and pm2.post_id in(select pm3.post_id from wkh_postmeta pm3 where pm3.meta_key='_sku' and pm3.meta_value=:code)")
+    public List<String> findThumbnail(@Param("code") String code);
+
     @Modifying
     @Transactional
-    @Query(value="select  pm.meta_value from wkh_postmeta pm where pm.meta_key='_thumbnail_id' and pm.post_id in(select post_id from wkh_postmeta where meta_key='_sku' and meta_value=:code)", nativeQuery = true )
+    @Query(value="update wkh_postmeta pm1 set pm1.meta_value=:fileName where pm1.meta_key='_wp_attached_file' and pm1.post_id=:postId", nativeQuery = true )
 
 
-    public List<String> insertImage(@Param("code") String code );
+    public Integer updateImage(@Param("fileName") String fileName,@Param("postId") String PostId );
 
     @Modifying
     @Transactional

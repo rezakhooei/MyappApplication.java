@@ -369,7 +369,7 @@ public class ReciveMessageController {
                    processList.add(stock.get(0));
                    else processList.add("-1");
 
-                   processList.add(wkhPostsRepository.imageUrl(message));
+                   processList.add(wkhPostMetaRepository.imageUrl(message));
 
             }
              if ((processList == null)|| (processList.size()==0)) {
@@ -547,15 +547,16 @@ public class ReciveMessageController {
             flag1= wkhPostMetaRepository.updateStock(String.valueOf(stock),postId);
              flag2=wkhPostMetaRepository.updatePrice(String.valueOf(price),postId);
              if(fileImage!=null) {
-                 if (wkhPostsRepository.imageUrl(String.valueOf(code)) == null) {
-                     message=fileImage.getOriginalFilename();
+                 List<String> thumbnail=wkhPostMetaRepository.findThumbnail(String.valueOf(code));
+                 if ( thumbnail.get(0)== null) {
 
-                     wkhPostMetaRepository.insertImage(String.valueOf(code));
+
+                     Integer test=wkhPostMetaRepository.updateImage("2024/01/"+fileImage.getOriginalFilename(),thumbnail.get(0));
                      recordAndProccessMessageService.storeImage(fileImage,SERVER_LOCATION_PRODUCT_IMG_WIN);
                  } else {
-                     message=fileImage.getOriginalFilename();
 
-                     List<String> test=wkhPostMetaRepository.insertImage(String.valueOf(code));
+
+                     Integer test=wkhPostMetaRepository.updateImage("2024/01/"+fileImage.getOriginalFilename(),thumbnail.get(0));
                      recordAndProccessMessageService.storeImage(fileImage,SERVER_LOCATION_PRODUCT_IMG_WIN);
 
 
@@ -590,7 +591,7 @@ public class ReciveMessageController {
                 processList.add(stock.get(0));
             else processList.add("-1");
 
-            processList.add(wkhPostsRepository.imageUrl(message));
+            processList.add(wkhPostMetaRepository.imageUrl(message));
 
         }
         if ((processList == null)|| (processList.size()==0)) {

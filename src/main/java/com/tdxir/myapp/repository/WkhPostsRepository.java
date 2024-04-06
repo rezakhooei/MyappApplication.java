@@ -19,10 +19,7 @@ public interface WkhPostsRepository extends JpaRepository<WkhPosts, Long> {
 
     public List<String> PostIdName (@Param("productName") String productName);
     // /var/www/tdx.ir/public_html
-    @Query("select meta_value from wkh_postmeta where post_id in(select meta_value from wkh_postmeta where\n" +
-            "meta_key='_thumbnail_id' and post_id in(select post_id from wkh_postmeta where meta_key='_sku' and meta_value=:id))\n" +
-            "and meta_key='_wp_attached_file'")
-    public String imageUrl(@Param("id") String id);
+
     @Modifying
     @Transactional                 //   _price , _sale_price  , _regular_price , wcwp_wholesale
     @Query(value="update Wkh_Posts  SET post_title=:mahakName  WHERE  id=:meta_post_id", nativeQuery = true )
