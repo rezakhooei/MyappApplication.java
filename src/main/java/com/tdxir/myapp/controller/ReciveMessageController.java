@@ -537,7 +537,7 @@ public class ReciveMessageController {
         String message=inf.get(1), postId;
         try {
             Long code,price;
-            Integer stock = Integer.valueOf(inf.get(2)),flag1,flag2;
+            Integer stock ,flag1,flag2;
             if(utils.isNumeric(inf.get(1)))
             {
              code = Long.valueOf(inf.get(1));
