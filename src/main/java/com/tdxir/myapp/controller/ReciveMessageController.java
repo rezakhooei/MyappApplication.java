@@ -56,6 +56,7 @@ public class ReciveMessageController {
     private static final String EXTENSION = ".wav";
     private static final String SERVER_LOCATION = "/opt/tomcat/uploads";
     private static final String SERVER_LOCATION_PRODUCT_IMG = "/var/www/khooei.ir/public_html/wp-content/uploads/";
+    private static final String SERVER_LOCATION_PRODUCT_IMG_WIN = "/var/www/khooei.ir/public_html/wp-content/uploads/2024/04/";
     private String errorMsg="";
 
     public ReciveMessageController(RecordAndProccessMessageService recordAndProccessMessageService, ProccessMessage proccessMessage) {
@@ -547,8 +548,19 @@ public class ReciveMessageController {
              flag2=wkhPostMetaRepository.updatePrice(String.valueOf(price),postId);
              if(fileImage!=null) {
                  if (wkhPostsRepository.imageUrl(String.valueOf(code)) == null) {
-                 } else wkhPostMetaRepository.updateImage();
-                 recordAndProccessMessageService.storeImage(fileImage,"");
+                     message=fileImage.getOriginalFilename();
+
+                     wkhPostMetaRepository.insertImage(String.valueOf(code));
+                     recordAndProccessMessageService.storeImage(fileImage,SERVER_LOCATION_PRODUCT_IMG_WIN);
+                 } else {
+                     message=fileImage.getOriginalFilename();
+
+                     List<String> test=wkhPostMetaRepository.insertImage(String.valueOf(code));
+                     recordAndProccessMessageService.storeImage(fileImage,SERVER_LOCATION_PRODUCT_IMG_WIN);
+
+
+                 };
+
 
              }
              System.out.println(flag1+flag2);

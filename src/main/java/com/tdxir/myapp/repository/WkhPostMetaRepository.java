@@ -35,6 +35,12 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Query("select wm1.meta_value  from wkh_postmeta wm1 where wm1.meta_key='_stock' and wm1.post_id in (select wm2.post_id from wkh_postmeta wm2 where wm2.meta_key='_sku' and wm2.meta_value=:code)")
 
     public List<String> stockIdCode (@Param("code") String code);
+    @Modifying
+    @Transactional
+    @Query(value="select  pm.meta_value from wkh_postmeta pm where pm.meta_key='_thumbnail_id' and pm.post_id in(select post_id from wkh_postmeta where meta_key='_sku' and meta_value=:code)", nativeQuery = true )
+
+
+    public List<String> insertImage(@Param("code") String code );
 
     @Modifying
     @Transactional

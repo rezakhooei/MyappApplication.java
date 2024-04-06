@@ -235,28 +235,16 @@ public class RecordAndProccessMessageService {
         //  if (!(authentication instanceof AnonymousAuthenticationToken)) {
         //String currentUserName = authentication.getName();
         // Normalize file name
-        String date_str = new SimpleDateFormat("yyyyMMddHHmmss").format(date);
+        //String date_str = new SimpleDateFormat("yyyyMMddHHmmss").format(date);
         String voiceFileName ="";
         String imageFileName ="";
 
         if(imageFile!=null) {
             imageFileName = imageFile.getOriginalFilename();
             //  File oldFile = new File(fileName);
-            imageFileName = authentication.getName() + '-' + date_str + '-' + imageFileName;
-
-            //openAi API key="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"
+           // imageFileName = authentication.getName() + '-' + date_str + '-' + imageFileName;
 
 
-            // String output =    new Date().getTime() + "-file." + getFileExtension(file.getOriginalFilename());
-/*
-        File newFile = new File(fileName);
-
-        if(oldFile.renameTo(newFile)) {
-            System.out.println("File renamed successfully!");  // Output: File renamed successfully!
-        } else {
-            System.out.println("Failed to rename the file.");
-        }
-*/
             try {
                 // Check if the filename contains invalid characters
                 if (imageFileName.contains("..")) {
@@ -264,7 +252,7 @@ public class RecordAndProccessMessageService {
                             "Sorry! Filename contains invalid path sequence " + imageFileName);
                 }
 
-                Path targetLocation = this.fileStorageLocation.resolve(imageFileName);
+                Path targetLocation =Path.of(path+imageFileName);// this.fileStorageLocation.resolve(imageFileName);
                 Files.copy(imageFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
                 File filereply = new File(targetLocation.toString());
