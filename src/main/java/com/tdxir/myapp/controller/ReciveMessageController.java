@@ -10,6 +10,7 @@ import com.tdxir.myapp.repository.WkhPostsRepository;
 import com.tdxir.myapp.service.GoogleSpeech;
 import com.tdxir.myapp.service.ProccessMessage;
 import com.tdxir.myapp.service.RecordAndProccessMessageService;
+import com.tdxir.myapp.utils.Utils;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,7 @@ public class ReciveMessageController {
     private ProccessMessage proccessMessage;
     private final GoogleSpeech googleSpeech = new GoogleSpeech();
     private  MakeTsv makeTsv;
+    private Utils utils;
     private static final String EXTENSION = ".wav";
     private static final String SERVER_LOCATION = "/opt/tomcat/uploads";
     private static final String SERVER_LOCATION_PRODUCT_IMG = "/var/www/khooei.ir/public_html/wp-content/uploads/";
@@ -534,38 +536,57 @@ public class ReciveMessageController {
                                              String checkBox1, String checkBox2, String checkBox3, UserKind userKind) {
         String message=inf.get(1), postId;
         try {
-
-
-            Long code = Long.valueOf(inf.get(1));
-            Long price = Long.valueOf(inf.get(3));
+            Long code,price;
             Integer stock = Integer.valueOf(inf.get(2)),flag1,flag2;
+            if(utils.isNumeric(inf.get(1)))
+            {
+             code = Long.valueOf(inf.get(1));
+            }
+            else code= Long.valueOf(-1);
+            if(utils.isNumeric(inf.get(2)))
+            {
+                stock=Integer.valueOf(inf.get(2));
+            }
+            else stock= Integer.valueOf(-1);
+            if(utils.isNumeric(inf.get(3)))
+            {
+                price = Long.valueOf(inf.get(3));
+            }
+            else price= Long.valueOf(-1);
+
+
 
 
         // product code = inf1 and  exists then change price and stock
-        postId=wkhPostMetaRepository.existsCode(String.valueOf(code));
-        if(postId!=null){
-            flag1= wkhPostMetaRepository.updateStock(String.valueOf(stock),postId);
-             flag2=wkhPostMetaRepository.updatePrice(String.valueOf(price),postId);
-             if(fileImage!=null) {
-                 List<String> thumbnail=wkhPostMetaRepository.findThumbnail(String.valueOf(code));
-                 if ( thumbnail.get(0)== null) {
+            if(code!=Long.valueOf(-1)) {
+                postId = wkhPostMetaRepository.existsCode(String.valueOf(code));
+                if (postId != null) {
+                    if(stock!=Integer.valueOf(-1))
+                    flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock), postId);
+                    if(price!=Long.valueOf(-1))
+                    flag2 = wkhPostMetaRepository.updatePrice(String.valueOf(price), postId);
+                    if (fileImage != null) {
+                        List<String> thumbnail = wkhPostMetaRepository.findThumbnail(String.valueOf(code));
+                        if (thumbnail.get(0) == null) {
 
 
-                     Integer test=wkhPostMetaRepository.updateImage("2024/01/"+fileImage.getOriginalFilename(),thumbnail.get(0));
-                     recordAndProccessMessageService.storeImage(fileImage,SERVER_LOCATION_PRODUCT_IMG_WIN);
-                 } else {
+                            Integer test = wkhPostMetaRepository.updateImage("2024/01/" + fileImage.getOriginalFilename(), thumbnail.get(0));
+                            recordAndProccessMessageService.storeImage(fileImage, SERVER_LOCATION_PRODUCT_IMG_WIN);
+                        } else {
 
 
-                     Integer test=wkhPostMetaRepository.updateImage("2024/01/"+fileImage.getOriginalFilename(),thumbnail.get(0));
-                     recordAndProccessMessageService.storeImage(fileImage,SERVER_LOCATION_PRODUCT_IMG_WIN);
+                            Integer test = wkhPostMetaRepository.updateImage("2024/01/" + fileImage.getOriginalFilename(), thumbnail.get(0));
+                            recordAndProccessMessageService.storeImage(fileImage, SERVER_LOCATION_PRODUCT_IMG_WIN);
 
 
-                 };
+                        }
+                        ;
 
 
-             }
-             System.out.println(flag1+flag2);
-        }
+                    }
+
+                }
+            }
         } catch (Exception e){
             errorMsg=e.getMessage();
 
