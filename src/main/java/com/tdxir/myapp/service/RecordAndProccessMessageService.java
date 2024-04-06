@@ -83,7 +83,6 @@ public class RecordAndProccessMessageService {
 
         return fileNameParts[fileNameParts.length - 1];
     }
-
     public String storeInfs(MultipartFile voiceFile,MultipartFile imageFile , List<String> inf) {
         Date date = new Date();
         // for record db
@@ -165,12 +164,12 @@ public class RecordAndProccessMessageService {
         }
 
 
-            if(MyappApplication.WinLinux==1) {
+        if(MyappApplication.WinLinux==1) {
 
-               inf.add(0,"قیمت رژ چنده؟");//[0]=;
-            }
-            else {
-                //  @@@@    below code is for using openAI Speech to text
+            inf.add(0,"قیمت رژ چنده؟");//[0]=;
+        }
+        else {
+            //  @@@@    below code is for using openAI Speech to text
                 /*
                try //if(openApiKeyValidation.checkApi(apikey))
 
@@ -184,48 +183,99 @@ public class RecordAndProccessMessageService {
                     String strTemp=googleSpeech.transcribeSpeech("f:\\opt\\tomcat\\uploads\\reza@yahoo.com-20231204002912-file1.mp3");//receivedmessage.wav");
                    inf1= transcription;
                 }*/
-                //  @@@ below code is for using GOOGLE Speech to text instead of above code
+            //  @@@ below code is for using GOOGLE Speech to text instead of above code
 
-               try
+            try
 
-                {
-
-
-               //     inf.add(0,googleSpeech.transcribeSpeech(filereply));
+            {
 
 
-                }
-               catch (Exception e) {
-                   inf.add(0,"apikey not valid OR google didn't reply");
-               }
+                //     inf.add(0,googleSpeech.transcribeSpeech(filereply));
 
 
             }
+            catch (Exception e) {
+                inf.add(0,"apikey not valid OR google didn't reply");
+            }
 
 
-            System.out.println(inf.get(0));
-           // inf.add(1, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد رضا");//
-            for(int i=inf.size();i<=3;++i)
-                inf.add("");
+        }
+
+
+        System.out.println(inf.get(0));
+        // inf.add(1, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد رضا");//
+        for(int i=inf.size();i<=3;++i)
+            inf.add("");
 //if(inf1 != "apikey not valid") {
-    var userData = UsersData.builder()
+        var userData = UsersData.builder()
 
-            .date(date)
-            .userid(authentication.getName())
-            .voiceFileName(voiceFileName)
-            .imageFileName(imageFileName)
-            .inf1(inf.get(0))
-            .inf2(inf.get(1))
-            .inf3(inf.get(2))
-            .inf4(inf.get(3))
-            .build();
-    //userData.setUserid(authentication.getName());
-    usersDataRepository.save(userData);// repository.save(userData);
+                .date(date)
+                .userid(authentication.getName())
+                .voiceFileName(voiceFileName)
+                .imageFileName(imageFileName)
+                .inf1(inf.get(0))
+                .inf2(inf.get(1))
+                .inf3(inf.get(2))
+                .inf4(inf.get(3))
+                .build();
+        //userData.setUserid(authentication.getName());
+        usersDataRepository.save(userData);// repository.save(userData);
 
-               //       }
-            // till record db
+        //       }
+        // till record db
 
-            return inf.get(0);//fileName;
+        return inf.get(0);//fileName;
+
+    }
+    public Boolean storeImage(MultipartFile  imageFile ,String path ) {
+        Date date = new Date();
+        // for record db
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        //  if (!(authentication instanceof AnonymousAuthenticationToken)) {
+        //String currentUserName = authentication.getName();
+        // Normalize file name
+        String date_str = new SimpleDateFormat("yyyyMMddHHmmss").format(date);
+        String voiceFileName ="";
+        String imageFileName ="";
+
+        if(imageFile!=null) {
+            imageFileName = imageFile.getOriginalFilename();
+            //  File oldFile = new File(fileName);
+            imageFileName = authentication.getName() + '-' + date_str + '-' + imageFileName;
+
+            //openAi API key="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"
+
+
+            // String output =    new Date().getTime() + "-file." + getFileExtension(file.getOriginalFilename());
+/*
+        File newFile = new File(fileName);
+
+        if(oldFile.renameTo(newFile)) {
+            System.out.println("File renamed successfully!");  // Output: File renamed successfully!
+        } else {
+            System.out.println("Failed to rename the file.");
+        }
+*/
+            try {
+                // Check if the filename contains invalid characters
+                if (imageFileName.contains("..")) {
+                    throw new RuntimeException(
+                            "Sorry! Filename contains invalid path sequence " + imageFileName);
+                }
+
+                Path targetLocation = this.fileStorageLocation.resolve(imageFileName);
+                Files.copy(imageFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+                File filereply = new File(targetLocation.toString());
+
+            } catch (IOException ex) {
+                throw new RuntimeException("Could not store file " + imageFileName + ". Please try again!", ex);
+                //return false;
+            }
+        }
+
+   return true;//fileName;
 
     }
 

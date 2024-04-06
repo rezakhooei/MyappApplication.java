@@ -15,6 +15,10 @@ import java.util.List;
 public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> {
 
 
+    @Query("select w1.post_id from wkh_postmeta w1 where w1.meta_key='_sku' and w1.meta_value=:code")
+
+    public String existsCode (@Param("code") String code);
+
 
     @Query("select w1.post_id from wkh_postmeta w1 where w1.meta_key='_sku' and w1.meta_value=:mahakCode")
 
@@ -31,18 +35,32 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Query("select wm1.meta_value  from wkh_postmeta wm1 where wm1.meta_key='_stock' and wm1.post_id in (select wm2.post_id from wkh_postmeta wm2 where wm2.meta_key='_sku' and wm2.meta_value=:code)")
 
     public List<String> stockIdCode (@Param("code") String code);
+
+    @Modifying
+    @Transactional
+    @Query(value="update wkh_postmeta  SET meta_value=:stock  WHERE  meta_key='_stock' and  (post_id =:postId )", nativeQuery = true )
+
+    //    ("UPDATE WkhPostMeta as w1 , (SELECT post_id  FROM WkhPostMeta WHERE meta_key='_sku' and meta_value='902') AS w2 SET w1.meta_value = '48' WHERE w1.post_id=w2.post_id")
+    public Integer updateStock(@Param("stock") String stock,@Param("postId") String postId );
+    @Modifying
+    @Transactional                 //   _price , _sale_price  , _regular_price , wcwp_wholesale
+    @Query(value="update wkh_postmeta  SET meta_value=:price  WHERE  meta_key='_price' and  (post_id =:postId )", nativeQuery = true )
+
+    //    ("UPDATE WkhPostMeta as w1 , (SELECT post_id  FROM WkhPostMeta WHERE meta_key='_sku' and meta_value='902') AS w2 SET w1.meta_value = '48' WHERE w1.post_id=w2.post_id")
+    public Integer updatePrice(@Param("price") String price,@Param("postId") String postId );
+
     @Modifying
     @Transactional
     @Query(value="update wkh_postmeta  SET meta_value=:mahakStock  WHERE  meta_key='_stock' and  (post_id =:mahakCode )", nativeQuery = true )
 
         //    ("UPDATE WkhPostMeta as w1 , (SELECT post_id  FROM WkhPostMeta WHERE meta_key='_sku' and meta_value='902') AS w2 SET w1.meta_value = '48' WHERE w1.post_id=w2.post_id")
-    public void updateStock(@Param("mahakStock") String mahakStock,@Param("mahakCode") String mahakCode );
+    public void updateStockMahak(@Param("mahakStock") String mahakStock,@Param("mahakCode") String mahakCode );
     @Modifying
     @Transactional                 //   _price , _sale_price  , _regular_price , wcwp_wholesale
     @Query(value="update wkh_postmeta  SET meta_value=:mahakPrice  WHERE  meta_key='_price' and  (post_id =:mahakCode )", nativeQuery = true )
 
     //    ("UPDATE WkhPostMeta as w1 , (SELECT post_id  FROM WkhPostMeta WHERE meta_key='_sku' and meta_value='902') AS w2 SET w1.meta_value = '48' WHERE w1.post_id=w2.post_id")
-    public void updatePrice(@Param("mahakPrice") String mahakPrice,@Param("mahakCode") String mahakCode );
+    public void updatePriceMahak(@Param("mahakPrice") String mahakPrice,@Param("mahakCode") String mahakCode );
     @Modifying
     @Transactional                 //   _price , _sale_price  , _regular_price , wcwp_wholesale
     @Query(value="insert into Wkh_postmeta (post_id,meta_key,meta_value) values (:post_id,'_sku',:mahakCode) ",nativeQuery = true)
