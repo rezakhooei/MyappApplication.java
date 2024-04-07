@@ -138,7 +138,14 @@ public class ReciveMessageController {
                   } else if (panel3.equals("Rd3")) {
                   }
               }
-              else{
+              else{                  if (panel3.equals("Rd1")) {
+
+                  return searchProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind());
+
+              } else if (panel3.equals("Rd2")) {
+                  return saveProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind());
+              } else if (panel3.equals("Rd3")) {
+              }
 
               }
           }
