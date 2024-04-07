@@ -575,7 +575,7 @@ public class ReciveMessageController {
                         } else {
 
 
-                            Integer test = wkhPostMetaRepository.updateImage("2024/01/" + fileImage.getOriginalFilename(), thumbnail.get(0));
+                            Integer test = wkhPostMetaRepository.updateImage("2024/04/" + fileImage.getOriginalFilename(), thumbnail.get(0));
                             recordAndProccessMessageService.storeImage(fileImage, SERVER_LOCATION_PRODUCT_IMG_WIN);
 
 
