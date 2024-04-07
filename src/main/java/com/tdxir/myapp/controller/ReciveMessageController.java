@@ -542,6 +542,8 @@ public class ReciveMessageController {
     ResponseEntity<JSONObject> saveProduct(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
                                              String checkBox1, String checkBox2, String checkBox3, UserKind userKind) {
         String message=inf.get(1), postId;
+        String[] nameList=inf.get(0).split("@");
+
         try {
             Long code,price;
             Integer stock ,flag1,flag2;
@@ -572,6 +574,8 @@ public class ReciveMessageController {
                     flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock), postId);
                     if(price!=Long.valueOf(-1))
                     flag2 = wkhPostMetaRepository.updatePrice(String.valueOf(price), postId);
+                    if(nameList[1].equals(inf.get(1)))
+                    wkhPostMetaRepository.updateName(nameList[0], postId);
                     if (fileImage != null) {
                         List<String> thumbnail = wkhPostMetaRepository.findThumbnail(String.valueOf(code));
                         if (thumbnail.get(0) == null) {
