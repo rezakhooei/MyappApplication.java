@@ -575,7 +575,7 @@ public class ReciveMessageController {
                     if(price!=Long.valueOf(-1))
                     flag2 = wkhPostMetaRepository.updatePrice(String.valueOf(price), postId);
                     if(nameList[1].equals(inf.get(1)))
-                    wkhPostMetaRepository.updateName(nameList[0], postId);
+                    wkhPostsRepository.updateName(nameList[0], postId);
                     if (fileImage != null) {
                         List<String> thumbnail = wkhPostMetaRepository.findThumbnail(String.valueOf(code));
                         if (thumbnail.get(0) == null) {

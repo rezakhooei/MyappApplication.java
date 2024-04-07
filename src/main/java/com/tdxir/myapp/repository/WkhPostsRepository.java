@@ -19,6 +19,12 @@ public interface WkhPostsRepository extends JpaRepository<WkhPosts, Long> {
 
     public List<String> PostIdName (@Param("productName") String productName);
     // /var/www/tdx.ir/public_html
+    @Modifying
+    @Transactional
+    @Query(value="update wkh_posts SET post_title=:name  WHERE  id=:Id and post_type='product'", nativeQuery = true )
+
+    //    ("UPDATE WkhPostMeta as w1 , (SELECT post_id  FROM WkhPostMeta WHERE meta_key='_sku' and meta_value='902') AS w2 SET w1.meta_value = '48' WHERE w1.post_id=w2.post_id")
+    public Integer updateName(@Param("name") String name,@Param("Id") String Id );
 
     @Modifying
     @Transactional                 //   _price , _sale_price  , _regular_price , wcwp_wholesale
