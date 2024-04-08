@@ -76,7 +76,7 @@ public class ReciveMessageController {
     public ResponseEntity<JSONObject> uploadFile(
             @RequestParam(name = "fileVoice", required = false) MultipartFile fileVoice,
             @RequestParam(name = "fileImage", required = false) MultipartFile fileImage,
-            @RequestParam("inf1") String inf1, @RequestParam("inf2") String inf2,@RequestParam("inf3") String inf3,@RequestParam("inf4")String inf4,@RequestParam("inf5")String inf5,
+            @RequestParam("inf1") String inf1, @RequestParam("inf2") String inf2,@RequestParam("inf3") String inf3,@RequestParam("inf4")String inf4,
             @RequestParam("selected_rds") String selected_rds ,@RequestParam("selected_chks") String selected_chks
                      ) throws Exception {   //googleSpeech.initialize();
         String checkBox1 = "false", checkBox2 = "false", checkBox3 = "false", checkBox4 = "false", panel1 = "", panel2 = "", panel3 = "";
@@ -268,7 +268,7 @@ public class ReciveMessageController {
             }
             JSONArray array = new JSONArray();
 
-            for (int i = 1; i <= 4; ++i) {
+            for (int i = 1; i <= 3; ++i) {
                 jsonObject.put("inf_id", String.valueOf(i));
                 if (i == 1) {
                     String chkBoxStr = "";
