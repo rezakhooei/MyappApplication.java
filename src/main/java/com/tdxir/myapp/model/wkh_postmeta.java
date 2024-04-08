@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "wkh_postmeta",schema = "test")
+@Table(name = "wkh_postmeta",schema = "khooeiir_db")
 public class wkh_postmeta {
     @Id
     @GeneratedValue

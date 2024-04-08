@@ -1,7 +1,6 @@
 package com.tdxir.myapp.controller;
 
 //import com.google.gson.JsonObject;
-import com.tdxir.myapp.model.UserKind;
 import com.tdxir.myapp.model.Users;
 import com.tdxir.myapp.nlp.training.MakeTsv;
 import com.tdxir.myapp.repository.UserRepository;
@@ -10,6 +9,7 @@ import com.tdxir.myapp.repository.WkhPostsRepository;
 import com.tdxir.myapp.service.GoogleSpeech;
 import com.tdxir.myapp.service.ProccessMessage;
 import com.tdxir.myapp.service.RecordAndProccessMessageService;
+import com.tdxir.myapp.service.Shop;
 import com.tdxir.myapp.utils.Utils;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -35,7 +35,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import org.apache.commons.io.FilenameUtils;
 
 import static com.tdxir.myapp.model.Role.ADMIN;
 import static com.tdxir.myapp.model.UserKind.SHOP;
@@ -47,13 +46,18 @@ public class ReciveMessageController {
     UserRepository userRepository;
     @Autowired
     private WkhPostsRepository wkhPostsRepository;
+  //  @Autowired
+   // private WkhPostMetaRepository wkhPostMetaRepository;
     @Autowired
-    private WkhPostMetaRepository wkhPostMetaRepository;
     private final RecordAndProccessMessageService recordAndProccessMessageService;
     @Autowired
     private ProccessMessage proccessMessage;
     private final GoogleSpeech googleSpeech = new GoogleSpeech();
     private  MakeTsv makeTsv;
+    @Autowired
+    public Shop shop;
+
+
     private Utils utils;
     private static final String EXTENSION = ".wav";
     private static final String SERVER_LOCATION = "/opt/tomcat/uploads";
@@ -131,19 +135,20 @@ public class ReciveMessageController {
               if (user.getRole()==ADMIN) {
                   if (panel3.equals("Rd1")) {
 
-                      return searchProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind());
+                      return shop.searchProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind());
 
                   } else if (panel3.equals("Rd2")) {
-                      return saveProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind());
+                      return shop.saveProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind());
                   } else if (panel3.equals("Rd3")) {
+                      return shop.buyProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail());
                   }
               }
               else{                  if (panel3.equals("Rd1")) {
 
-                  return searchProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind());
+                  return shop.searchProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind());
 
               } else if (panel3.equals("Rd2")) {
-                  return saveProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind());
+                  return shop.saveProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind());
               } else if (panel3.equals("Rd3")) {
               }
 
@@ -353,435 +358,6 @@ public class ReciveMessageController {
     }
 
 
-    ResponseEntity<JSONObject> searchProduct(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
-                                             String checkBox1, String checkBox2, String checkBox3, UserKind userKind)
-         {
-         String message=inf.get(1);
-        JSONObject jsonObjectMain = new JSONObject();
-        JSONObject jsonObject = new JSONObject();
-       // String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
-             List<String> processList=new ArrayList<>();
-        if(fileVoice!=null) {
-             processList = proccessMessage.proccess(message, userKind, Rd);
-        }
-        else{
-                   List<String> name=wkhPostMetaRepository.nameIdCode(message);
-                   if(name.size()>0)
-                   processList.add(name.get(0));
-                   else processList.add("-1");
-                   List<String> price=wkhPostMetaRepository.priceIdCode(message);
-                   if(price.size()>0)
-                   processList.add(price.get(0));
-                   else processList.add("-1");
-                   List<String> stock=wkhPostMetaRepository.stockIdCode(message);
-                   if(stock.size()>0)
-                   processList.add(stock.get(0));
-                   else processList.add("-1");
 
-                   processList.add(wkhPostMetaRepository.imageUrl(message));
 
-            }
-             if ((processList == null)|| (processList.size()==0)) {
-                 processList = new ArrayList<>();
-                 processList.add(" پاسخی پیدا نکردم");
-             }
-
-        if(Rd.equals("Rd1")) {
-
-
-            jsonObjectMain.put("fileContentImage", null);
-            String fileName = "receivedmessage.wav";
-            inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
-            //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
-
-            String image = fileName;//"file";
-            File filereply = new File(SERVER_LOCATION + File.separator + image);//+ EXTENSION);
-
-             /*HttpHeaders header = new HttpHeaders();
-             header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
-
-             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
-             header.add("Pragma", "no-cache");
-             header.add("Expires", "0");
-*/
-            try {
-                Path path = Paths.get(filereply.getAbsolutePath());
-                ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
-
-                byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
-                jsonObjectMain.put("fileContentImage", null);
-                jsonObjectMain.put("fileContentVoice", resource.getByteArray());
-            } catch (IOException ex) {
-                errorMsg = ex.getMessage();
-            }
-
-
-        }
-        else if(Rd.equals("Rd2")){
-
-            jsonObjectMain.put("fileContentVoice", null);
-            if((processList.size()>1)&&processList.get(3)!=null) {
-                String image1 = FilenameUtils.getName(processList.get(3));//"replyimage.jpg"
-                if (image1 != null) {
-                    String pathFile = SERVER_LOCATION_PRODUCT_IMG + FilenameUtils.getPath(processList.get(3));
-                    File filereplyImg = new File(pathFile + File.separator + image1);//+ EXTENSION);
-
-                    try {
-                        Path path1 = Paths.get(filereplyImg.getAbsolutePath());
-                        ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
-
-                        byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
-                        //jsonObjectMain.put("fileContentVoice", null);
-                        jsonObjectMain.put("fileContentImage", resource1.getByteArray());
-                    } catch (IOException ex) {
-                        errorMsg = ex.getMessage() + "Path or file isn't correct";
-
-                    }
-                } else jsonObjectMain.put("fileContentImage", null);
-            } else errorMsg+="وجود ندارد";
-
-        }
-        else if(Rd.equals("Rd3")){
-
-
-            String fileName = "receivedmessage.wav";
-            inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
-            //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
-
-            String image = fileName;//"file";
-            File filereply = new File(SERVER_LOCATION + File.separator + image);//+ EXTENSION);
-
-             /*HttpHeaders header = new HttpHeaders();
-             header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
-
-             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
-             header.add("Pragma", "no-cache");
-             header.add("Expires", "0");
-*/
-            try {
-                Path path = Paths.get(filereply.getAbsolutePath());
-                ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
-
-                byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
-
-                jsonObjectMain.put("fileContentVoice", resource.getByteArray());
-            } catch (IOException ex) {
-                errorMsg = ex.getMessage();
-            }
-
-            String image1 = "replyimage.jpg";
-
-            File filereplyImg = new File(SERVER_LOCATION + File.separator + image1);//+ EXTENSION);
-
-             /*HttpHeaders header = new HttpHeaders();
-             header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
-
-             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
-             header.add("Pragma", "no-cache");
-             header.add("Expires", "0");
-*/
-            try {
-                Path path1 = Paths.get(filereplyImg.getAbsolutePath());
-                ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
-
-                byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
-
-                jsonObjectMain.put("fileContentImage", resource1.getByteArray());
-            } catch (IOException ex) {
-                errorMsg = ex.getMessage();
-            }
-        }
-        else if(Rd.equals("Rd4")){
-
-            jsonObjectMain.put("fileContentVoice", null);
-            jsonObjectMain.put("fileContentImage", null);
-        }
-
-
-
-    JSONArray array = new JSONArray();
-
-         for (int i = 1; i <= processList.size(); ++i) {
-        jsonObject.put("inf_id", String.valueOf(i));
-             if(i==1) {
-                 if (processList.get(i - 1) != "-1")
-                     jsonObject.put("inf_text", "نام کالا : " + processList.get(i - 1) );
-                 else jsonObject.put("inf_text", "نام کالا تعریف نشده است");
-             }
-           else if(i==2) {
-               if(processList.get(i - 1)!="-1")
-               jsonObject.put("inf_text", "قیمت : " + processList.get(i - 1) + "ریال");
-               else jsonObject.put("inf_text",  "قیمت تعریف نشده است");
-
-           }
-           else if(i==3)
-                   {
-                     if(processList.get(i - 1)!="-1")
-                       jsonObject.put("inf_text","تعداد :    " +processList.get(i - 1) );
-                     else jsonObject.put("inf_text",  "موجودی تعریف نشده است");
-                     }
-           else if(i==4) {
-               if(processList.get(i - 1)!=null)
-               jsonObject.put("inf_text","");//, processList.get(i - 1) + ":" + "عکس");
-               else jsonObject.put("inf_text",  "عکس  تعریف نشده است");
-           }
-           array.add(new JSONObject(jsonObject));
-        jsonObject.clear();
-    }
-         jsonObjectMain.put("inf", array);
-
-    HttpHeaders headers = new HttpHeaders();
-         headers.setContentType(MediaType.APPLICATION_JSON);
-
-    // ContentDisposition disposition = ContentDisposition.attachment().filename("monshi.mp3").build();
-    // ContentDisposition disposition = ContentDisposition.attachment().filename(filereply.getName()).build();
-    //headers.setContentDisposition(disposition);
-
-         return new ResponseEntity<>(jsonObjectMain, headers, HttpStatus.OK);
-    }
-    ResponseEntity<JSONObject> saveProduct(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
-                                             String checkBox1, String checkBox2, String checkBox3, UserKind userKind) {
-        String message=inf.get(1), postId;
-        String[] nameList=inf.get(0).split("@");
-
-        try {
-            Long code,price;
-            Integer stock ,flag1,flag2;
-            if(utils.isNumeric(inf.get(1)))
-            {
-             code = Long.valueOf(inf.get(1));
-            }
-            else code= Long.valueOf(-1);
-            if(utils.isNumeric(inf.get(2)))
-            {
-                stock=Integer.valueOf(inf.get(2));
-            }
-            else stock= -1;
-            if(utils.isNumeric(inf.get(3)))
-            {
-                price = Long.valueOf(inf.get(3));
-            }
-            else price= Long.valueOf(-1);
-
-
-
-
-        // product code = inf1 and  exists then change price and stock
-            if(code!=Long.valueOf(-1)) {
-                postId = wkhPostMetaRepository.existsCode(String.valueOf(code));
-                if (postId != null) {
-                    if(stock!=-1)
-                    flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock), postId);
-                    if(price!=Long.valueOf(-1))
-                    flag2 = wkhPostMetaRepository.updatePrice(String.valueOf(price), postId);
-                    if(nameList[1].equals(inf.get(1)))
-                    wkhPostsRepository.updateName(nameList[0], postId);
-                    if (fileImage != null) {
-                        List<String> thumbnail = wkhPostMetaRepository.findThumbnail(String.valueOf(code));
-                        if (thumbnail.get(0) == null) {
-
-
-                            Integer test = wkhPostMetaRepository.updateImage("2024/04/" + fileImage.getOriginalFilename(), thumbnail.get(0));
-                            recordAndProccessMessageService.storeImage(fileImage, SERVER_LOCATION_PRODUCT_IMG_WIN);
-                        } else {
-
-
-                            Integer test = wkhPostMetaRepository.updateImage("2024/04/" + fileImage.getOriginalFilename(), thumbnail.get(0));
-                            recordAndProccessMessageService.storeImage(fileImage, SERVER_LOCATION_PRODUCT_IMG_WIN);
-
-
-                        }
-                        ;
-
-
-                    }
-
-                }
-            }
-        } catch (Exception e){
-            errorMsg+=e.getMessage();
-
-        }
-        JSONObject jsonObjectMain = new JSONObject();
-        JSONObject jsonObject = new JSONObject();
-        // String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
-        List<String> processList=new ArrayList<>();
-        if(fileVoice!=null) {
-            processList = proccessMessage.proccess(message, userKind, Rd);
-        }
-        else{
-            List<String> name=wkhPostMetaRepository.nameIdCode(message);
-            if(name.size()>0)
-                processList.add(name.get(0));
-            else processList.add("-1");
-            List<String> price=wkhPostMetaRepository.priceIdCode(message);
-            if(price.size()>0)
-                processList.add(price.get(0));
-            else processList.add("-1");
-            List<String> stock=wkhPostMetaRepository.stockIdCode(message);
-            if(stock.size()>0)
-                processList.add(stock.get(0));
-            else processList.add("-1");
-
-            processList.add(wkhPostMetaRepository.imageUrl(message));
-
-        }
-        if ((processList == null)|| (processList.size()==0)) {
-            processList = new ArrayList<>();
-            processList.add(" پاسخی پیدا نکردم");
-        }
-
-        if(Rd.equals("Rd1")) {
-
-
-            jsonObjectMain.put("fileContentImage", null);
-            String fileName = "receivedmessage.wav";
-            inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
-            //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
-
-            String image = fileName;//"file";
-            File filereply = new File(SERVER_LOCATION + File.separator + image);//+ EXTENSION);
-
-             /*HttpHeaders header = new HttpHeaders();
-             header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
-
-             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
-             header.add("Pragma", "no-cache");
-             header.add("Expires", "0");
-*/
-            try {
-                Path path = Paths.get(filereply.getAbsolutePath());
-                ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
-
-                byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
-                jsonObjectMain.put("fileContentImage", null);
-                jsonObjectMain.put("fileContentVoice", resource.getByteArray());
-            } catch (IOException ex) {
-                errorMsg = ex.getMessage();
-            }
-
-
-        }
-        else if(Rd.equals("Rd2")){
-
-            jsonObjectMain.put("fileContentVoice", null);
-            if((processList.size()>1)&&processList.get(3)!=null) {
-                String image1 = FilenameUtils.getName(processList.get(3));//"replyimage.jpg"
-                if (image1 != null) {
-                    String pathFile = SERVER_LOCATION_PRODUCT_IMG + FilenameUtils.getPath(processList.get(3));
-                    File filereplyImg = new File(pathFile + File.separator + image1);//+ EXTENSION);
-
-                    try {
-                        Path path1 = Paths.get(filereplyImg.getAbsolutePath());
-                        ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
-
-                        byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
-                        //jsonObjectMain.put("fileContentVoice", null);
-                        jsonObjectMain.put("fileContentImage", resource1.getByteArray());
-                    } catch (IOException ex) {
-                        errorMsg = ex.getMessage() + "Path or file isn't correct";
-
-                    }
-                } else jsonObjectMain.put("fileContentImage", null);
-            } else errorMsg+="وجود ندارد";
-
-        }
-        else if(Rd.equals("Rd3")){
-
-
-            String fileName = "receivedmessage.wav";
-            inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
-            //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
-
-            String image = fileName;//"file";
-            File filereply = new File(SERVER_LOCATION + File.separator + image);//+ EXTENSION);
-
-             /*HttpHeaders header = new HttpHeaders();
-             header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
-
-             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
-             header.add("Pragma", "no-cache");
-             header.add("Expires", "0");
-*/
-            try {
-                Path path = Paths.get(filereply.getAbsolutePath());
-                ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
-
-                byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
-
-                jsonObjectMain.put("fileContentVoice", resource.getByteArray());
-            } catch (IOException ex) {
-                errorMsg = ex.getMessage();
-            }
-
-            String image1 = "replyimage.jpg";
-
-            File filereplyImg = new File(SERVER_LOCATION + File.separator + image1);//+ EXTENSION);
-
-             /*HttpHeaders header = new HttpHeaders();
-             header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
-
-             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
-             header.add("Pragma", "no-cache");
-             header.add("Expires", "0");
-*/
-            try {
-                Path path1 = Paths.get(filereplyImg.getAbsolutePath());
-                ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
-
-                byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
-
-                jsonObjectMain.put("fileContentImage", resource1.getByteArray());
-            } catch (IOException ex) {
-                errorMsg = ex.getMessage();
-            }
-        }
-        else if(Rd.equals("Rd4")){
-
-            jsonObjectMain.put("fileContentVoice", null);
-            jsonObjectMain.put("fileContentImage", null);
-        }
-
-
-
-        JSONArray array = new JSONArray();
-
-        for (int i = 1; i <= processList.size(); ++i) {
-            jsonObject.put("inf_id", String.valueOf(i));
-            if(i==1) {
-                if (processList.get(i - 1) != "-1")
-                    jsonObject.put("inf_text", "نام کالا : " + processList.get(i - 1) );
-                else jsonObject.put("inf_text", "نام کالا تعریف نشده است");
-            }
-            else if(i==2) {
-                if(processList.get(i - 1)!="-1")
-                    jsonObject.put("inf_text", "قیمت : " + processList.get(i - 1) + "ریال");
-                else jsonObject.put("inf_text",  "قیمت تعریف نشده است");
-
-            }
-            else if(i==3)
-            {
-                if(processList.get(i - 1)!="-1")
-                    jsonObject.put("inf_text","تعداد :    " +processList.get(i - 1) );
-                else jsonObject.put("inf_text",  "موجودی تعریف نشده است");
-            }
-            else if(i==4) {
-                if(processList.get(i - 1)!=null)
-                    jsonObject.put("inf_text",""+errorMsg);//, processList.get(i - 1) + ":" + "عکس");
-                else jsonObject.put("inf_text",  "عکس  تعریف نشده است"+errorMsg);
-            }
-            array.add(new JSONObject(jsonObject));
-            jsonObject.clear();
-        }
-        jsonObjectMain.put("inf", array);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        // ContentDisposition disposition = ContentDisposition.attachment().filename("monshi.mp3").build();
-        // ContentDisposition disposition = ContentDisposition.attachment().filename(filereply.getName()).build();
-        //headers.setContentDisposition(disposition);
-
-        return new ResponseEntity<>(jsonObjectMain, headers, HttpStatus.OK);
-    }
 }

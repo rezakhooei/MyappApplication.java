@@ -4,7 +4,6 @@ import com.tdxir.myapp.auth.AuthenticationRequest;
 import com.tdxir.myapp.auth.AuthenticationResponse;
 import com.tdxir.myapp.auth.RegisterRequest;
 import com.tdxir.myapp.service.AuthenticationService;
-import com.tdxir.myapp.service.AuthenticationService1;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import org.springframework.http.ResponseEntity;

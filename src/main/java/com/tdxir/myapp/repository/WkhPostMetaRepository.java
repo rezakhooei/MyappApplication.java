@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nullable;
+import java.util.Date;
 import java.util.List;
 
 public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> {
@@ -93,5 +94,13 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Transactional                 //   _price , _sale_price  , _regular_price , wcwp_wholesale
     @Query(value="insert into Wkh_postmeta (post_id,meta_key,meta_value) values (:post_id,'_regular_price',:mahakRegularPrice)",nativeQuery = true)
     public void insertRegularPrice(@Param("post_id") Long postid,@Param("mahakRegularPrice") String mahakRegularPrice);
+
+    @Modifying
+    @Transactional                 //   _price , _sale_price  , _regular_price , wcwp_wholesale
+    @Query(value="insert into buy_data (date,email,sku,stock,old_stock,price,old_price,seller_name) values (:date,:email,:sku,:stock,:oldStock,:price,:oldPrice,:sellerName)",nativeQuery = true)
+    public Integer insertBuyData(@Param("date") String date,@Param("email") String email,@Param("sku") String sku,@Param("stock") Integer stock,
+                                 @Param("oldStock") Integer oldStock,@Param("price") Long price,@Param("oldPrice") Long oldPrice,
+                                 @Param("sellerName") String sellerName);
+
 
 }
