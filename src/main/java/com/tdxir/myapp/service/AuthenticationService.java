@@ -195,7 +195,7 @@ for(int panelNum=1;panelNum<=panels[0].length;++panelNum)
     infs.add(new Inf(2,"inf2",infList[1]));
     infs.add(new Inf(3,"inf3",infList[2]));
     infs.add(new Inf(3,"inf4",infList[3]));
-    if(infList[4]!=null)  infs.add(new Inf(4,"inf5",infList[4]));
+
     jsonObjectMain.put("infs",infs);
 
 
