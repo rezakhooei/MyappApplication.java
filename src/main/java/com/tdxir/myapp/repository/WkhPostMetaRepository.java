@@ -20,6 +20,10 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
 
     public String existsCode (@Param("code") String code);
 
+    @Query("select B1.idDoc from BuyInvoices B1 where B1.idInvoice=:code")
+
+    public Integer existsCodeInvoice (@Param("code") String code);
+
 
     @Query("select w1.post_id from wkh_postmeta w1 where w1.meta_key='_sku' and w1.meta_value=:mahakCode")
 
@@ -30,6 +34,11 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Query("select wm1.meta_value  from wkh_postmeta wm1 where wm1.meta_key='_price' and wm1.post_id in (select wm2.post_id from wkh_postmeta wm2 where wm2.meta_key='_sku' and wm2.meta_value=:code)")
 
     public List<String> priceIdCode (@Param("code") String code);
+
+
+    @Query("select bd.price from BuyData as bd where bd.sku=:code ORDER BY bd.date")
+
+    public List<Long> buyPrice (@Param("code") String code);
     @Query("select p.post_title from WkhPosts  p where p.id in(select post_id from wkh_postmeta where meta_key='_sku' and meta_value=:code) and p.post_type='product'")
 
     public List<String> nameIdCode (@Param("code") String code);
@@ -101,6 +110,11 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     public Integer insertBuyData(@Param("date") String date,@Param("email") String email,@Param("sku") String sku,@Param("stock") Integer stock,
                                  @Param("oldStock") Integer oldStock,@Param("price") Long price,@Param("oldPrice") Long oldPrice,
                                  @Param("sellerName") String sellerName);
+    //nowDate, userName, numProduct, price, sellerId
+    @Modifying
+    @Transactional
+    @Query(value="insert into Buy_Invoices (id_invoice,user_name,date,num_product,price) values (:idInvoice,:userName,:date,:numProduct,:price)",nativeQuery = true)
+    public Integer insertInvoice(@Param("idInvoice") String idInvoice,@Param("userName") String userName,@Param("date") String date,@Param("numProduct") Long numProduct,@Param("price") Long price);
 
 
 }

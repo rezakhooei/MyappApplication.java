@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.tdxir.myapp.MyappApplication.*;
-import static com.tdxir.myapp.model.Role.ADMIN;
-import static com.tdxir.myapp.model.Role.USER;
+import static com.tdxir.myapp.model.Role.*;
 
 @Service
 @RequiredArgsConstructor
@@ -70,7 +69,7 @@ public class AuthenticationService {
         if (user.getUserKind() == UserKind.SHOP)            //User Shop
         {
             if (user.getRole() == ADMIN) {
-                infList=new String[]{"نام کالا/نام فروشنده","کد کالا","موجودی","قیمت(ریال)"};
+                infList=new String[]{"نام کالا@کدکالا/سند حسابداری","کد کالا","تعداد کالا","قیمت(ریال)"};
                 checkBoxesList=new String[]{};//"chk1","chk2","chk3"};
                 panels=new String[][]{{"نحوه ارسال","نحوه دریافت","دستور"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"بررسی","ذخیره","خرید"}};
 
@@ -81,6 +80,14 @@ public class AuthenticationService {
                 infList=new String[]{"نام کالا","کد کالا","موجودی","قیمت(ریال)"};
                 checkBoxesList=new String[]{};//{"chk1","chk2","chk3"};
                 panels=new String[][]{{"نحوه ارسال","نحوه دریافت","دستور"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"بررسی"}};
+
+                return  sendAuthConfig(infList,checkBoxesList,panels,jwtToken);
+
+            }
+            else if(user.getRole() == ACCOUNTING){
+                infList=new String[]{"شماره فاکتور@شناسه فروشنده","شماره فاکتور","تعداد کالا","قیمت(ریال)"};
+                checkBoxesList=new String[]{};//"chk1","chk2","chk3"};
+                panels=new String[][]{{"نحوه ارسال","نحوه دریافت","دستور"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"ثبت فاکتور","ثبت چک","گزارش کالا","گزارش عملکرد"}};
 
                 return  sendAuthConfig(infList,checkBoxesList,panels,jwtToken);
 

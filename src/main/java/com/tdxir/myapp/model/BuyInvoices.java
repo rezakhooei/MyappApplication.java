@@ -7,26 +7,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class BuyData {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
-    private Long id;
-    private String email;
-    private Date date;
-    private String sku;
-    private Long stock;
-    private Long oldStock;
-    private Long price;
-    private Long oldPrice;
-    private Long idDoc;
 
+public class BuyInvoices {
+    @Id
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idDoc")
+    private Long idDoc;//shomare sanad hesabdari
+    private String idInvoice;//shomare faktor
+    private String userName;
+    private Date date;
+    private Long numProduct;//tedad kala
+
+    private Long price;
 
 }

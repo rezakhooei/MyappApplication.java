@@ -8,6 +8,7 @@ import com.tdxir.myapp.repository.WkhPostsRepository;
 import com.tdxir.myapp.service.ProccessMessage;
 import com.tdxir.myapp.service.RecordAndProccessMessageService;
 import com.tdxir.myapp.utils.Utils;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.apache.commons.io.FilenameUtils;
@@ -39,11 +40,13 @@ import static com.tdxir.myapp.model.Role.USER;
 import static com.tdxir.myapp.model.UserKind.SHOP;
 
 @Service
-public class Shop {
+
+
+public class Accounting {
     @Autowired
     private WkhPostsRepository wkhPostsRepository;
     @Autowired
-     WkhPostMetaRepository wkhPostMetaRepository;
+    WkhPostMetaRepository wkhPostMetaRepository;
     @Autowired
 
     private  RecordAndProccessMessageService recordAndProccessMessageService;
@@ -64,36 +67,31 @@ public class Shop {
     //parameters : Rd=panel2 means return image or voice or text ---inf1 نام کالا یا فروشنده inf2 کد کالا
     //inf3 تعداد inf4 قیمت
 
-    public ResponseEntity<JSONObject> buyProduct(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
+    public ResponseEntity<JSONObject> saveInvoice(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
                                                  String checkBox1, String checkBox2, String checkBox3, String userName) {
         Date date=new Date();
         String yearAndmounth= new SimpleDateFormat("yyyy/MM/").format(date);
         String nowDate= new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
-        String message=inf.get(1), postId,sellerId=inf.get(0);
+        String idInvoice=null,message=inf.get(0), postId,sellerId=null;
         String[] idList=inf.get(0).split("@");
-        Operation op=null;
-        if((idList.length==1)&&utils.isNumeric(idList[0])){
-            sellerId=idList[0];
-            op=PRODUCT;
-        }
-        else if(idList.length==2&&utils.isNumeric(idList[0])&&utils.isNumeric(idList[1])) {
+        Long price;
+        Long numProduct=null;
+        Integer flag1;
+        Boolean flag2;
+               if(idList.length==2){
             sellerId=idList[1];
-            op=INVOICE;
+            idInvoice=idList[0];
         }
 
+
         try {
-            Long code,price;
-            Integer stock ,flag1,flag2;
-            if(utils.isNumeric(inf.get(1))&&utils.isNumeric(idList[0]))
-            {
-                code = Long.valueOf(inf.get(1));
-            }
-            else code= Long.valueOf(-1);
+
+
             if(utils.isNumeric(inf.get(2)))
             {
-                stock=Integer.valueOf(inf.get(2));
+                numProduct=Long.valueOf(inf.get(2));
             }
-            else stock= -1;
+            else numProduct= Long.valueOf(-1);
             if(utils.isNumeric(inf.get(3)))
             {
                 price = Long.valueOf(inf.get(3));
@@ -103,42 +101,17 @@ public class Shop {
 
 
 
-    // product code = inf1 and  exists then change price and stock
-    if (code != Long.valueOf(-1)) {
-        postId = wkhPostMetaRepository.existsCode(String.valueOf(code));
-        if (postId != null) {
-            Integer oldStock = Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0));
-            Long oldPrice = Long.valueOf(wkhPostMetaRepository.priceIdCode(String.valueOf(code)).get(0));
-            flag1 = wkhPostMetaRepository.insertBuyData(nowDate, userName, String.valueOf(code), stock, oldStock, price, oldPrice, sellerId);
-            if (stock != -1) {
 
-                flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock + Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0))), postId);
+                // product code = inf1 and  exists then change price and stock
 
-            }
-            if (price != Long.valueOf(-1))
-                flag2 = wkhPostMetaRepository.updatePrice(String.valueOf(price), postId);
+                    if (wkhPostMetaRepository.existsCodeInvoice(idInvoice)==null) {
 
-            if (fileImage != null) {
-                List<String> thumbnail = wkhPostMetaRepository.findThumbnail(String.valueOf(code));
-                if (thumbnail.get(0) == null) {
+                        flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,nowDate,numProduct,price);
+
+                    }
 
 
-                    Integer test = wkhPostMetaRepository.updateImage(yearAndmounth + fileImage.getOriginalFilename(), thumbnail.get(0));
-                    recordAndProccessMessageService.storeImage(fileImage, SERVER_LOCATION_PRODUCT_IMG + yearAndmounth);
-                } else {
 
-
-                    Integer test = wkhPostMetaRepository.updateImage(yearAndmounth + fileImage.getOriginalFilename(), thumbnail.get(0));
-                    recordAndProccessMessageService.storeImage(fileImage, SERVER_LOCATION_PRODUCT_IMG + yearAndmounth);
-
-
-                }
-
-
-            }
-
-        }
-    }
 
         } catch (Exception e){
             errorMsg+=e.getMessage();
@@ -156,9 +129,9 @@ public class Shop {
             if(name.size()>0)
                 processList.add(name.get(0));
             else processList.add("-1");
-            List<String> price=wkhPostMetaRepository.priceIdCode(message);
-            if(price.size()>0)
-                processList.add(price.get(0));
+            List<String> pricekkk=wkhPostMetaRepository.priceIdCode(message);
+            if(pricekkk.size()>0)
+                processList.add(pricekkk.get(0));
             else processList.add("-1");
             List<String> stock=wkhPostMetaRepository.stockIdCode(message);
             if(stock.size()>0)
@@ -573,7 +546,7 @@ public class Shop {
             List<String> price=wkhPostMetaRepository.priceIdCode(message);
             if(price.size()>0) {
                 if(role==USER)
-                processList.add(price.get(0));
+                    processList.add(price.get(0));
                 else if(role==ADMIN)
                 {   List<Long> buyPrice=wkhPostMetaRepository.buyPrice(message);
                     processList.add(price.get(0)+"(قیمت خرید"+String.valueOf(buyPrice.get(buyPrice.size()-1))+")");
@@ -746,4 +719,5 @@ public class Shop {
 
         return new ResponseEntity<>(jsonObjectMain, headers, HttpStatus.OK);
     }
+
 }

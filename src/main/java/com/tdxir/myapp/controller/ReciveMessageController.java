@@ -6,10 +6,7 @@ import com.tdxir.myapp.nlp.training.MakeTsv;
 import com.tdxir.myapp.repository.UserRepository;
 import com.tdxir.myapp.repository.WkhPostMetaRepository;
 import com.tdxir.myapp.repository.WkhPostsRepository;
-import com.tdxir.myapp.service.GoogleSpeech;
-import com.tdxir.myapp.service.ProccessMessage;
-import com.tdxir.myapp.service.RecordAndProccessMessageService;
-import com.tdxir.myapp.service.Shop;
+import com.tdxir.myapp.service.*;
 import com.tdxir.myapp.utils.Utils;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -36,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-import static com.tdxir.myapp.model.Role.ADMIN;
+import static com.tdxir.myapp.model.Role.*;
 import static com.tdxir.myapp.model.UserKind.SHOP;
 
 @RestController
@@ -56,6 +53,8 @@ public class ReciveMessageController {
     private  MakeTsv makeTsv;
     @Autowired
     public Shop shop;
+    @Autowired
+    public Accounting accounting;
 
 
     private Utils utils;
@@ -132,10 +131,11 @@ public class ReciveMessageController {
              makeTsv.createTsv(file);//.getResource().getFile());
 */
           if(user.getUserKind()==SHOP){
-              if (user.getRole()==ADMIN) {
+              if (user.getRole()==ADMIN)
+              {
                   if (panel3.equals("Rd1")) {
 
-                      return shop.searchProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind());
+                      return shop.searchProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());
 
                   } else if (panel3.equals("Rd2")) {
                       return shop.saveProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind());
@@ -143,14 +143,26 @@ public class ReciveMessageController {
                       return shop.buyProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail());
                   }
               }
-              else{                  if (panel3.equals("Rd1")) {
+              else  if (user.getRole()==USER){
+                  if (panel3.equals("Rd1")) {
 
-                  return shop.searchProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind());
+                  return shop.searchProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());
 
               } else if (panel3.equals("Rd2")) {
                   return shop.saveProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind());
               } else if (panel3.equals("Rd3")) {
               }
+
+              }
+              else  if (user.getRole()==ACCOUNTING){
+                  if (panel3.equals("Rd1")) {
+
+                      return accounting.saveInvoice(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail());
+
+                  } else if (panel3.equals("Rd2")) {
+                      return null;// accounting.savecheque(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind());
+                  } else if (panel3.equals("Rd3")) {
+                  }
 
               }
           }
