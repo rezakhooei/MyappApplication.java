@@ -71,10 +71,10 @@ public class Shop {
         String nowDate= new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
         String message=inf.get(1), postId,sellerId=inf.get(0);
         String[] idList=inf.get(0).split("@");
-        Long idIdinvoice=null;
+        Long idInvoice=null;
         Operation op=null;
         if((idList.length==1)&&utils.isNumeric(idList[0])){
-            idIdinvoice=Long.valueOf(idList[0]);
+            idInvoice=Long.valueOf(idList[0]);
             op=PRODUCT;
         }
         else if(idList.length==2&&utils.isNumeric(idList[0])&&utils.isNumeric(idList[1])) {
@@ -105,12 +105,12 @@ public class Shop {
 
 
     // product code = inf1 and  exists then change price and stock
-    if (code != Long.valueOf(-1)) {
+    if (code != Long.valueOf(-1)&&idInvoice!=null) {
         postId = wkhPostMetaRepository.existsCode(String.valueOf(code));
         if (postId != null) {
             Integer oldStock = Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0));
             Long oldPrice = Long.valueOf(wkhPostMetaRepository.priceIdCode(String.valueOf(code)).get(0));
-            flag1 = wkhPostMetaRepository.insertBuyData(nowDate, userName, String.valueOf(code), stock, oldStock, price, oldPrice, idIdinvoice);
+            flag1 = wkhPostMetaRepository.insertBuyData(nowDate, userName, String.valueOf(code), stock, oldStock, price, oldPrice, idInvoice);
             if (stock != -1) {
 
                 flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock + Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0))), postId);

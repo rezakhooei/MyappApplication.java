@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 
@@ -26,6 +27,7 @@ public class BuyData {
     private Long oldStock;
     private Long price;
     private Long oldPrice;
+    @NotNull
     private Long idInvoice;
 
 
