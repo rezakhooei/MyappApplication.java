@@ -71,9 +71,10 @@ public class Shop {
         String nowDate= new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
         String message=inf.get(1), postId,sellerId=inf.get(0);
         String[] idList=inf.get(0).split("@");
+        Long idIdinvoice=null;
         Operation op=null;
         if((idList.length==1)&&utils.isNumeric(idList[0])){
-            sellerId=idList[0];
+            idIdinvoice=Long.valueOf(idList[0]);
             op=PRODUCT;
         }
         else if(idList.length==2&&utils.isNumeric(idList[0])&&utils.isNumeric(idList[1])) {
@@ -109,7 +110,7 @@ public class Shop {
         if (postId != null) {
             Integer oldStock = Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0));
             Long oldPrice = Long.valueOf(wkhPostMetaRepository.priceIdCode(String.valueOf(code)).get(0));
-            flag1 = wkhPostMetaRepository.insertBuyData(nowDate, userName, String.valueOf(code), stock, oldStock, price, oldPrice, sellerId);
+            flag1 = wkhPostMetaRepository.insertBuyData(nowDate, userName, String.valueOf(code), stock, oldStock, price, oldPrice, idIdinvoice);
             if (stock != -1) {
 
                 flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock + Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0))), postId);
@@ -567,8 +568,13 @@ public class Shop {
         }
         else{
             List<String> name=wkhPostMetaRepository.nameIdCode(message);
-            if(name.size()>0)
-                processList.add(name.get(0));
+            if(name.size()>0) {
+               List<String> postIdLst=wkhPostMetaRepository.postIdCode(message);
+               if(postIdLst.size()==1)
+                processList.add(name.get(0) + "-pid" + postIdLst.get(0));
+               else if(postIdLst.size()==2) processList.add(name.get(0) + "-pid" + postIdLst.get(0)+","+postIdLst.get(1));
+               else processList.add(name.get(0) + "-pid..." );
+            }
             else processList.add("-1");
             List<String> price=wkhPostMetaRepository.priceIdCode(message);
             if(price.size()>0) {

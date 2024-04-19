@@ -69,7 +69,7 @@ public class AuthenticationService {
         if (user.getUserKind() == UserKind.SHOP)            //User Shop
         {
             if (user.getRole() == ADMIN) {
-                infList=new String[]{"نام کالا@کدکالا/سند حسابداری","کد کالا","تعداد کالا","قیمت(ریال)"};
+                infList=new String[]{"نام کالا@کدکالا/شماره فاکتور","کد کالا","تعداد کالا","قیمت(ریال)"};
                 checkBoxesList=new String[]{};//"chk1","chk2","chk3"};
                 panels=new String[][]{{"نحوه ارسال","نحوه دریافت","دستور"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"بررسی","ذخیره","خرید"}};
 

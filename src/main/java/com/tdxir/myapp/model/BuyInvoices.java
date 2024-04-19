@@ -21,9 +21,11 @@ public class BuyInvoices {
     private Long idDoc;//shomare sanad hesabdari
     private String idInvoice;//shomare faktor
     private String userName;
+    private String sellerID;
     private Date date;
     private Long numProduct;//tedad kala
 
     private Long price;
+    private String fileImage;
 
 }

@@ -39,34 +39,42 @@ public class UpdateShopSiteService {
                 fileNotExist.createNewFile();//.createNewFile();
 
 int i=0;
+        long pid=0;
      for (Mahak mahak : mahakList)
      {    ++i;
          if(mahak!=null) {
 
              try {
-                 long pid = postMetaRepository.post_id(String.valueOf(mahak.getCode()));
+                 pid = postMetaRepository.post_id(String.valueOf(mahak.getCode()));
 
-                 String stock = String.valueOf(mahak.getStock());
+                 String stock = String.valueOf(10000);//mahak.getStock());
                  String price = String.valueOf(mahak.getPrice());
 
                  postsRepository.updateName(mahak.getName(),pid);
                  postMetaRepository.updateStock(stock, String.valueOf(pid));
                  postMetaRepository.updatePrice(price, String.valueOf(pid));
+                 postMetaRepository.updateRegularPrice(price, String.valueOf(pid));
+                 postMetaRepository.updateSalePrice(price, String.valueOf(pid));
+                 postMetaRepository.updateWholeSalePrice(price, String.valueOf(pid));
+                 postMetaRepository.updateStockStatus("instock", String.valueOf(pid));
+                 postMetaRepository.updateManageStock("yes",String.valueOf(pid));
                  ++numbeforeerror;
+                 pid=0;
                  //System.out.println("hohoho hoo hoo  "+String.valueOf(++numbeforeerror));
 
              } catch (RuntimeException e) {
                  System.out.println("Number doesn't exist                   " + String.valueOf(mahak.getCode()));
                  //throw e;
-                // e.printStackTrace();
-              postsRepository.insertProduct(mahak.getName());
+                 // e.printStackTrace();
 
-              postMetaRepository.insertSku(postsRepository.lastId(),String.valueOf(mahak.getCode()));
-              postMetaRepository.insertStock(postsRepository.lastId(),String.valueOf(mahak.getStock()));
-              postMetaRepository.insertPrice(postsRepository.lastId(),String.valueOf(mahak.getPrice()));
-              postMetaRepository.insertRegularPrice(postsRepository.lastId(),String.valueOf(mahak.getPrice()));
-              buffer.write(String.valueOf(mahak.getCode())+"\n");//mahakList.get(numbeforeerror).getCode()) + "\n");
-             }
+                     postsRepository.insertProduct(mahak.getName());
+                     postMetaRepository.insertSku(postsRepository.lastId(), String.valueOf(mahak.getCode()));
+                     postMetaRepository.insertStock(postsRepository.lastId(), String.valueOf(mahak.getStock()));
+                     postMetaRepository.insertPrice(postsRepository.lastId(), String.valueOf(mahak.getPrice()));
+                     postMetaRepository.insertRegularPrice(postsRepository.lastId(), String.valueOf(mahak.getPrice()));
+                     buffer.write(String.valueOf(mahak.getCode()) + "\n");//mahakList.get(numbeforeerror).getCode()) + "\n");
+                 }
+
          }
      }
 

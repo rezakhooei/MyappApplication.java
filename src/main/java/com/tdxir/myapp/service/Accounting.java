@@ -106,7 +106,7 @@ public class Accounting {
 
                     if (wkhPostMetaRepository.existsCodeInvoice(idInvoice)==null) {
 
-                        flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,nowDate,numProduct,price);
+                        flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,nowDate,numProduct,price,sellerId);
 
                     }
 
@@ -121,26 +121,14 @@ public class Accounting {
         JSONObject jsonObject = new JSONObject();
         // String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
         List<String> processList=new ArrayList<>();
-        if(fileVoice!=null) {
-            processList = proccessMessage.proccess(message, SHOP, Rd);
-        }
-        else{
-            List<String> name=wkhPostMetaRepository.nameIdCode(message);
-            if(name.size()>0)
-                processList.add(name.get(0));
-            else processList.add("-1");
-            List<String> pricekkk=wkhPostMetaRepository.priceIdCode(message);
-            if(pricekkk.size()>0)
-                processList.add(pricekkk.get(0));
-            else processList.add("-1");
-            List<String> stock=wkhPostMetaRepository.stockIdCode(message);
-            if(stock.size()>0)
-                processList.add(stock.get(0));
-            else processList.add("-1");
 
-            processList.add(wkhPostMetaRepository.imageUrl(message));
 
-        }
+           processList.add(String.valueOf(wkhPostMetaRepository.existsCodeInvoice(idInvoice)));
+           processList.add(idInvoice);
+           processList.add(sellerId);
+           processList.add(wkhPostMetaRepository.imageUrl(message));
+
+
         if ((processList == null)|| (processList.size()==0)) {
             processList = new ArrayList<>();
             processList.add(" پاسخی پیدا نکردم");
@@ -259,20 +247,20 @@ public class Accounting {
             jsonObject.put("inf_id", String.valueOf(i));
             if(i==1) {
                 if (processList.get(i - 1) != "-1")
-                    jsonObject.put("inf_text", "نام کالا : " + processList.get(i - 1) );
-                else jsonObject.put("inf_text", "نام کالا تعریف نشده است");
+                    jsonObject.put("inf_text", "شماره سند : " + processList.get(i - 1) );
+                else jsonObject.put("inf_text", "ثبت نشده است");
             }
             else if(i==2) {
                 if(processList.get(i - 1)!="-1")
-                    jsonObject.put("inf_text", "قیمت : " + processList.get(i - 1) + "ریال");
-                else jsonObject.put("inf_text",  "قیمت تعریف نشده است");
+                    jsonObject.put("inf_text", "شماره فاکتور : " + processList.get(i - 1) + "ریال");
+                else jsonObject.put("inf_text",  "فاکتور تعریف نشده است");
 
             }
             else if(i==3)
             {
                 if(processList.get(i - 1)!="-1")
-                    jsonObject.put("inf_text","تعداد :    " +processList.get(i - 1) );
-                else jsonObject.put("inf_text",  "موجودی تعریف نشده است");
+                    jsonObject.put("inf_text","فروشنده :    " +processList.get(i - 1) );
+                else jsonObject.put("inf_text",  "فروشنده تعریف نشده است");
             }
             else if(i==4) {
                 if(processList.get(i - 1)!=null)

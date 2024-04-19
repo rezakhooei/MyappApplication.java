@@ -26,7 +26,7 @@ public class BuyData {
     private Long oldStock;
     private Long price;
     private Long oldPrice;
-    private Long idDoc;
+    private Long idInvoice;
 
 
 }
