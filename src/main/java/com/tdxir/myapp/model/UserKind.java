@@ -4,5 +4,6 @@ public enum UserKind {
     SHOP,
     SPORT,
     PERSON,
+
     TEST
 }
