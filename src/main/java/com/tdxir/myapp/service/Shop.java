@@ -139,6 +139,16 @@ public class Shop {
             }
 
         }
+        else{
+            wkhPostsRepository.insertProduct(String.valueOf(code));
+            wkhPostMetaRepository.insertSku(wkhPostsRepository.lastId(), String.valueOf(code));
+            wkhPostMetaRepository.insertStock(wkhPostsRepository.lastId(), String.valueOf(stock));
+            wkhPostMetaRepository.insertPrice(wkhPostsRepository.lastId(), String.valueOf(price));
+            wkhPostMetaRepository.insertRegularPrice(wkhPostsRepository.lastId(), String.valueOf(price));
+            wkhPostMetaRepository.insertCategory(wkhPostsRepository.lastId(),2);
+            wkhPostMetaRepository.insertCategory(wkhPostsRepository.lastId(),15);
+
+        }
     }
 
         } catch (Exception e){
