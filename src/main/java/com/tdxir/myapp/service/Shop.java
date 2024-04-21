@@ -81,9 +81,9 @@ public class Shop {
             sellerId=idList[1];
             op=INVOICE;
         }
-
+        Long code,price=Long.valueOf(0);
         try {
-            Long code,price;
+
             Integer stock ,flag1,flag2;
             if(utils.isNumeric(inf.get(1))&&utils.isNumeric(idList[0]))
             {
@@ -111,39 +111,17 @@ public class Shop {
             Integer oldStock = Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0));
             Long oldPrice = Long.valueOf(wkhPostMetaRepository.priceIdCode(String.valueOf(code)).get(0));
             flag1 = wkhPostMetaRepository.insertBuyData(nowDate, userName, String.valueOf(code), stock, oldStock, price, oldPrice, idInvoice);
-            if (stock != -1) {
+            if (stock != -1 && price != Long.valueOf(-1) ) {
 
                 flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock + Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0))), postId);
 
             }
-            if (price != Long.valueOf(-1)) {
-                flag2 = wkhPostMetaRepository.updatePrice(String.valueOf(price), postId);
-                wkhPostMetaRepository.updateRegularPrice(String.valueOf(price), postId);
-                wkhPostMetaRepository.updateWholeSalePrice(String.valueOf(price), postId);
-                wkhPostMetaRepository.updateSalePrice(String.valueOf(price), postId);
-            }
-
-            if (fileImage != null) {
-                List<String> thumbnail = wkhPostMetaRepository.findThumbnail(String.valueOf(code));
-                if (thumbnail.get(0) == null) {
 
 
-                    Integer test = wkhPostMetaRepository.updateImage(yearAndmounth + fileImage.getOriginalFilename(), thumbnail.get(0));
-                    recordAndProccessMessageService.storeImage(fileImage, SERVER_LOCATION_PRODUCT_IMG + yearAndmounth);
-                } else {
 
-
-                    Integer test = wkhPostMetaRepository.updateImage(yearAndmounth + fileImage.getOriginalFilename(), thumbnail.get(0));
-                    recordAndProccessMessageService.storeImage(fileImage, SERVER_LOCATION_PRODUCT_IMG + yearAndmounth);
-
-
-                }
-
-
-            }
 
         }
-        else{
+        else{// @@@ Adding new product to site
             wkhPostsRepository.insertProduct(String.valueOf(code));
             wkhPostMetaRepository.insertSku(wkhPostsRepository.lastId(), String.valueOf(code));
             wkhPostMetaRepository.insertStock(wkhPostsRepository.lastId(), String.valueOf(stock));
@@ -151,6 +129,18 @@ public class Shop {
             wkhPostMetaRepository.insertRegularPrice(wkhPostsRepository.lastId(), String.valueOf(price));
             wkhPostMetaRepository.insertCategory(wkhPostsRepository.lastId(),2);
             wkhPostMetaRepository.insertCategory(wkhPostsRepository.lastId(),15);
+            //@@@@@@@@@@@@@@@@@ Adding product to invoice
+
+
+            flag1 = wkhPostMetaRepository.insertBuyData(nowDate, userName, String.valueOf(code), stock, 0, price, Long.valueOf(0), idInvoice);
+            if (stock != -1) {
+
+                flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock + Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0))), postId);
+
+            }
+
+
+
 
         }
     }
@@ -171,16 +161,16 @@ public class Shop {
             if(name.size()>0)
                 processList.add(name.get(0));
             else processList.add("-1");
-            List<String> price=wkhPostMetaRepository.priceIdCode(message);
-            if(price.size()>0)
-                processList.add(price.get(0));
-            else processList.add("-1");
-            List<String> stock=wkhPostMetaRepository.stockIdCode(message);
-            if(stock.size()>0)
-                processList.add(stock.get(0));
-            else processList.add("-1");
+           // List<String> price=wkhPostMetaRepository.priceIdCode(message);
+           // if(price.size()>0)
+                processList.add(String.valueOf(price));
 
-            processList.add(wkhPostMetaRepository.imageUrlId(message));
+            List<String> stock=wkhPostMetaRepository.stockIdCode(message);
+
+                processList.add(String.valueOf(stock));
+
+
+           // processList.add(wkhPostMetaRepository.imageUrlId(message));
 
         }
         if ((processList == null)|| (processList.size()==0)) {
@@ -601,7 +591,7 @@ public class Shop {
                 processList.add(price.get(0));
                 else if(role==ADMIN)
                 {   List<Long> buyPrice=wkhPostMetaRepository.buyPrice(message);
-                    if(buyPrice.size()!=0)
+                    if(buyPrice.get(0)!=null)
                     processList.add(price.get(0)+ "ریال"+"(قیمت خرید"+String.valueOf(buyPrice.get(buyPrice.size()-1))+")");
                     else processList.add(price.get(0)+ "ریال"+"--"+"قیمت خرید ندارد");
                 }

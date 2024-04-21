@@ -37,7 +37,7 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     public List<String> priceIdCode (@Param("code") String code);
 
 
-    @Query("select bd.price from BuyData as bd where bd.sku=:code ORDER BY bd.date")
+    @Query("select bd.price from BuyData as bd where bd.sku=:code order by bd.id ")
 
     public List<Long> buyPrice (@Param("code") String code);
     @Query("select p.post_title from WkhPosts  p where p.id in(select post_id from wkh_postmeta where meta_key='_sku' and meta_value=:code) and p.post_type='product'")
