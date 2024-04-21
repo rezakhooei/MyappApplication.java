@@ -116,10 +116,12 @@ public class Shop {
                 flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock + Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0))), postId);
 
             }
-            if (price != Long.valueOf(-1))
+            if (price != Long.valueOf(-1)) {
                 flag2 = wkhPostMetaRepository.updatePrice(String.valueOf(price), postId);
-                   wkhPostMetaRepository.updateRegularPrice(String.valueOf(price), postId);
-
+                wkhPostMetaRepository.updateRegularPrice(String.valueOf(price), postId);
+                wkhPostMetaRepository.updateWholeSalePrice(String.valueOf(price), postId);
+                wkhPostMetaRepository.updateSalePrice(String.valueOf(price), postId);
+            }
 
             if (fileImage != null) {
                 List<String> thumbnail = wkhPostMetaRepository.findThumbnail(String.valueOf(code));
@@ -366,7 +368,9 @@ public class Shop {
                         flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock), postId);
                     if(price!=Long.valueOf(-1)){
                         flag2 = wkhPostMetaRepository.updatePrice(String.valueOf(price), postId);
-                    wkhPostMetaRepository.updateRegularPrice(String.valueOf(price), postId);
+                        wkhPostMetaRepository.updateRegularPrice(String.valueOf(price), postId);
+                        wkhPostMetaRepository.updateWholeSalePrice(String.valueOf(price), postId);
+                        wkhPostMetaRepository.updateSalePrice(String.valueOf(price), postId);
 
                 }
                     if(nameList[1].equals(inf.get(1)))

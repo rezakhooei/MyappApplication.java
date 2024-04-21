@@ -314,7 +314,9 @@ public class Accounting {
                         flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock), postId);
                     if(price!=Long.valueOf(-1)) {
                         flag2 = wkhPostMetaRepository.updatePrice(String.valueOf(price), postId);
-                        wkhPostMetaRepository.updateRegularPrice(String.valueOf(price), postId);
+                         wkhPostMetaRepository.updateRegularPrice(String.valueOf(price), postId);
+                         wkhPostMetaRepository.updateWholeSalePrice(String.valueOf(price), postId);
+                         wkhPostMetaRepository.updateSalePrice(String.valueOf(price), postId);
                     }
                     if(nameList[1].equals(inf.get(1)))
                         wkhPostsRepository.updateName(nameList[0], postId);
