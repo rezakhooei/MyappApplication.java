@@ -56,7 +56,7 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
             "and meta_key='_wp_attached_file'")
     public String imageUrlId(@Param("id") String id);
     @Query("select BI.fileImage from BuyInvoices BI where BI.idInvoice=:idInvoice")
-    public String imageUrlInvoice(@Param("idInvoice") String idInvoice);
+    public List<String> imageUrlInvoice(@Param("idInvoice") String idInvoice);
     @Query("select  pm2.meta_value from wkh_postmeta pm2 where pm2.meta_key='_thumbnail_id' and pm2.post_id in(select pm3.post_id from wkh_postmeta pm3 where pm3.meta_key='_sku' and pm3.meta_value=:code)")
     public List<String> findThumbnail(@Param("code") String code);
 

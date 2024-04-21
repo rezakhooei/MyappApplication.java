@@ -138,7 +138,7 @@ public class Accounting {
            processList.add(String.valueOf(wkhPostMetaRepository.existsCodeInvoice(idInvoice)));
            processList.add(idInvoice);
            processList.add(sellerId);
-           processList.add(wkhPostMetaRepository.imageUrlInvoice(idInvoice));
+           processList.add(wkhPostMetaRepository.imageUrlInvoice(idInvoice).get(0));
 
 
         if ((processList == null)|| (processList.size()==0)) {
@@ -264,7 +264,7 @@ public class Accounting {
             }
             else if(i==2) {
                 if(processList.get(i - 1)!="-1")
-                    jsonObject.put("inf_text", "شماره فاکتور : " + processList.get(i - 1) + "ریال");
+                    jsonObject.put("inf_text", "شماره فاکتور : " + processList.get(i - 1) );
                 else jsonObject.put("inf_text",  "فاکتور تعریف نشده است");
 
             }
