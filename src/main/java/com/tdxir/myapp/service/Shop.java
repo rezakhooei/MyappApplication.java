@@ -601,7 +601,9 @@ public class Shop {
                 processList.add(price.get(0));
                 else if(role==ADMIN)
                 {   List<Long> buyPrice=wkhPostMetaRepository.buyPrice(message);
+                    if(buyPrice.size()!=0)
                     processList.add(price.get(0)+"(قیمت خرید"+String.valueOf(buyPrice.get(buyPrice.size()-1))+")");
+                    else processList.add(price.get(0)+"--"+"قیمت خرید ندارد");
                 }
             }
             else processList.add("-1");

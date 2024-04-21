@@ -72,6 +72,9 @@ int i=0;
                      postMetaRepository.insertStock(postsRepository.lastId(), String.valueOf(mahak.getStock()));
                      postMetaRepository.insertPrice(postsRepository.lastId(), String.valueOf(mahak.getPrice()));
                      postMetaRepository.insertRegularPrice(postsRepository.lastId(), String.valueOf(mahak.getPrice()));
+                     postMetaRepository.insertWholeSalePrice(postsRepository.lastId(), String.valueOf(mahak.getPrice()));
+                     postMetaRepository.insertSalePrice(postsRepository.lastId(), String.valueOf(mahak.getPrice()));
+
                      buffer.write(String.valueOf(mahak.getCode()) + "\n");//mahakList.get(numbeforeerror).getCode()) + "\n");
                  }
 
