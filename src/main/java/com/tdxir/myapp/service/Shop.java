@@ -592,7 +592,7 @@ public class Shop {
                 else if(role==ADMIN)
                 {   List<Long> buyPrice=wkhPostMetaRepository.buyPrice(message);
                     if(buyPrice.get(0)!=null)
-                    processList.add(price.get(0)+ "ریال"+"(قیمت خرید"+String.valueOf(buyPrice.get(buyPrice.size()-1))+")");
+                    processList.add(price.get(0)+ "ریال"/*+"(قیمت خرید"+String.valueOf(buyPrice.get(buyPrice.size()-1))*/+")");
                     else processList.add(price.get(0)+ "ریال"+"--"+"قیمت خرید ندارد");
                 }
             }
