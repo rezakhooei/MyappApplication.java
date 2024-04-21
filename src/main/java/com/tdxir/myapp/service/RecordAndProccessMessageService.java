@@ -51,7 +51,7 @@ public class RecordAndProccessMessageService {
     @Value("${app.file.resource-dir-linux}")
     private String pathLinux;
     private final Path fileStorageLocation;
-
+    private final Path invoiceStorageLocation;
     //private final UsersDataRepository repository;
     @Autowired
     private UsersDataRepository usersDataRepository;
@@ -73,6 +73,18 @@ public class RecordAndProccessMessageService {
             throw new RuntimeException(
                     "Could not create the directory where the uploaded files will be stored.", ex);
         }
+        this.invoiceStorageLocation = Paths.get(env.getProperty("app.file.invoice-dir-linux", ""/*"~/uploads/files"*/))
+                //      this.fileStorageLocation = Paths.get(env.getProperty("app.file.upload-dir-win"))
+                .toAbsolutePath().normalize();
+
+
+        try {
+            Files.createDirectories(this.invoiceStorageLocation);
+        } catch (Exception ex) {
+            throw new RuntimeException(
+                    "Could not create the directory where the uploaded files will be stored.", ex);
+        }
+
     }
 
     private String getFileExtension(String fileName) {
@@ -225,6 +237,46 @@ public class RecordAndProccessMessageService {
         // till record db
 
         return inf.get(0);//fileName;
+
+    }
+    public String storeInvoiceImg(MultipartFile imageFile) {
+        Date date = new Date();
+        // for record db
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        //  if (!(authentication instanceof AnonymousAuthenticationToken)) {
+        //String currentUserName = authentication.getName();
+        // Normalize file name
+        String date_str = new SimpleDateFormat("yyyyMMddHHmmss").format(date);
+        String voiceFileName ="";
+        String imageFileName ="";
+
+        if(imageFile!=null) {
+            imageFileName = imageFile.getOriginalFilename();
+            //  File oldFile = new File(fileName);
+            imageFileName = authentication.getName() + '-' + date_str + '-' + imageFileName;
+
+
+            try {
+                // Check if the filename contains invalid characters
+                if (imageFileName.contains("..")) {
+                    throw new RuntimeException(
+                            "Sorry! Filename contains invalid path sequence " + imageFileName);
+                }
+
+                Path targetLocation = this.invoiceStorageLocation.resolve(imageFileName);
+                Files.copy(imageFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+                File filereply = new File(targetLocation.toString());
+
+            } catch (IOException ex) {
+                throw new RuntimeException("Could not store file " + imageFileName + ". Please try again!", ex);
+            }
+        }
+
+
+
+        return imageFileName;
 
     }
     public Boolean storeImage(MultipartFile  imageFile ,String path ) {

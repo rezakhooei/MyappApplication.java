@@ -180,7 +180,7 @@ public class Shop {
                 processList.add(stock.get(0));
             else processList.add("-1");
 
-            processList.add(wkhPostMetaRepository.imageUrl(message));
+            processList.add(wkhPostMetaRepository.imageUrlId(message));
 
         }
         if ((processList == null)|| (processList.size()==0)) {
@@ -422,7 +422,7 @@ public class Shop {
                 processList.add(stock.get(0));
             else processList.add("-1");
 
-            processList.add(wkhPostMetaRepository.imageUrl(message));
+            processList.add(wkhPostMetaRepository.imageUrlId(message));
 
         }
         if ((processList == null)|| (processList.size()==0)) {
@@ -612,7 +612,7 @@ public class Shop {
                 processList.add(stock.get(0));
             else processList.add("-1");
 
-            processList.add(wkhPostMetaRepository.imageUrl(message));
+            processList.add(wkhPostMetaRepository.imageUrlId(message));
 
         }
         if ((processList == null)|| (processList.size()==0)) {

@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nullable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -53,7 +54,9 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Query("select meta_value from wkh_postmeta where post_id in(select meta_value from wkh_postmeta where\n" +
             "meta_key='_thumbnail_id' and post_id in(select post_id from wkh_postmeta where meta_key='_sku' and meta_value=:id))\n" +
             "and meta_key='_wp_attached_file'")
-    public String imageUrl(@Param("id") String id);
+    public String imageUrlId(@Param("id") String id);
+    @Query("select BI.fileImage from BuyInvoices BI where BI.idInvoice=:idInvoice")
+    public String imageUrlInvoice(@Param("idInvoice") String idInvoice);
     @Query("select  pm2.meta_value from wkh_postmeta pm2 where pm2.meta_key='_thumbnail_id' and pm2.post_id in(select pm3.post_id from wkh_postmeta pm3 where pm3.meta_key='_sku' and pm3.meta_value=:code)")
     public List<String> findThumbnail(@Param("code") String code);
 
@@ -161,8 +164,9 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     //nowDate, userName, numProduct, price, sellerId
     @Modifying
     @Transactional
-    @Query(value="insert into buy_invoices (id_invoice,user_name,date,num_product,price,sellerId) values (:idInvoice,:userName,:date,:numProduct,:price,:sellerId)",nativeQuery = true)
-    public Integer insertInvoice(@Param("idInvoice") String idInvoice,@Param("userName") String userName,@Param("date") String date,@Param("numProduct") Long numProduct,@Param("price") Long price,@Param("sellerId") String sellerId);
+    @Query(value="insert into buy_invoices (id_invoice,user_name,file_image,date,date_invoice,num_product,price,sellerId) values (:idInvoice,:userName,:fileName,:date,:dateInvoice,:numProduct,:price,:sellerId)",nativeQuery = true)
+    public Integer insertInvoice(@Param("idInvoice") String idInvoice, @Param("userName") String userName, @Param("fileName") String fileName, @Param("date") String date, @Param("dateInvoice") LocalDate dateInvoice, @Param("numProduct") Long numProduct,
+                                 @Param("price") Long price, @Param("sellerId") String sellerId);
 
 
 }

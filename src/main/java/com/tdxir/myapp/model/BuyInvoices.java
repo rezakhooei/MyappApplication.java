@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 @Data
 @Builder
@@ -22,7 +23,8 @@ public class BuyInvoices {
     private String idInvoice;//shomare faktor
     private String userName;
     private String sellerID;
-    private Date date;
+    private String date;
+    private LocalDate dateInvoice;
     private Long numProduct;//tedad kala
 
     private Long price;

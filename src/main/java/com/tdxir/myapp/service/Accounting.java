@@ -28,10 +28,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+
 
 import static com.tdxir.myapp.model.Operation.INVOICE;
 import static com.tdxir.myapp.model.Operation.PRODUCT;
@@ -63,17 +64,22 @@ public class Accounting {
 
     private static final String SERVER_LOCATION_PRODUCT_IMG = "/var/www/khooei.ir/public_html/wp-content/uploads/";
 
+    private static final String SERVER_LOCATION_INVOICES = "/opt/tomcat/uploads/invoices";
     private String errorMsg="";
     //parameters : Rd=panel2 means return image or voice or text ---inf1 نام کالا یا فروشنده inf2 کد کالا
     //inf3 تعداد inf4 قیمت
 
     public ResponseEntity<JSONObject> saveInvoice(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
                                                  String checkBox1, String checkBox2, String checkBox3, String userName) {
-        Date date=new Date();
-        String yearAndmounth= new SimpleDateFormat("yyyy/MM/").format(date);
-        String nowDate= new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
+        Date date = new Date();
+       // String yearAndmounth= new SimpleDateFormat("yyyy/MM/").format(date);
+       String nowDate= new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
         String idInvoice=null,message=inf.get(0), postId,sellerId=null;
         String[] idList=inf.get(0).split("@");
+        String[] stockANDdateList=inf.get(2).split("@");
+
+        LocalDate dateInvoice= LocalDate.parse(stockANDdateList[1], DateTimeFormatter.BASIC_ISO_DATE);
+
         Long price;
         Long numProduct=null;
         Integer flag1;
@@ -87,11 +93,12 @@ public class Accounting {
         try {
 
 
-            if(utils.isNumeric(inf.get(2)))
+            if(utils.isNumeric(stockANDdateList[0]))
             {
-                numProduct=Long.valueOf(inf.get(2));
+                numProduct=Long.valueOf(stockANDdateList[0]);
             }
             else numProduct= Long.valueOf(-1);
+
             if(utils.isNumeric(inf.get(3)))
             {
                 price = Long.valueOf(inf.get(3));
@@ -105,8 +112,13 @@ public class Accounting {
                 // product code = inf1 and  exists then change price and stock
 
                     if (wkhPostMetaRepository.existsCodeInvoice(idInvoice)==null) {
+                        String fileName = recordAndProccessMessageService.storeInvoiceImg( fileImage);
 
-                        flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,nowDate,numProduct,price,sellerId);
+
+
+
+
+                        flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,nowDate,dateInvoice,numProduct,price,sellerId );
 
                     }
 
@@ -126,7 +138,7 @@ public class Accounting {
            processList.add(String.valueOf(wkhPostMetaRepository.existsCodeInvoice(idInvoice)));
            processList.add(idInvoice);
            processList.add(sellerId);
-           processList.add(wkhPostMetaRepository.imageUrl(message));
+           processList.add(wkhPostMetaRepository.imageUrlInvoice(idInvoice));
 
 
         if ((processList == null)|| (processList.size()==0)) {
@@ -171,7 +183,7 @@ public class Accounting {
             if((processList.size()>1)&&processList.get(3)!=null) {
                 String image1 = FilenameUtils.getName(processList.get(3));//"replyimage.jpg"
                 if (image1 != null) {
-                    String pathFile = SERVER_LOCATION_PRODUCT_IMG + FilenameUtils.getPath(processList.get(3));
+                    String pathFile = SERVER_LOCATION_INVOICES + FilenameUtils.getPath(processList.get(3));
                     File filereplyImg = new File(pathFile + File.separator + image1);//+ EXTENSION);
 
                     try {
@@ -367,7 +379,7 @@ public class Accounting {
                 processList.add(stock.get(0));
             else processList.add("-1");
 
-            processList.add(wkhPostMetaRepository.imageUrl(message));
+            processList.add(wkhPostMetaRepository.imageUrlId(message));
 
         }
         if ((processList == null)|| (processList.size()==0)) {
@@ -550,7 +562,7 @@ public class Accounting {
                 processList.add(stock.get(0));
             else processList.add("-1");
 
-            processList.add(wkhPostMetaRepository.imageUrl(message));
+            processList.add(wkhPostMetaRepository.imageUrlId(message));
 
         }
         if ((processList == null)|| (processList.size()==0)) {
