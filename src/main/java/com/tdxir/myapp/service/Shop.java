@@ -118,6 +118,8 @@ public class Shop {
             }
             if (price != Long.valueOf(-1))
                 flag2 = wkhPostMetaRepository.updatePrice(String.valueOf(price), postId);
+                   wkhPostMetaRepository.updateRegularPrice(String.valueOf(price), postId);
+
 
             if (fileImage != null) {
                 List<String> thumbnail = wkhPostMetaRepository.findThumbnail(String.valueOf(code));
@@ -362,8 +364,11 @@ public class Shop {
                 if (postId != null) {
                     if(stock!=-1)
                         flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock), postId);
-                    if(price!=Long.valueOf(-1))
+                    if(price!=Long.valueOf(-1)){
                         flag2 = wkhPostMetaRepository.updatePrice(String.valueOf(price), postId);
+                    wkhPostMetaRepository.updateRegularPrice(String.valueOf(price), postId);
+
+                }
                     if(nameList[1].equals(inf.get(1)))
                         wkhPostsRepository.updateName(nameList[0], postId);
                     if (fileImage != null) {
