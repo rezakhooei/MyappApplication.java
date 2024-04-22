@@ -110,7 +110,7 @@ public class Accounting {
                 // product code = inf1 and  exists then change price and stock
 
                     if (wkhPostMetaRepository.existsCodeInvoice(idInvoice)==null) {
-                        String fileName =fileImage.getOriginalFilename();//= recordAndProccessMessageService.storeInvoiceImg( fileImage);
+                        String fileName ="reza";//=fileImage.getOriginalFilename();//= recordAndProccessMessageService.storeInvoiceImg( fileImage);
 
                         errorMsg+="-ASF";
 
