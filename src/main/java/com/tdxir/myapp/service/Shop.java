@@ -1,9 +1,6 @@
 package com.tdxir.myapp.service;
 
-import com.tdxir.myapp.model.BuyData;
-import com.tdxir.myapp.model.Operation;
-import com.tdxir.myapp.model.Role;
-import com.tdxir.myapp.model.UserKind;
+import com.tdxir.myapp.model.*;
 import com.tdxir.myapp.repository.WkhPostMetaRepository;
 import com.tdxir.myapp.repository.WkhPostsRepository;
 import com.tdxir.myapp.service.ProccessMessage;
@@ -102,48 +99,52 @@ public class Shop {
             }
             else price= Long.valueOf(-1);
 
-
-
+            if(idInvoice!=null)
+            {
+                BuyInvoices buyInvoices=wkhPostMetaRepository.reportInvoices(String.valueOf(idInvoice));
 
     // product code = inf1 and  exists then change price and stock
-    if (code != Long.valueOf(-1)&&idInvoice!=null&&(String.valueOf(idInvoice)==(wkhPostMetaRepository.idInvoice(String.valueOf(idInvoice))))) {
+    if (code != Long.valueOf(-1)&&String.valueOf(idInvoice).equals(buyInvoices.getIdInvoice())) {
         postId = wkhPostMetaRepository.existsCode(String.valueOf(code));
         if (postId != null) {
             Integer oldStock = Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0));
             Long oldPrice = Long.valueOf(wkhPostMetaRepository.priceIdCode(String.valueOf(code)).get(0));
             flag1 = wkhPostMetaRepository.insertBuyData(nowDate, userName, String.valueOf(code), stock, oldStock, price, oldPrice, idInvoice);
+
             if (stock != -1 && price != Long.valueOf(-1) ) {
 
+                wkhPostMetaRepository.updateInvoices(buyInvoices.getNumProduct()+1,buyInvoices.getPrice()+price,String.valueOf(idInvoice));
                 flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock + Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0))), postId);
 
             }
-
+            else errorMsg+="ایراد در اطلاعات ورودی کد کالا یا شماره فاکتور";
 
 
 
         }
-        else{// @@@ Adding new product to site
+        else {// @@@ Adding new product to site
             wkhPostsRepository.insertProduct(String.valueOf(code));
             wkhPostMetaRepository.insertSku(wkhPostsRepository.lastId(), String.valueOf(code));
             wkhPostMetaRepository.insertStock(wkhPostsRepository.lastId(), String.valueOf(stock));
             wkhPostMetaRepository.insertPrice(wkhPostsRepository.lastId(), String.valueOf(price));
             wkhPostMetaRepository.insertRegularPrice(wkhPostsRepository.lastId(), String.valueOf(price));
-            wkhPostMetaRepository.insertCategory(wkhPostsRepository.lastId(),2);
-            wkhPostMetaRepository.insertCategory(wkhPostsRepository.lastId(),15);
+            wkhPostMetaRepository.insertCategory(wkhPostsRepository.lastId(), 2);
+            wkhPostMetaRepository.insertCategory(wkhPostsRepository.lastId(), 15);
             //@@@@@@@@@@@@@@@@@ Adding product to invoice
 
 
             flag1 = wkhPostMetaRepository.insertBuyData(nowDate, userName, String.valueOf(code), stock, 0, price, Long.valueOf(0), idInvoice);
             if (stock != -1) {
-
+                wkhPostMetaRepository.updateInvoices(buyInvoices.getNumProduct()+1,buyInvoices.getPrice()+price,String.valueOf(idInvoice));
                 flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock + Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0))), postId);
 
             }
 
 
-
+        }
 
         }
+    else errorMsg+="ایراد در اطلاعات ورودی کد کالا یا شماره فاکتور";
     }
     else errorMsg+="ایراد در اطلاعات ورودی کد کالا یا شماره فاکتور";
 

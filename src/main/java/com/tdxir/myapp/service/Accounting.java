@@ -119,7 +119,7 @@ public class Accounting {
 
 
 
-                        flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,nowDate,dateInvoice,numProduct,price,sellerId );
+                        flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,nowDate,dateInvoice,Long.valueOf(0),Long.valueOf(0),sellerId );
 
                         errorMsg+="-ASData";
                     }
@@ -918,14 +918,14 @@ public class Accounting {
             processList = proccessMessage.proccess(message, userKind, Rd);
         }
         else{
-            List<BuyInvoices> buyInvoices=wkhPostMetaRepository.reportInvoices(message);
-            if(buyInvoices.size()!=0)
-            { Integer lastrecordindex=buyInvoices.size()-1;
-
-                for(int i=lastrecordindex;i>=0;--i)
-
-
-                    processList.add("تاریخ"+buyInvoices.get(i).getDate()+ "-"+"تعداد"+buyInvoices.get(i).getNumProduct()+"فروشنده"+buyInvoices.get(i).getSellerID()+ "-"+"قیمت"+buyInvoices.get(i).getPrice()+"ریال");
+            BuyInvoices buyInvoices=wkhPostMetaRepository.reportInvoices(message);
+            if(buyInvoices!=null)
+            {
+                processList.add("تاریخ-"+buyInvoices.getDate());
+                processList.add("تعداد-"+buyInvoices.getNumProduct());
+                processList.add("فروشنده-"+buyInvoices.getSellerID());
+                processList.add("قیمت-"+buyInvoices.getPrice()+"-ریال");
+                processList.add(buyInvoices.getFileImage());
 
             }
             else processList.add("-1");
@@ -969,10 +969,10 @@ public class Accounting {
         else if(Rd.equals("Rd2")){
 
             jsonObjectMain.put("fileContentVoice", null);
-            if((processList.size()>1)&&processList.get(3)!=null) {
-                String image1 = FilenameUtils.getName(processList.get(3));//"replyimage.jpg"
+            if((processList.size()>1)&&processList.get(4)!=null) {
+                String image1 = FilenameUtils.getName(processList.get(4));//"replyimage.jpg"
                 if (image1 != null) {
-                    String pathFile = SERVER_LOCATION_PRODUCT_IMG + FilenameUtils.getPath(processList.get(3));
+                    String pathFile = SERVER_LOCATION_INVOICES + FilenameUtils.getPath(processList.get(4));
                     File filereplyImg = new File(pathFile + File.separator + image1);//+ EXTENSION);
 
                     try {

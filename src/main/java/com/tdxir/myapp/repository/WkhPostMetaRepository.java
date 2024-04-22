@@ -48,7 +48,7 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Query("select new BuyData(bd.id,bd.email,bd.date,bd.sku,bd.stock,bd.oldStock,bd.price,bd.oldPrice,bd.idInvoice) from BuyData bd where bd.sku=:code order by bd.id")
     public List<BuyData> reportProduct (@Param("code") String code);
     @Query("select new BuyInvoices (bi.idDoc,bi.idInvoice,bi.userName,bi.sellerID,bi.date,bi.dateInvoice,bi.numProduct,bi.price,bi.fileImage) from BuyInvoices bi where bi.idInvoice=:code order by bi.idDoc ")
-    public List<BuyInvoices> reportInvoices (@Param("code") String code);
+    public BuyInvoices reportInvoices (@Param("code") String code);
     @Query("select p.post_title from WkhPosts  p where p.id in(select post_id from wkh_postmeta where meta_key='_sku' and meta_value=:code) and p.post_type='product'")
 
     public List<String> nameIdCode (@Param("code") String code);
@@ -69,6 +69,12 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Query("select  pm2.meta_value from wkh_postmeta pm2 where pm2.meta_key='_thumbnail_id' and pm2.post_id in(select pm3.post_id from wkh_postmeta pm3 where pm3.meta_key='_sku' and pm3.meta_value=:code)")
     public List<String> findThumbnail(@Param("code") String code);
 
+    @Modifying
+    @Transactional
+    @Query(value="update buy_invoices bi set bi.num_product=:numProduct,bi.price=:price where bi.id_invoice=:idInvoices", nativeQuery = true )
+
+
+    public Integer updateInvoices(@Param("numProduct") Long numProduct,@Param("price") Long price,@Param("idInvoices") String idInvoices );
     @Modifying
     @Transactional
     @Query(value="update wkh_postmeta pm1 set pm1.meta_value=:fileName where pm1.meta_key='_wp_attached_file' and pm1.post_id=:postId", nativeQuery = true )
