@@ -105,7 +105,7 @@ public class Shop {
 
 
     // product code = inf1 and  exists then change price and stock
-    if (code != Long.valueOf(-1)&&idInvoice!=null) {
+    if (code != Long.valueOf(-1)&&idInvoice!=null&&(String.valueOf(idInvoice)==(wkhPostMetaRepository.idInvoice(String.valueOf(idInvoice))))) {
         postId = wkhPostMetaRepository.existsCode(String.valueOf(code));
         if (postId != null) {
             Integer oldStock = Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0));
@@ -144,6 +144,7 @@ public class Shop {
 
         }
     }
+    else errorMsg+="ایراد در اطلاعات ورودی کد کالا یا شماره فاکتور";
 
         } catch (Exception e){
             errorMsg+=e.getMessage();

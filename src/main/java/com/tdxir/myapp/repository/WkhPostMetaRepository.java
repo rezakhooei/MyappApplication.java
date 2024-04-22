@@ -25,7 +25,9 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
 
     public Integer existsCodeInvoice (@Param("code") String code);
 
+    @Query("select B1.idInvoice from BuyInvoices B1 where B1.idInvoice=:code")
 
+    public String idInvoice (@Param("code") String code);
     @Query("select w1.post_id from wkh_postmeta w1 where w1.meta_key='_sku' and w1.meta_value=:mahakCode")
 
         public long post_id (@Param("mahakCode") String mahakCode);
