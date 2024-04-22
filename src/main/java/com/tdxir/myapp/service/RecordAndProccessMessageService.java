@@ -265,7 +265,7 @@ public class RecordAndProccessMessageService {
                // File filereply = new File(targetLocation.toString());
 
             } catch (IOException ex) {
-           //     throw new RuntimeException("Could not store file " + imageFileName + ". Please try again!", ex);
+                throw new RuntimeException("Could not store file " + imageFileName + ". Please try again!", ex);
             }
         }
 
