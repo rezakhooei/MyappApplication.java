@@ -5,7 +5,10 @@ import com.tdxir.myapp.repository.WkhPostMetaRepository;
 import com.tdxir.myapp.repository.WkhPostsRepository;
 import com.tdxir.myapp.service.ProccessMessage;
 import com.tdxir.myapp.service.RecordAndProccessMessageService;
+import com.tdxir.myapp.tools.DateConvertor;
 import com.tdxir.myapp.utils.Utils;
+import com.tosan.tools.jalali.JalaliCalendar;
+import com.tosan.tools.jalali.JalaliDate;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -42,6 +45,8 @@ import static com.tdxir.myapp.model.UserKind.SHOP;
 
 
 public class Accounting {
+
+    DateConvertor dateConverter = new DateConvertor();
     @Autowired
     private WkhPostsRepository wkhPostsRepository;
     @Autowired
@@ -68,13 +73,23 @@ public class Accounting {
     //inf3 تعداد inf4 قیمت
 
     public ResponseEntity<JSONObject> saveInvoice(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
-                                                 String checkBox1, String checkBox2, String checkBox3, String userName) {
+                                                  String checkBox1, String checkBox2, String checkBox3, String userName) {
         Date date = new Date();
+        JalaliDate jalaliDate=new JalaliDate();
+
+        JalaliCalendar jalaliCalendar=new JalaliCalendar();//date);
+        jalaliDate=jalaliCalendar.getJalaliDate();
+        /*
+        ULocale locale = new ULocale("fa_IR@calendar=persian");
+        PersianCalendar jalali = PersianCalendar.of(1394, 11, 5);
+*/
+
        // String yearAndmounth= new SimpleDateFormat("yyyy/MM/").format(date);
        String nowDate= new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
         String idInvoice=null,message=inf.get(0), postId,sellerId=null;
         String[] idList=inf.get(0).split("@");
         String[] stockANDdateList=inf.get(2).split("@");
+
 
         LocalDate dateInvoice= LocalDate.parse(stockANDdateList[1], DateTimeFormatter.BASIC_ISO_DATE);
 
@@ -909,16 +924,28 @@ public class Accounting {
     {
 
 
-        String message=inf.get(1);
+
+
+        String idInvoice=inf.get(1);
+        List<BuyData> buyData=wkhPostMetaRepository.findInvoiceInBuyData(idInvoice);
+        if(buyData.size()!=0){
+         Long num_product=Long.valueOf(0),price=Long.valueOf(0);
+        for(int i=0;i<=buyData.size()-1;++i)
+        {
+         num_product+=1;
+         price+=buyData.get(i).getPrice()*buyData.get(i).getStock();
+        }
+            wkhPostMetaRepository.updateInvoices(num_product,price,String.valueOf(idInvoice));
+        }
         JSONObject jsonObjectMain = new JSONObject();
         JSONObject jsonObject = new JSONObject();
         // String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
         List<String> processList=new ArrayList<>();
         if(fileVoice!=null) {
-            processList = proccessMessage.proccess(message, userKind, Rd);
+            processList = proccessMessage.proccess(idInvoice, userKind, Rd);
         }
         else{
-            BuyInvoices buyInvoices=wkhPostMetaRepository.reportInvoices(message);
+            BuyInvoices buyInvoices=wkhPostMetaRepository.reportInvoices(idInvoice);
             if(buyInvoices!=null)
             {
                 processList.add("تاریخ-"+buyInvoices.getDate());

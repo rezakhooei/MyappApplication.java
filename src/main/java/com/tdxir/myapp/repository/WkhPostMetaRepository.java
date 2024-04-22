@@ -40,8 +40,12 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Query("select wm1.meta_value  from wkh_postmeta wm1 where wm1.meta_key='_price' and wm1.post_id in (select wm2.post_id from wkh_postmeta wm2 where wm2.meta_key='_sku' and wm2.meta_value=:code)")
 
     public List<String> priceIdCode (@Param("code") String code);
+    @Query("select new BuyData(bd.id,bd.email,bd.date,bd.sku,bd.stock,bd.oldStock,bd.price,bd.oldPrice,bd.idInvoice) from BuyData as bd where  bd.idInvoice=:idInvoice order by bd.id ")
 
+    public List<BuyData> findInvoiceInBuyData (@Param("idInvoice") String idInvoice);
+    @Query("select new BuyData(bd.id,bd.email,bd.date,bd.sku,bd.stock,bd.oldStock,bd.price,bd.oldPrice,bd.idInvoice) from BuyData as bd where bd.sku=:code and bd.idInvoice=:idInvoice order by bd.id ")
 
+    public List<BuyData> findSkuInInvoice (@Param("code") String code,@Param("idInvoice") String idInvoice);
     @Query("select bd.price from BuyData as bd where bd.sku=:code order by bd.id ")
 
     public List<Long> buyPrice (@Param("code") String code);
@@ -68,6 +72,14 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     public List<String> imageUrlInvoice(@Param("idInvoice") String idInvoice);
     @Query("select  pm2.meta_value from wkh_postmeta pm2 where pm2.meta_key='_thumbnail_id' and pm2.post_id in(select pm3.post_id from wkh_postmeta pm3 where pm3.meta_key='_sku' and pm3.meta_value=:code)")
     public List<String> findThumbnail(@Param("code") String code);
+
+
+    @Modifying
+    @Transactional
+    @Query(value="update buy_data bd set bd.stock=:newStock,bd.price=:newPrice where bd.id=:id", nativeQuery = true )
+
+
+    public Integer updateBuyData(@Param("newStock") Long newStock,@Param("newPrice") Long newPrice,@Param("id") Long id );
 
     @Modifying
     @Transactional

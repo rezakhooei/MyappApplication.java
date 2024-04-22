@@ -1,5 +1,8 @@
 package com.tdxir.myapp.tools;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class DateConvertor {
 
     /**  Gregorian & Jalali (Hijri_Shamsi,Solar) Date Converter Functions

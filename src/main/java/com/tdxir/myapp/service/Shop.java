@@ -106,18 +106,35 @@ public class Shop {
     // product code = inf1 and  exists then change price and stock
     if (code != Long.valueOf(-1)&&String.valueOf(idInvoice).equals(buyInvoices.getIdInvoice())) {
         postId = wkhPostMetaRepository.existsCode(String.valueOf(code));
-        if (postId != null) {
+        if (postId != null)
+        {
             Integer oldStock = Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0));
             Long oldPrice = Long.valueOf(wkhPostMetaRepository.priceIdCode(String.valueOf(code)).get(0));
-            flag1 = wkhPostMetaRepository.insertBuyData(nowDate, userName, String.valueOf(code), stock, oldStock, price, oldPrice, idInvoice);
+            List<BuyData> buyData=wkhPostMetaRepository.findSkuInInvoice(String.valueOf(code),String.valueOf(idInvoice));
+            if(buyData.size()==0)
+            {
+                flag1 = wkhPostMetaRepository.insertBuyData(nowDate, userName, String.valueOf(code), stock, oldStock, price, oldPrice, idInvoice);
+                if (stock != -1 && price != Long.valueOf(-1) ) {
 
-            if (stock != -1 && price != Long.valueOf(-1) ) {
 
-                wkhPostMetaRepository.updateInvoices(buyInvoices.getNumProduct()+1,buyInvoices.getPrice()+price,String.valueOf(idInvoice));
-                flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock + Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0))), postId);
+                    wkhPostMetaRepository.updateStock(String.valueOf(stock + Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0))), postId);
+
+                }
+                else errorMsg+="ایراد در اطلاعات ورودی کد کالا یا شماره فاکتور";
+            }
+            else
+            {wkhPostMetaRepository.updateBuyData(Long.valueOf(stock),price,buyData.get(0).getId());
+
+            if (stock != -1 && price != Long.valueOf(-1) )
+            {
+
+
+                flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock-buyData.get(0).getStock() + Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0))), postId);
 
             }
             else errorMsg+="ایراد در اطلاعات ورودی کد کالا یا شماره فاکتور";
+            }
+
 
 
 
@@ -135,7 +152,7 @@ public class Shop {
 
             flag1 = wkhPostMetaRepository.insertBuyData(nowDate, userName, String.valueOf(code), stock, 0, price, Long.valueOf(0), idInvoice);
             if (stock != -1) {
-                wkhPostMetaRepository.updateInvoices(buyInvoices.getNumProduct()+1,buyInvoices.getPrice()+price,String.valueOf(idInvoice));
+                wkhPostMetaRepository.updateInvoices(buyInvoices.getNumProduct()+1,buyInvoices.getPrice()+stock*price,String.valueOf(idInvoice));
                 flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock + Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0))), postId);
 
             }

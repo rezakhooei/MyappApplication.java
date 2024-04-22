@@ -28,6 +28,14 @@
 			<version>0.18.0</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.tosan.tools/jalali-calendar -->
+		<dependency>
+			<groupId>com.tosan.tools</groupId>
+			<artifactId>jalali-calendar</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+
 
 		<dependency>
 			<groupId>ai.picovoice</groupId>
