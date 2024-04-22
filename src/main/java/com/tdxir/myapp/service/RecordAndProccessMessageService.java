@@ -51,7 +51,8 @@ public class RecordAndProccessMessageService {
     @Value("${app.file.resource-dir-linux}")
     private String pathLinux;
     private final Path fileStorageLocation;
-    private final Path invoiceStorageLocation;
+    @Value("/opt/tomcat/uploads/invoices/")
+    private  Path invoiceDirLinux;
     //private final UsersDataRepository repository;
     @Autowired
     private UsersDataRepository usersDataRepository;
@@ -73,17 +74,7 @@ public class RecordAndProccessMessageService {
             throw new RuntimeException(
                     "Could not create the directory where the uploaded files will be stored.", ex);
         }
-        this.invoiceStorageLocation = Paths.get(env.getProperty("app.file.invoice-dir-linux", ""/*"~/uploads/files"*/))
-                //      this.fileStorageLocation = Paths.get(env.getProperty("app.file.upload-dir-win"))
-                .toAbsolutePath().normalize();
 
-
-        try {
-            Files.createDirectories(this.invoiceStorageLocation);
-        } catch (Exception ex) {
-            throw new RuntimeException(
-                    "Could not create the directory where the uploaded files will be stored.", ex);
-        }
 
     }
 
@@ -263,11 +254,15 @@ public class RecordAndProccessMessageService {
                     throw new RuntimeException(
                             "Sorry! Filename contains invalid path sequence " + imageFileName);
                 }
-
-                Path targetLocation = this.invoiceStorageLocation.resolve(imageFileName);
+                if (WinLinux == 1)
+                {   Path targetLocation = this.fileStorageLocation.resolve(imageFileName);
                 Files.copy(imageFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+                }
+                else {  Path targetLocation = invoiceDirLinux.resolve(imageFileName);
+                    Files.copy(imageFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-                File filereply = new File(targetLocation.toString());
+                }
+               // File filereply = new File(targetLocation.toString());
 
             } catch (IOException ex) {
                 throw new RuntimeException("Could not store file " + imageFileName + ". Please try again!", ex);
