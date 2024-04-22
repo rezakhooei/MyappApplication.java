@@ -259,13 +259,13 @@ public class RecordAndProccessMessageService {
                 Files.copy(imageFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
                 }
                 else {  Path targetLocation = invoiceDirLinux.resolve(imageFileName);
-                 //   Files.copy(imageFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+                    Files.copy(imageFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
                 }
                // File filereply = new File(targetLocation.toString());
 
             } catch (IOException ex) {
-                throw new RuntimeException("Could not store file " + imageFileName + ". Please try again!", ex);
+               // throw new RuntimeException("Could not store file " + imageFileName + ". Please try again!", ex);
             }
         }
 
