@@ -30,4 +30,7 @@ public class BuyInvoices {
     private Long price;
     private String fileImage;
 
+
+
+
 }

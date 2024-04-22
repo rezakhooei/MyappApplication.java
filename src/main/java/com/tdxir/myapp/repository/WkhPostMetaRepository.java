@@ -1,8 +1,11 @@
 package com.tdxir.myapp.repository;
 
+import com.tdxir.myapp.model.BuyData;
+import com.tdxir.myapp.model.BuyInvoices;
 import com.tdxir.myapp.model.wkh_postmeta;
 import kotlin.jvm.Throws;
 import org.hibernate.annotations.SecondaryRows;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -42,6 +45,10 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Query("select bd.price from BuyData as bd where bd.sku=:code order by bd.id ")
 
     public List<Long> buyPrice (@Param("code") String code);
+    @Query("select new BuyData(bd.id,bd.email,bd.date,bd.sku,bd.stock,bd.oldStock,bd.price,bd.oldPrice,bd.idInvoice) from BuyData bd where bd.sku=:code order by bd.id")
+    public List<BuyData> reportProduct (@Param("code") String code);
+    @Query("select new BuyInvoices (bi.idDoc,bi.idInvoice,bi.userName,bi.sellerID,bi.date,bi.dateInvoice,bi.numProduct,bi.price,bi.fileImage) from BuyInvoices bi where bi.idInvoice=:code order by bi.idDoc ")
+    public List<BuyInvoices> reportInvoices (@Param("code") String code);
     @Query("select p.post_title from WkhPosts  p where p.id in(select post_id from wkh_postmeta where meta_key='_sku' and meta_value=:code) and p.post_type='product'")
 
     public List<String> nameIdCode (@Param("code") String code);
