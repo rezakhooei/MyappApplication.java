@@ -74,25 +74,24 @@ public class Accounting {
 
     public ResponseEntity<JSONObject> saveInvoice(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
                                                   String checkBox1, String checkBox2, String checkBox3, String userName) {
-        Date date = new Date();
-        JalaliDate jalaliDate=new JalaliDate();
+        //Date date = new Date();
+        JalaliDate date=new JalaliDate();
 
         JalaliCalendar jalaliCalendar=new JalaliCalendar();//date);
-        jalaliDate=jalaliCalendar.getJalaliDate();
+        date=jalaliCalendar.getJalaliDate();
+
         /*
         ULocale locale = new ULocale("fa_IR@calendar=persian");
         PersianCalendar jalali = PersianCalendar.of(1394, 11, 5);
 */
 
        // String yearAndmounth= new SimpleDateFormat("yyyy/MM/").format(date);
-       String nowDate= new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
+       //String nowDate= new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
         String idInvoice=null,message=inf.get(0), postId,sellerId=null;
         String[] idList=inf.get(0).split("@");
         String[] stockANDdateList=inf.get(2).split("@");
 
-
         LocalDate dateInvoice= LocalDate.parse(stockANDdateList[1], DateTimeFormatter.BASIC_ISO_DATE);
-
         Long price;
         Long numProduct=null;
         Integer flag1;
@@ -134,7 +133,7 @@ public class Accounting {
 
 
 
-                        flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,nowDate,dateInvoice,Long.valueOf(0),Long.valueOf(0),sellerId );
+                        flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,date.toString(),dateInvoice,Long.valueOf(0),Long.valueOf(0),sellerId );
 
                         errorMsg+="-ASData";
                     }
@@ -316,7 +315,12 @@ public class Accounting {
     }
     public ResponseEntity<JSONObject> saveProduct(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
                                                   String checkBox1, String checkBox2, String checkBox3, UserKind userKind) {
-        Date date=new Date();
+        JalaliDate date=new JalaliDate();
+
+        JalaliCalendar jalaliCalendar=new JalaliCalendar();//date);
+        date=jalaliCalendar.getJalaliDate();
+
+
         String yearAndmounth= new SimpleDateFormat("yyyy/MM/").format(date);
         String message=inf.get(1), postId;
         String[] nameList=inf.get(0).split("@");

@@ -1,5 +1,6 @@
 package com.tdxir.myapp.model;
 
+import com.tosan.tools.jalali.JalaliDate;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

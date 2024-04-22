@@ -6,6 +6,8 @@ import com.tdxir.myapp.repository.WkhPostsRepository;
 import com.tdxir.myapp.service.ProccessMessage;
 import com.tdxir.myapp.service.RecordAndProccessMessageService;
 import com.tdxir.myapp.utils.Utils;
+import com.tosan.tools.jalali.JalaliCalendar;
+import com.tosan.tools.jalali.JalaliDate;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.apache.commons.io.FilenameUtils;
@@ -64,9 +66,13 @@ public class Shop {
 
     public ResponseEntity<JSONObject> buyProduct(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
                                                  String checkBox1, String checkBox2, String checkBox3, String userName) {
-        Date date=new Date();
-        String yearAndmounth= new SimpleDateFormat("yyyy/MM/").format(date);
-        String nowDate= new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
+
+        JalaliDate date=new JalaliDate();
+
+        JalaliCalendar jalaliCalendar=new JalaliCalendar();//date);
+        date=jalaliCalendar.getJalaliDate();
+        String yearAndmounth=String.valueOf(date.getYear())+date.getMonth();//= new SimpleDateFormat("yyyy/MM/").format(date.);
+        String nowDate= date.toString();//new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
         String message=inf.get(1), postId,sellerId=inf.get(0);
         String[] idList=inf.get(0).split("@");
         Long idInvoice=null;

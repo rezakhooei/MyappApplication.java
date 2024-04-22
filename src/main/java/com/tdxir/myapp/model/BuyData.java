@@ -1,5 +1,6 @@
 package com.tdxir.myapp.model;
 
+import com.tosan.tools.jalali.JalaliDate;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,7 @@ public class BuyData {
     @Column(name = "id")
     private Long id;
     private String email;
-    private Date date;
+    private String date;
     private String sku;
     private Long stock;
     private Long oldStock;
