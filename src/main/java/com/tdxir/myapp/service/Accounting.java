@@ -133,12 +133,15 @@ public class Accounting {
         // String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
         List<String> processList=new ArrayList<>();
 
+        try {
+
 
            processList.add(String.valueOf(wkhPostMetaRepository.existsCodeInvoice(idInvoice)));
            processList.add(idInvoice);
            processList.add(sellerId);
            processList.add(wkhPostMetaRepository.imageUrlInvoice(idInvoice).get(0));
-
+            }catch (Exception e){errorMsg+=e.getMessage();
+        }
 
         if ((processList == null)|| (processList.size()==0)) {
             processList = new ArrayList<>();
@@ -253,34 +256,39 @@ public class Accounting {
 
 
         JSONArray array = new JSONArray();
+       try {
+           for (int i = 1; i <= processList.size(); ++i) {
+               jsonObject.put("inf_id", String.valueOf(i));
+               if (i == 1) {
+                   if (processList.get(i - 1) != "-1")
+                       jsonObject.put("inf_text", "شماره سند : " + processList.get(i - 1));
+                   else jsonObject.put("inf_text", "ثبت نشده است");
+               } else if (i == 2) {
+                   if (processList.get(i - 1) != "-1")
+                       jsonObject.put("inf_text", "شماره فاکتور : " + processList.get(i - 1));
+                   else jsonObject.put("inf_text", "فاکتور تعریف نشده است");
 
-        for (int i = 1; i <= processList.size(); ++i) {
-            jsonObject.put("inf_id", String.valueOf(i));
-            if(i==1) {
-                if (processList.get(i - 1) != "-1")
-                    jsonObject.put("inf_text", "شماره سند : " + processList.get(i - 1) );
-                else jsonObject.put("inf_text", "ثبت نشده است");
-            }
-            else if(i==2) {
-                if(processList.get(i - 1)!="-1")
-                    jsonObject.put("inf_text", "شماره فاکتور : " + processList.get(i - 1) );
-                else jsonObject.put("inf_text",  "فاکتور تعریف نشده است");
+               } else if (i == 3) {
+                   if (processList.get(i - 1) != "-1")
+                       jsonObject.put("inf_text", "فروشنده :    " + processList.get(i - 1));
+                   else jsonObject.put("inf_text", "فروشنده تعریف نشده است");
+               } else if (i == 4) {
+                   if (processList.get(i - 1) != null)
+                       jsonObject.put("inf_text", "" + errorMsg);//, processList.get(i - 1) + ":" + "عکس");
+                   else jsonObject.put("inf_text", "عکس  تعریف نشده است" + errorMsg);
+               }
+               array.add(new JSONObject(jsonObject));
+               jsonObject.clear();
+           }
+       }catch (Exception ex) {
+           errorMsg += ex.getMessage();
+           jsonObject.put("inf_text", "" + errorMsg);//, processList.get(i - 1) + ":" + "عکس");
+                   jsonObject.put("inf_text", "عکس  تعریف نشده است" + errorMsg);
 
-            }
-            else if(i==3)
-            {
-                if(processList.get(i - 1)!="-1")
-                    jsonObject.put("inf_text","فروشنده :    " +processList.get(i - 1) );
-                else jsonObject.put("inf_text",  "فروشنده تعریف نشده است");
-            }
-            else if(i==4) {
-                if(processList.get(i - 1)!=null)
-                    jsonObject.put("inf_text",""+errorMsg);//, processList.get(i - 1) + ":" + "عکس");
-                else jsonObject.put("inf_text",  "عکس  تعریف نشده است"+errorMsg);
-            }
-            array.add(new JSONObject(jsonObject));
-            jsonObject.clear();
-        }
+        array.add(new JSONObject(jsonObject));
+        jsonObject.clear();
+
+       }
         jsonObjectMain.put("inf", array);
 
         HttpHeaders headers = new HttpHeaders();
