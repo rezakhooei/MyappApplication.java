@@ -957,7 +957,7 @@ public class Accounting {
                 processList.add("تاریخ-"+buyInvoices.getDate());
                 processList.add("تعداد-"+buyInvoices.getNumProduct());
                 processList.add("فروشنده-"+buyInvoices.getSellerID());
-                processList.add("قیمت-"+buyInvoices.getPrice()+"-ریال");
+                processList.add("قیمت-"+String.valueOf(df.format(buyInvoices.getPrice()))+"-ریال");
                 processList.add(buyInvoices.getFileImage());
                 for(int i=0;i<=buyData.size()-1;++i){
                 processList.add("کد-"+buyData.get(i).getSku()+"تعداد-"+buyData.get(i).getStock()+"قیمت-"+String.valueOf(df.format(buyData.get(i).getPrice())));
@@ -1089,8 +1089,11 @@ public class Accounting {
         for (int i = 1; i <= processList.size(); ++i) {
             jsonObject.put("inf_id", String.valueOf(i));
 
-            if (processList.get(i - 1) != "-1")
-                jsonObject.put("inf_text", processList.get(i - 1) );
+            if (processList.get(i - 1) != "-1") {
+             if(i==5)    jsonObject.put("inf_text",  "لیست کالاهای خرید شده این فاکتور : ");
+
+               else  jsonObject.put("inf_text", processList.get(i - 1));
+            }
             else jsonObject.put("inf_text", "گزارشی وجود ندارد");
 
 
