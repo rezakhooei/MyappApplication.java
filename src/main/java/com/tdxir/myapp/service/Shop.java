@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -617,9 +618,10 @@ public class Shop {
                 processList.add(price.get(0));
                 else if(role==ADMIN)
                 {   List<Long> buyPrice=wkhPostMetaRepository.buyPrice(message);
+                    DecimalFormat df = new DecimalFormat("###,###,###");
                     if(buyPrice.size()!=0)
-                    processList.add(price.get(0)+ "ریال"+"(قیمت خرید"+String.valueOf(buyPrice.get(buyPrice.size()-1))+")");
-                    else processList.add(price.get(0)+ "ریال"+"--"+"قیمت خرید ندارد");
+                    processList.add(String.valueOf(df.format(Long.valueOf(price.get(0))))+ "ریال"+"(قیمت خرید"+String.valueOf(buyPrice.get(buyPrice.size()-1))+")");
+                    else processList.add(String.valueOf(df.format(Long.valueOf(price.get(0))))+ "ریال"+"--"+"قیمت خرید ندارد");
                 }
             }
             else processList.add("-1");
@@ -760,7 +762,10 @@ public class Shop {
             }
             else if(i==2) {
                 if(processList.get(i - 1)!="-1")
+                {  DecimalFormat df = new DecimalFormat("###,###,###");
                     jsonObject.put("inf_text", "قیمت : " + processList.get(i - 1) );
+
+                }
                 else jsonObject.put("inf_text",  "قیمت تعریف نشده است");
 
             }
