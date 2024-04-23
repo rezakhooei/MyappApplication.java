@@ -620,7 +620,7 @@ public class Shop {
                 {   List<Long> buyPrice=wkhPostMetaRepository.buyPrice(message);
                     DecimalFormat df = new DecimalFormat("###,###,###");
                     if(buyPrice.size()!=0)
-                    processList.add(String.valueOf(df.format(Long.valueOf(price.get(0))))+ "ریال"+"(قیمت خرید"+String.valueOf(buyPrice.get(buyPrice.size()-1))+")");
+                    processList.add(String.valueOf(df.format(Long.valueOf(price.get(0))))+ "ریال"+"(قیمت خرید"+String.valueOf(df.format(buyPrice.get(buyPrice.size()-1)))+")");
                     else processList.add(String.valueOf(df.format(Long.valueOf(price.get(0))))+ "ریال"+"--"+"قیمت خرید ندارد");
                 }
             }

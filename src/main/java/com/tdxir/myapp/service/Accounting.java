@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -157,6 +158,7 @@ public class Accounting {
            processList.add(idInvoice);
            processList.add(sellerId);
            processList.add(wkhPostMetaRepository.imageUrlInvoice(idInvoice).get(0));
+
             }catch (Exception e){errorMsg+=e.getMessage();
         }
 
@@ -929,7 +931,7 @@ public class Accounting {
 
 
 
-
+        DecimalFormat df = new DecimalFormat("###,###,###");
         String idInvoice=inf.get(1);
         List<BuyData> buyData=wkhPostMetaRepository.findInvoiceInBuyData(idInvoice);
         if(buyData.size()!=0){
@@ -957,6 +959,9 @@ public class Accounting {
                 processList.add("فروشنده-"+buyInvoices.getSellerID());
                 processList.add("قیمت-"+buyInvoices.getPrice()+"-ریال");
                 processList.add(buyInvoices.getFileImage());
+                for(int i=0;i<=buyData.size()-1;++i){
+                processList.add("کد-"+buyData.get(i).getSku()+"تعداد-"+buyData.get(i).getStock()+"قیمت-"+String.valueOf(df.format(buyData.get(i).getPrice())));
+                }
 
             }
             else processList.add("-1");
