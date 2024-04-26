@@ -87,7 +87,7 @@ public class AuthenticationService {
             else if(user.getRole() == ACCOUNTING){
                 infList=new String[]{"شماره فاکتور@شناسه فروشنده","شماره فاکتور","تعداد کالا@تاریخ فاکتور","قیمت(ریال)/نحوه پرداخت"};
                 checkBoxesList=new String[]{};//"chk1","chk2","chk3"};
-                panels=new String[][]{{"نحوه ارسال","نحوه دریافت","دستور","نوع"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"ثبت","تسویه","گزارش کالا"},{"فروشنده"+"خریدار"+"گزارش فاکتور"}};
+                panels=new String[][]{{"نحوه ارسال","نحوه دریافت","دستور","نوع"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"ثبت","تسویه","گزارش کالا","گزارش فاکتور"},{"خریدار","فروشنده"}};
 
                 return  sendAuthConfig(infList,checkBoxesList,panels,jwtToken);
 
@@ -160,7 +160,7 @@ for(int panelNum=1;panelNum<=panels[0].length;++panelNum)
         jsonObjectRd.put("id", rdNum);//String.valueOf(i));
         jsonObjectRd.put("name", panels[panelNum][rdNum-1]);
 
-        if ((rdNum == 4 && (panelNum==1 || panelNum==2))||(rdNum==1 && panelNum==3))
+        if ((rdNum == 4 && (panelNum==1 || panelNum==2))||(rdNum==1 && panelNum==3)||(rdNum==1 && panelNum==4))
             jsonObjectRd.put("isSelct", true);
         else jsonObjectRd.put("isSelct", false);
 
