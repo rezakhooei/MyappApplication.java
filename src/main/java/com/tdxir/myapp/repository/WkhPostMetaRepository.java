@@ -1,23 +1,13 @@
 package com.tdxir.myapp.repository;
 
-import com.tdxir.myapp.model.BuyData;
-import com.tdxir.myapp.model.BuyInvoices;
-import com.tdxir.myapp.model.Operation;
-import com.tdxir.myapp.model.wkh_postmeta;
-import com.tdxir.myapp.model.Billings;
-import com.tosan.tools.jalali.JalaliDate;
-import kotlin.jvm.Throws;
-import org.hibernate.annotations.SecondaryRows;
-import org.jetbrains.annotations.NotNull;
+import com.tdxir.myapp.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Nullable;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> {
@@ -200,9 +190,9 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
 
     @Modifying
     @Transactional
-    @Query(value="insert into Billings (date,date_pay,id_doc,id_invoice,price,bill_kind,pay_kind,user_name,file_image) values (:date,:dateInvoice,:idDoc,:idInvoice,:price,:billKind,:payKind,:userName,:fileName)",nativeQuery = true)
+    @Query(value="insert into Bills (date,date_pay,id_doc,id_invoice,price,bill_kind,pay_kind,user_name,file_image,finish) values (:date,:dateInvoice,:idDoc,:idInvoice,:price,:billKind,:payKind,:userName,:fileName,:finish)",nativeQuery = true)
     public Integer insertBilling(@Param("date") String date, @Param("dateInvoice") LocalDate dateInvoice, @Param("idDoc") Long idDoc, @Param("idInvoice") String idInvoice,
-                                 @Param("price") Long price, @Param("billKind") Operation billKind, @Param("payKind") Operation PayKind, @Param("userName") String userName, @Param("fileName") String fileName);
+                                 @Param("price") Long price, @Param("billKind") String billKind, @Param("payKind") String PayKind, @Param("userName") String userName, @Param("fileName") String fileName,@Param("finish") Boolean finish);
 
 
 

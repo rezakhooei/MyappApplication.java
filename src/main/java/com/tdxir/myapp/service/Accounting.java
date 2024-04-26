@@ -128,8 +128,8 @@ public class Accounting {
 
 
                 if(fileImage==null)
-                flag1 = wkhPostMetaRepository.insertBilling(date.toString(),datePaying,Long.valueOf(idDoc),idInvoice,price,BUY,CASH,userName,fileName );
-                else flag1 = wkhPostMetaRepository.insertBilling(date.toString(),datePaying,Long.valueOf(idDoc),idInvoice,price,BUY,CHECK,userName,fileName );
+                flag1 = wkhPostMetaRepository.insertBilling(date.toString(),datePaying,Long.valueOf(idDoc),idInvoice,price,"BUY","CASH",userName,fileName ,false);
+                else flag1 = wkhPostMetaRepository.insertBilling(date.toString(),datePaying,Long.valueOf(idDoc),idInvoice,price,"BUY","CHECK",userName,fileName,false );
 
                 errorMsg+="-ASData";
             }

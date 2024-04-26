@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 
@@ -14,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Billings {
+public class Bills {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,11 +29,11 @@ public class Billings {
     private  Operation billKind=Operation.SELL;//sell or buy
     @Enumerated(EnumType.STRING)
     private Operation payKind=Operation.CASH;//cash or product or checque
+
     private  String userName;
     private String fileImage;
     private Boolean finish=false;
-    private String desc;
-
+    private String description;
 
 
 }
