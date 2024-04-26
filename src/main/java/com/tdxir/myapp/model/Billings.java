@@ -24,12 +24,13 @@ public class Billings {
     private String date;
     private LocalDate datePay;
     private Long idDoc;
-    private Long idInvoice;
+    private String idInvoice;
+    private Long price;
     @Enumerated(EnumType.STRING)
     private  Operation billKind=Operation.SELL;//sell or buy
-    private Long price;
+    @Enumerated(EnumType.STRING)
     private Operation payKind=Operation.CASH;//cash or product or checque
-    private  String userId;
+    private  String userName;
     private String fileImage;
     private Boolean finish=false;
     private String desc;

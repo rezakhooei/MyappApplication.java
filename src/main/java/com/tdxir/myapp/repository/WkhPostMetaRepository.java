@@ -4,6 +4,7 @@ import com.tdxir.myapp.model.BuyData;
 import com.tdxir.myapp.model.BuyInvoices;
 import com.tdxir.myapp.model.Operation;
 import com.tdxir.myapp.model.wkh_postmeta;
+import com.tdxir.myapp.model.Billings;
 import com.tosan.tools.jalali.JalaliDate;
 import kotlin.jvm.Throws;
 import org.hibernate.annotations.SecondaryRows;
@@ -199,7 +200,7 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
 
     @Modifying
     @Transactional
-    @Query(value="insert into billings (date,date_pay,id_doc,id_invoice,price,bill_kind,pay_kind,user_name,file_image) values (:date,:dateInvoice,:idDoc,:idInvoice,,:price,:billKind,:payKind,:userName,:fileName)",nativeQuery = true)
+    @Query(value="insert into Billings (date,date_pay,id_doc,id_invoice,price,bill_kind,pay_kind,user_name,file_image) values (:date,:dateInvoice,:idDoc,:idInvoice,:price,:billKind,:payKind,:userName,:fileName)",nativeQuery = true)
     public Integer insertBilling(@Param("date") String date, @Param("dateInvoice") LocalDate dateInvoice, @Param("idDoc") Long idDoc, @Param("idInvoice") String idInvoice,
                                  @Param("price") Long price, @Param("billKind") Operation billKind, @Param("payKind") Operation PayKind, @Param("userName") String userName, @Param("fileName") String fileName);
 
