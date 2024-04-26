@@ -28,6 +28,6 @@ public class BankTransactions {
     private Long amount;
     private Boolean kind;
     private Long idDoc;
-    private  String discript;
+    private  String descript;
     private String fileImage;
 }

@@ -78,14 +78,14 @@ public class ReciveMessageController {
             @RequestParam("inf1") String inf1, @RequestParam("inf2") String inf2,@RequestParam("inf3") String inf3,@RequestParam("inf4")String inf4,
             @RequestParam("selected_rds") String selected_rds ,@RequestParam("selected_chks") String selected_chks
                      ) throws Exception {   //googleSpeech.initialize();
-        String checkBox1 = "false", checkBox2 = "false", checkBox3 = "false", checkBox4 = "false", panel1 = "", panel2 = "", panel3 = "";
+        String checkBox1 = "false", checkBox2 = "false", checkBox3 = "false", checkBox4 = "false", panel1 = "", panel2 = "", panel3 = "",panel4="";
 
         // inf1="Rds="+selected_rds+"-Chks="+selected_chks;
         // inf1=inf2;
         panel1 = "Rd" + selected_rds.substring(selected_rds.indexOf("panel1-") + 7, selected_rds.indexOf("panel1-") + 8);
         panel2 = "Rd" + selected_rds.substring(selected_rds.indexOf("panel2-") + 7, selected_rds.indexOf("panel2-") + 8);
         panel3 = "Rd" + selected_rds.substring(selected_rds.indexOf("panel3-") + 7, selected_rds.indexOf("panel3-") + 8);
-
+        panel4 = "Rd" + selected_rds.substring(selected_rds.indexOf("panel4-") + 7, selected_rds.indexOf("panel4-") + 8);
         String[] checkBoxes = selected_chks.split(",");
         for (int i = 0; i <= checkBoxes.length - 1; ++i) {
             if (checkBoxes[i].equals(String.valueOf(1))) checkBox1 = "true";
@@ -155,11 +155,11 @@ public class ReciveMessageController {
 
               }
               else  if (user.getRole()==ACCOUNTING){
-                  if (panel3.equals("Rd1")) {
+                  if (panel3.equals("Rd1") && panel4.equals("Rd1"))  {
 
                       return accounting.saveInvoice(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail());
 
-                  } else if (panel3.equals("Rd2")) {
+                  } else if (panel3.equals("Rd2")&& panel4.equals("Rd1")) {
 
                       return  accounting.paySell(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail());
 
@@ -167,7 +167,7 @@ public class ReciveMessageController {
                       return accounting.reportProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());
 
                   }
-                  else if (panel3.equals("Rd4")) {
+                  else if (panel3.equals("Rd4")&& panel4.equals("Rd1")) {
                       return accounting.reportInvoiceSell(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());
 
                   }
