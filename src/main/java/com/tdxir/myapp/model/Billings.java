@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+
+import java.time.LocalDate;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,6 +22,7 @@ public class Billings {
     @Column(name = "id")
     private Long id;
     private String date;
+    private LocalDate datePay;
     private Long idDoc;
     private Long idInvoice;
     @Enumerated(EnumType.STRING)

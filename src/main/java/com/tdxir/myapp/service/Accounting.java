@@ -36,8 +36,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
-import static com.tdxir.myapp.model.Operation.INVOICE;
-import static com.tdxir.myapp.model.Operation.PRODUCT;
+import static com.tdxir.myapp.model.Operation.*;
 import static com.tdxir.myapp.model.Role.ADMIN;
 import static com.tdxir.myapp.model.Role.USER;
 import static com.tdxir.myapp.model.UserKind.SHOP;
@@ -90,27 +89,22 @@ public class Accounting {
         //String nowDate= new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
         String idInvoice=null,message=inf.get(0), postId,sellerId=null;
         String[] idList=inf.get(0).split("@");
-        String[] stockANDdateList=inf.get(2).split("@");
+       // String[] stockANDdateList=inf.get(2).split("@");
 
-        LocalDate dateInvoice= LocalDate.parse(stockANDdateList[1], DateTimeFormatter.BASIC_ISO_DATE);
+        LocalDate datePaying= LocalDate.parse(inf.get(2), DateTimeFormatter.BASIC_ISO_DATE);
         Long price;
         Long numProduct=null;
         Integer flag1;
         Boolean flag2;
-        if(idList.length==2){
-            sellerId=idList[1];
-            idInvoice=idList[0];
-        }
+
+            idInvoice=inf.get(1);
+
 
 
         try {
 
 
-            if(utils.isNumeric(stockANDdateList[0]))
-            {
-                numProduct=Long.valueOf(stockANDdateList[0]);
-            }
-            else numProduct= Long.valueOf(-1);
+
 
             if(utils.isNumeric(inf.get(3)))
             {
@@ -123,8 +117,8 @@ public class Accounting {
             errorMsg+="-BSF";
 
             // product code = inf1 and  exists then change price and stock
-
-            if (wkhPostMetaRepository.existsCodeInvoice(idInvoice)==null) {
+            Integer idDoc=wkhPostMetaRepository.existsCodeInvoice(idInvoice);
+            if (idDoc!=null) {
 
                 String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
 
@@ -133,8 +127,9 @@ public class Accounting {
                 errorMsg+="-ASF";
 
 
-
-                flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,date.toString(),dateInvoice,Long.valueOf(0),Long.valueOf(0),sellerId );
+                if(fileImage==null)
+                flag1 = wkhPostMetaRepository.insertBilling(date.toString(),datePaying,Long.valueOf(idDoc),idInvoice,price,BUY,CASH,userName,fileName );
+                else flag1 = wkhPostMetaRepository.insertBilling(date.toString(),datePaying,Long.valueOf(idDoc),idInvoice,price,BUY,CHECK,userName,fileName );
 
                 errorMsg+="-ASData";
             }

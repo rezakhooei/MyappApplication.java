@@ -2,6 +2,7 @@ package com.tdxir.myapp.repository;
 
 import com.tdxir.myapp.model.BuyData;
 import com.tdxir.myapp.model.BuyInvoices;
+import com.tdxir.myapp.model.Operation;
 import com.tdxir.myapp.model.wkh_postmeta;
 import com.tosan.tools.jalali.JalaliDate;
 import kotlin.jvm.Throws;
@@ -195,6 +196,13 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Query(value="insert into buy_invoices (id_invoice,user_name,file_image,date,date_invoice,num_product,price,sellerId) values (:idInvoice,:userName,:fileName,:date,:dateInvoice,:numProduct,:price,:sellerId)",nativeQuery = true)
     public Integer insertInvoice(@Param("idInvoice") String idInvoice, @Param("userName") String userName, @Param("fileName") String fileName, @Param("date") String date, @Param("dateInvoice") LocalDate dateInvoice, @Param("numProduct") Long numProduct,
                                  @Param("price") Long price, @Param("sellerId") String sellerId);
+
+    @Modifying
+    @Transactional
+    @Query(value="insert into billings (date,date_pay,id_doc,id_invoice,price,bill_kind,pay_kind,user_name,file_image) values (:date,:dateInvoice,:idDoc,:idInvoice,,:price,:billKind,:payKind,:userName,:fileName)",nativeQuery = true)
+    public Integer insertBilling(@Param("date") String date, @Param("dateInvoice") LocalDate dateInvoice, @Param("idDoc") Long idDoc, @Param("idInvoice") String idInvoice,
+                                 @Param("price") Long price, @Param("billKind") Operation billKind, @Param("payKind") Operation PayKind, @Param("userName") String userName, @Param("fileName") String fileName);
+
 
 
 }
