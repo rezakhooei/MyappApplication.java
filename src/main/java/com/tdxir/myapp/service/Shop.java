@@ -33,8 +33,8 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
-import static com.tdxir.myapp.model.Operation.INVOICE;
-import static com.tdxir.myapp.model.Operation.PRODUCT;
+//import static com.tdxir.myapp.model.Operation.INVOICE;
+//import static com.tdxir.myapp.model.Operation.PRODUCT;
 import static com.tdxir.myapp.model.Role.ADMIN;
 import static com.tdxir.myapp.model.Role.USER;
 import static com.tdxir.myapp.model.UserKind.SHOP;
@@ -80,11 +80,11 @@ public class Shop {
         Operation op=null;
         if((idList.length==1)&&utils.isNumeric(idList[0])){
             idInvoice=Long.valueOf(idList[0]);
-            op=PRODUCT;
+           // op=PRODUCT;
         }
         else if(idList.length==2&&utils.isNumeric(idList[0])&&utils.isNumeric(idList[1])) {
             sellerId=idList[1];
-            op=INVOICE;
+          //  op=INVOICE;
         }
         Long code,price=Long.valueOf(0);
         try {

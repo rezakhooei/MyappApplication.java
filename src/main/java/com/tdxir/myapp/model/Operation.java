@@ -1,10 +1,11 @@
 package com.tdxir.myapp.model;
 
 public enum Operation {
-    INVOICE,
-    PRODUCT,
-    CASH,
-    CHECK,
+    INVOICEBUY,
+    INVOICESELL,
     BUY,
-    SELL
+    SELL,
+    CASH,
+    CHECK
+
 }

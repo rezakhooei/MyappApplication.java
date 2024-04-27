@@ -1,6 +1,8 @@
 package com.tdxir.myapp.repository;
 
 import com.tdxir.myapp.model.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -46,6 +48,10 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     public List<BuyData> reportProduct (@Param("code") String code);
     @Query("select new BuyInvoices (bi.idDoc,bi.idInvoice,bi.userName,bi.sellerID,bi.date,bi.dateInvoice,bi.numProduct,bi.price,bi.fileImage) from BuyInvoices bi where bi.idInvoice=:code order by bi.idDoc ")
     public BuyInvoices reportInvoices (@Param("code") String code);
+    @Query("select new Bills (bi.id,bi.date,bi.datePay,bi.idDoc,bi.idInvoice,bi.price,bi.billKind,bi.payKind,bi.userName,bi.fileImage,bi.finish,bi.description) from Bills bi where bi.idInvoice=:code order by bi.datePay ")
+    public List<Bills> reportInvoiceInBills (@Param("code") String code);
+
+
     @Query("select p.post_title from WkhPosts  p where p.id in(select post_id from wkh_postmeta where meta_key='_sku' and meta_value=:code) and p.post_type='product'")
 
     public List<String> nameIdCode (@Param("code") String code);
@@ -65,6 +71,14 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     public List<String> imageUrlInvoice(@Param("idInvoice") String idInvoice);
     @Query("select  pm2.meta_value from wkh_postmeta pm2 where pm2.meta_key='_thumbnail_id' and pm2.post_id in(select pm3.post_id from wkh_postmeta pm3 where pm3.meta_key='_sku' and pm3.meta_value=:code)")
     public List<String> findThumbnail(@Param("code") String code);
+    @Modifying
+    @Transactional
+    @Query(value="update bills b set b.price=:newPrice  where b.id_doc=:idDoc and id_invoice=:idInvoice and bill_kind=:billKind", nativeQuery = true )
+
+
+    public Integer updateBills(@Param("idDoc") Long idDoc,@Param("idInvoice") String idInvoice,@Param("newPrice") Long newPrice,@Param("billKind") String billKind );
+
+
 
 
     @Modifying
@@ -191,7 +205,7 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Modifying
     @Transactional
     @Query(value="insert into Bills (date,date_pay,id_doc,id_invoice,price,bill_kind,pay_kind,user_name,file_image,finish) values (:date,:dateInvoice,:idDoc,:idInvoice,:price,:billKind,:payKind,:userName,:fileName,:finish)",nativeQuery = true)
-    public Integer insertBilling(@Param("date") String date, @Param("dateInvoice") LocalDate dateInvoice, @Param("idDoc") Long idDoc, @Param("idInvoice") String idInvoice,
+    public Integer insertBills(@Param("date") String date, @Param("dateInvoice") LocalDate dateInvoice, @Param("idDoc") Long idDoc, @Param("idInvoice") String idInvoice,
                                  @Param("price") Long price, @Param("billKind") String billKind, @Param("payKind") String PayKind, @Param("userName") String userName, @Param("fileName") String fileName,@Param("finish") Boolean finish);
 
 

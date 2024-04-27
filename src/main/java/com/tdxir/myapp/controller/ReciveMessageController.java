@@ -161,14 +161,18 @@ public class ReciveMessageController {
 
                   } else if (panel3.equals("Rd2")&& panel4.equals("Rd1")) {
 
-                      return  accounting.paySell(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail());
+                      return  accounting.payBuy(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail());
 
                   } else if (panel3.equals("Rd3")) {
                       return accounting.reportProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());
 
                   }
                   else if (panel3.equals("Rd4")&& panel4.equals("Rd1")) {
-                      return accounting.reportInvoiceSell(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());
+                      return accounting.reportInvoiceBuy(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());
+
+                  }
+                  else if (panel3.equals("Rd5")&& panel4.equals("Rd1")) {
+                      return accounting.reportInvoicePay(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());
 
                   }
 
