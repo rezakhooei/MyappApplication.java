@@ -204,7 +204,7 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
 
     @Modifying
     @Transactional
-    @Query(value="insert into Bills (date,date_pay,id_doc,id_invoice,price,bill_kind,pay_kind,user_name,file_image,finish) values (:date,:dateInvoice,:idDoc,:idInvoice,:price,:billKind,:payKind,:userName,:fileName,:finish)",nativeQuery = true)
+    @Query(value="insert into bills (date,date_pay,id_doc,id_invoice,price,bill_kind,pay_kind,user_name,file_image,finish) values (:date,:dateInvoice,:idDoc,:idInvoice,:price,:billKind,:payKind,:userName,:fileName,:finish)",nativeQuery = true)
     public Integer insertBills(@Param("date") String date, @Param("dateInvoice") LocalDate dateInvoice, @Param("idDoc") Long idDoc, @Param("idInvoice") String idInvoice,
                                  @Param("price") Long price, @Param("billKind") String billKind, @Param("payKind") String PayKind, @Param("userName") String userName, @Param("fileName") String fileName,@Param("finish") Boolean finish);
 
