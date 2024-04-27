@@ -86,7 +86,7 @@ public class AuthenticationService {
             }
             else if(user.getRole() == ACCOUNTING){
                 infList=new String[]{"شماره فاکتور@شناسه فروشنده/توضیحات","شماره فاکتور","تعداد کالا@تاریخ","مبلغ(ریال)/نحوه پرداخت"};
-                checkBoxesList=new String[]{};//"chk1","chk2","chk3"};
+                checkBoxesList=new String[]{"chk1","chk2","chk3"};
                 panels=new String[][]{{"نحوه ارسال","نحوه دریافت","دستور","نوع"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"ثبت خرید","پرداختی","گزارش کالا","فاکتور"},{"ما","دیگران","صورتحساب فاکتور"}};
 
                 return  sendAuthConfig(infList,checkBoxesList,panels,jwtToken);

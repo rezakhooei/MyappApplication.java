@@ -74,19 +74,12 @@ public class Accounting {
     public ResponseEntity<JSONObject> payBuy(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
                                                   String checkBox1, String checkBox2, String checkBox3, String userName)
     {
-        //Date date = new Date();
+        List<String> processList=new ArrayList<>();
         JalaliDate date=new JalaliDate();
 
         JalaliCalendar jalaliCalendar=new JalaliCalendar();//date);
         date=jalaliCalendar.getJalaliDate();
 
-        /*
-        ULocale locale = new ULocale("fa_IR@calendar=persian");
-        PersianCalendar jalali = PersianCalendar.of(1394, 11, 5);
-*/
-
-        // String yearAndmounth= new SimpleDateFormat("yyyy/MM/").format(date);
-        //String nowDate= new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
         String idInvoice=null,message=inf.get(0), postId,sellerId=null;
         String[] idList=inf.get(0).split("@");
        // String[] stockANDdateList=inf.get(2).split("@");
@@ -114,24 +107,21 @@ public class Accounting {
 
 
 
-            errorMsg+="-BSF";
+
 
             // product code = inf1 and  exists then change price and stock
             Integer idDoc=wkhPostMetaRepository.existsCodeInvoice(idInvoice);
             if (idDoc!=null) {
-
-                String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
-
-
-
-                errorMsg+="-ASF";
-
-
+                String fileName="";
+                processList.add("حجم فایل"+String.valueOf(fileImage.getSize()));
+                if(fileImage!=null && checkBox1=="true"){// && checkBox1.equals()) {
+                    fileName = recordAndProccessMessageService.storeInvoiceImg(fileImage);
+                }
                 if(fileImage==null)
                 flag1 = wkhPostMetaRepository.insertBills(date.toString(),datePaying,Long.valueOf(idDoc),idInvoice,price,"BUY","CASH",userName,fileName ,false);
                 else flag1 = wkhPostMetaRepository.insertBills(date.toString(),datePaying,Long.valueOf(idDoc),idInvoice,price,"BUY","CHECK",userName,fileName,false );
 
-                errorMsg+="-ASData";
+
             }
 
 
@@ -144,7 +134,7 @@ public class Accounting {
         JSONObject jsonObjectMain = new JSONObject();
         JSONObject jsonObject = new JSONObject();
         // String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
-        List<String> processList=new ArrayList<>();
+
 
         try {
 
