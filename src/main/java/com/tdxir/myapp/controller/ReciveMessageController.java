@@ -171,7 +171,7 @@ public class ReciveMessageController {
                       return accounting.reportInvoiceBuy(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());
 
                   }
-                  else if (panel3.equals("Rd5")&& panel4.equals("Rd1")) {
+                  else if ( panel4.equals("Rd3")) {
                       return accounting.reportInvoicePay(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());
 
                   }
