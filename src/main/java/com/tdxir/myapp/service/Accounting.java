@@ -95,13 +95,9 @@ public class Accounting {
 
 
         try {
-
-
-
-
-            if(utils.isNumeric(inf.get(3)))
+            if(utils.isNumeric(inf.get(3).replaceAll(",","")))
             {
-                price = Long.valueOf(inf.get(3));
+                price = Long.valueOf(inf.get(3).replaceAll(",",""));
             }
             else price= Long.valueOf(-1);
 
@@ -113,6 +109,7 @@ public class Accounting {
             Integer idDoc=wkhPostMetaRepository.existsCodeInvoice(idInvoice);
             if (idDoc!=null) {
                 String fileName="";
+                if(checkBox1!="true")
                 processList.add("حجم فایل"+String.valueOf(fileImage.getSize()));
                 if(fileImage!=null && checkBox1=="true"){// && checkBox1.equals()) {
                     fileName = recordAndProccessMessageService.storeInvoiceImg(fileImage);
@@ -187,9 +184,9 @@ public class Accounting {
 
             jsonObjectMain.put("fileContentVoice", null);
             if((processList.size()>1)&&processList.get(3)!=null) {
-                String image1 = FilenameUtils.getName(processList.get(3));//"replyimage.jpg"
+                String image1 = FilenameUtils.getName(processList.get(4));//"replyimage.jpg"
                 if (image1 != null) {
-                    String pathFile = SERVER_LOCATION_INVOICES + FilenameUtils.getPath(processList.get(3));
+                    String pathFile = SERVER_LOCATION_INVOICES + FilenameUtils.getPath(processList.get(4));
                     File filereplyImg = new File(pathFile + File.separator + image1);//+ EXTENSION);
 
                     try {
@@ -340,9 +337,9 @@ public class Accounting {
             }
             else numProduct= Long.valueOf(-1);
 
-            if(utils.isNumeric(inf.get(3)))
+            if(utils.isNumeric(inf.get(3).replaceAll(",","")))
             {
-                price = Long.valueOf(inf.get(3));
+                price = Long.valueOf(inf.get(3).replaceAll(",",""));
             }
             else price= Long.valueOf(-1);
 
@@ -574,9 +571,9 @@ public class Accounting {
                 stock=Integer.valueOf(inf.get(2));
             }
             else stock= -1;
-            if(utils.isNumeric(inf.get(3)))
+            if(utils.isNumeric(inf.get(3).replaceAll(",","")))
             {
-                price = Long.valueOf(inf.get(3));
+                price = Long.valueOf(inf.get(3).replaceAll(",",""));
             }
             else price= Long.valueOf(-1);
 
@@ -1382,7 +1379,7 @@ public class Accounting {
             if(bills.size()!=0)
                 for(int i=0;i<=bills.size()-1;++i)
                 {
-                    processList.add(bills.get(i).getDate()+"مبلغ"+String.valueOf(bills.get(i).getPrice())+"ریال-"+bills.get(i).getPayKind());
+                    processList.add(bills.get(i).getDate()+"مبلغ"+String.valueOf(df.format(bills.get(i).getPrice()))+"ریال-"+bills.get(i).getPayKind());
                 }
          /*   if(buyInvoices!=null)
             {

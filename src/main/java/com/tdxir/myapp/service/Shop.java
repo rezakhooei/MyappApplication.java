@@ -368,9 +368,9 @@ public class Shop {
                 stock=Integer.valueOf(inf.get(2));
             }
             else stock= -1;
-            if(utils.isNumeric(inf.get(3)))
+            if(utils.isNumeric(inf.get(3).replaceAll(",","")))
             {
-                price = Long.valueOf(inf.get(3));
+                price = Long.valueOf(inf.get(3).replaceAll(",",""));
             }
             else price= Long.valueOf(-1);
 
