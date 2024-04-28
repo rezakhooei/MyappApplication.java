@@ -142,6 +142,9 @@ public class ReciveMessageController {
                   } else if (panel3.equals("Rd3")) {
                       return shop.buyProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail());
                   }
+                  else if (panel3.equals("Rd4")) {
+                      return accounting.reportInvoiceBuy(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());
+                  }
               }
               else  if (user.getRole()==USER){
                   if (panel3.equals("Rd1")) {
@@ -168,13 +171,10 @@ public class ReciveMessageController {
 
                   }
                   else if (panel3.equals("Rd4")&& panel4.equals("Rd1")) {
-                      return accounting.reportInvoiceBuy(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());
-
-                  }
-                  else if ( panel4.equals("Rd3")) {
                       return accounting.reportInvoicePay(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());
 
                   }
+
 
               }
           }
