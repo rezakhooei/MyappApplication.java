@@ -73,10 +73,11 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     public List<String> findThumbnail(@Param("code") String code);
     @Modifying
     @Transactional
-    @Query(value="update bills b set b.price=:newPrice  where b.id_doc=:idDoc and id_invoice=:idInvoice and bill_kind=:billKind", nativeQuery = true )
+    @Query(value="update bills b set b.price=:newPrice  where b.id_doc=:idDoc and b.id_invoice=:idInvoice and b.bill_kind=:billKind and b.description=:description and b.id_check=:idCheck", nativeQuery = true )
 
 
-    public Integer updateBills(@Param("idDoc") Long idDoc,@Param("idInvoice") String idInvoice,@Param("newPrice") Long newPrice,@Param("billKind") String billKind );
+    public Integer updateBills(@Param("idDoc") Long idDoc,@Param("idInvoice") String idInvoice,@Param("newPrice") Long newPrice,@Param("billKind") String billKind ,
+            @Param("description") String description,@Param("idCheck") Long idCheck);
 
 
 

@@ -71,7 +71,7 @@ public class Accounting {
     private String errorMsg="";
     //parameters : Rd=panel2 means return image or voice or text ---inf1 نام کالا یا فروشنده inf2 کد کالا
     //inf3 تعداد inf4 قیمت
-    public ResponseEntity<JSONObject> payBuy(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
+    public ResponseEntity<JSONObject> saveMyCredit(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
                                                   String checkBox1, String checkBox2, String checkBox3, String userName)
     {
         List<String> processList=new ArrayList<>();
@@ -297,28 +297,24 @@ public class Accounting {
 
         return new ResponseEntity<>(jsonObjectMain, headers, HttpStatus.OK);
     }
-    public ResponseEntity<JSONObject> saveInvoice(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
+    public ResponseEntity<JSONObject> saveMyDebit(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
                                                   String checkBox1, String checkBox2, String checkBox3, String userName)
     {
-        //Date date = new Date();
+
         JalaliDate date=new JalaliDate();
 
         JalaliCalendar jalaliCalendar=new JalaliCalendar();//date);
         date=jalaliCalendar.getJalaliDate();
 
-        /*
-        ULocale locale = new ULocale("fa_IR@calendar=persian");
-        PersianCalendar jalali = PersianCalendar.of(1394, 11, 5);
-*/
 
-       // String yearAndmounth= new SimpleDateFormat("yyyy/MM/").format(date);
-       //String nowDate= new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
-        String idInvoice=null,message=inf.get(0), postId,sellerId=null;
+        String idInvoice=null,message=inf.get(0), postId,sellerId=null,description="";
         String[] idList=inf.get(0).split("@");
         String[] stockANDdateList=inf.get(2).split("@");
-
+        String[] priceAndCheck=inf.get(3).split("@");
+        Boolean isCheck=false;
+        if (priceAndCheck.length==2 && priceAndCheck[1].equals("چک")) isCheck=true;
         LocalDate dateInvoice= LocalDate.parse(stockANDdateList[1], DateTimeFormatter.BASIC_ISO_DATE);
-        Long price;
+        Long price,idCheck;
         Long numProduct=null;
         Integer flag1;
         Boolean flag2;
@@ -326,10 +322,15 @@ public class Accounting {
             sellerId=idList[1];
             idInvoice=idList[0];
         }
+               else {description=inf.get(0);}
 
 
         try {
-
+            if(utils.isNumeric(inf.get(0)))
+            {
+                idCheck=Long.valueOf(inf.get(0));
+            }
+            else idCheck= Long.valueOf(-1);
 
             if(utils.isNumeric(stockANDdateList[0]))
             {
@@ -337,9 +338,9 @@ public class Accounting {
             }
             else numProduct= Long.valueOf(-1);
 
-            if(utils.isNumeric(inf.get(3).replaceAll(",","")))
+            if(utils.isNumeric(priceAndCheck[0].replaceAll(",","")))
             {
-                price = Long.valueOf(inf.get(3).replaceAll(",",""));
+                price = Long.valueOf(priceAndCheck[0].replaceAll(",",""));
             }
             else price= Long.valueOf(-1);
 
@@ -359,15 +360,26 @@ public class Accounting {
 
 
 
-                        flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,date.toString(),dateInvoice,Long.valueOf(numProduct),Long.valueOf(price),sellerId );
+                        flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,date.toString(),dateInvoice,Long.valueOf(numProduct),-Long.valueOf(price),sellerId );
                         Integer idDoc=wkhPostMetaRepository.existsCodeInvoice(idInvoice);
-                        wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,price,"INVOICEBUY","CASH",userName,fileName,false );
+                        wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,price,"","INVOICEBUY",userName,fileName,false );
                         errorMsg+="-ASData";
                     }
                     else {
-                        wkhPostMetaRepository.updateInvoices(numProduct,price,idInvoice);
+
                         Integer idDoc=wkhPostMetaRepository.existsCodeInvoice(idInvoice);
-                        wkhPostMetaRepository.updateBills(Long.valueOf(idDoc),idInvoice,price,"INVOICEBUY" );
+                        if(isCheck){
+                            wkhPostMetaRepository.updateBills(Long.valueOf(idDoc),idInvoice,-price,"CHECK","",idCheck );
+
+                        }
+                        else if(fileImage!=null){
+                        wkhPostMetaRepository.updateInvoices(numProduct,price,idInvoice);
+                        wkhPostMetaRepository.updateBills(Long.valueOf(idDoc),idInvoice,-price,"INVOICEBUY" ,description,idCheck);
+                    }
+                        else {
+                            wkhPostMetaRepository.updateBills(Long.valueOf(idDoc),idInvoice,-price,"CASH" ,description,idCheck);
+
+                        }
                     }
 
 

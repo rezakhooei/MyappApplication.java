@@ -160,11 +160,11 @@ public class ReciveMessageController {
               else  if (user.getRole()==ACCOUNTING){
                   if (panel3.equals("Rd1") && panel4.equals("Rd1"))  {
 
-                      return accounting.saveInvoice(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail());
+                      return accounting.saveMyDebit(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail());
 
                   } else if (panel3.equals("Rd2")&& panel4.equals("Rd1")) {
 
-                      return  accounting.payBuy(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail());
+                      return  accounting.saveMyCredit(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail());
 
                   } else if (panel3.equals("Rd3")) {
                       return accounting.reportProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());

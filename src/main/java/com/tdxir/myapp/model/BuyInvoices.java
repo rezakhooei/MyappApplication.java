@@ -27,7 +27,7 @@ public class BuyInvoices {
     private String date;
     private LocalDate dateInvoice;
     private Long numProduct;//tedad kala
-
+    private Long idCheck;
     private Long price;
     private String fileImage;
 
