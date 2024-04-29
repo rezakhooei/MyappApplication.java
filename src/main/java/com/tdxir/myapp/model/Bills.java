@@ -26,8 +26,6 @@ public class Bills {
     private String idInvoice;
     private Long price;
     @Enumerated(EnumType.STRING)
-    private  Operation billKind=Operation.SELL;//sell or buy
-    @Enumerated(EnumType.STRING)
     private Operation payKind=Operation.CASH;//cash or product or checque
 
     private  String userName;
