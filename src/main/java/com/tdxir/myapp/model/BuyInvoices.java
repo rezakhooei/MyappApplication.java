@@ -30,6 +30,7 @@ public class BuyInvoices {
     private Long idCheck;
     private Long price;
     private String fileImage;
+    private Integer companyId;
 
 
 

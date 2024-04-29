@@ -66,6 +66,7 @@ public class AuthenticationService {
         String[] infList,checkBoxesList;
 
         String[][] panels;
+        if(user.getCompanyId()==null) return null;
         if (user.getUserKind() == UserKind.SHOP)            //User Shop
         {
             if (user.getRole() == ADMIN) {

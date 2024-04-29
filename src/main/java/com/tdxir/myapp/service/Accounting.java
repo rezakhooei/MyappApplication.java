@@ -72,13 +72,14 @@ public class Accounting {
     //parameters : Rd=panel2 means return image or voice or text ---inf1 نام کالا یا فروشنده inf2 کد کالا
     //inf3 تعداد inf4 قیمت
     public ResponseEntity<JSONObject> saveMyCredit(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
-                                                  String checkBox1, String checkBox2, String checkBox3, String userName)
+                                                  String checkBox1, String checkBox2, String checkBox3, String userName,Integer companyId)
     {
+        DecimalFormat df = new DecimalFormat("###,###,###");
         JalaliDate date=new JalaliDate();
 
         JalaliCalendar jalaliCalendar=new JalaliCalendar();//date);
         date=jalaliCalendar.getJalaliDate();
-
+        LocalDate dateInvoice;
 
         String idInvoice=null,message=inf.get(0), postId,sellerId=null,description="";
         String[] idList=inf.get(0).split("@");
@@ -86,12 +87,17 @@ public class Accounting {
         String[] priceAndCheck=inf.get(3).split("@");
         Boolean isCheck=false;
         if (priceAndCheck.length==2 && priceAndCheck[1].equals("چک")) isCheck=true;
-        LocalDate dateInvoice= LocalDate.parse(stockANDdateList[1], DateTimeFormatter.BASIC_ISO_DATE);
+        if(stockANDdateList.length==2) {
+            dateInvoice = LocalDate.parse(stockANDdateList[1], DateTimeFormatter.BASIC_ISO_DATE);
+        }
+        else {
+            dateInvoice = LocalDate.parse(stockANDdateList[0], DateTimeFormatter.BASIC_ISO_DATE);
+        }
         Long price,idCheck;
         Long numProduct=null;
         Integer flag1;
         Boolean flag2;
-        if(idList.length==2){
+        if(idList.length==2&&idList[0]!="شماره فاکتور"){
             sellerId=idList[1];
             idInvoice=idList[0];
         }
@@ -133,9 +139,9 @@ public class Accounting {
 
 
 
-                flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,date.toString(),dateInvoice,Long.valueOf(numProduct),Long.valueOf(price),sellerId );
+                flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,date.toString(),dateInvoice,Long.valueOf(numProduct),Long.valueOf(price),sellerId,companyId );
                 Integer idDoc=wkhPostMetaRepository.existsCodeInvoice(idInvoice);
-                wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,price,"INVOICESELL",userName,fileName,false );
+                wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,price,"INVOICEBUY",userName,fileName,false ,"فاکتور",companyId);
                 errorMsg+="-ASData";
             }
             else {
@@ -143,7 +149,7 @@ public class Accounting {
                 Integer idDoc=wkhPostMetaRepository.existsCodeInvoice(idInvoice);
                 if(isCheck){
                     String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
-                    wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,price,"CHECK",userName,fileName,false );
+                    wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,price,"CHECK",userName,fileName,false ,description,companyId);
 
 
                 }
@@ -151,10 +157,11 @@ public class Accounting {
 
                     wkhPostMetaRepository.updateInvoices(numProduct,price,idInvoice);
                     String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
-                    wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,price,"cash",userName,fileName,false );
+                    wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,price,"cash",userName,fileName,false ,description,companyId);
                 }
 
             }
+
 
 
 
@@ -165,15 +172,17 @@ public class Accounting {
         JSONObject jsonObjectMain = new JSONObject();
         JSONObject jsonObject = new JSONObject();
         // String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
-
         List<String> processList=new ArrayList<>();
+
         try {
 
 
-            processList.add(String.valueOf(wkhPostMetaRepository.existsCodeInvoice(idInvoice)));
-            processList.add(idInvoice);
-            processList.add(sellerId);
-            processList.add(wkhPostMetaRepository.imageUrlInvoice(idInvoice).get(0));
+            List<Bills> bills=wkhPostMetaRepository.reportInvoiceInBills(idInvoice,companyId);
+            if(bills.size()!=0)
+                for(int i=0;i<=bills.size()-1;++i)
+                {
+                    processList.add(bills.get(i).getDate()+"مبلغ"+String.valueOf(df.format(bills.get(i).getPrice()))+"ریال-"+bills.get(i).getPayKind());
+                }
 
         }catch (Exception e){errorMsg+=e.getMessage();
         }
@@ -218,9 +227,9 @@ public class Accounting {
 
             jsonObjectMain.put("fileContentVoice", null);
             if((processList.size()>1)&&processList.get(3)!=null) {
-                String image1 = FilenameUtils.getName(processList.get(4));//"replyimage.jpg"
+                String image1 = FilenameUtils.getName(processList.get(3));//"replyimage.jpg"
                 if (image1 != null) {
-                    String pathFile = SERVER_LOCATION_INVOICES + FilenameUtils.getPath(processList.get(4));
+                    String pathFile = SERVER_LOCATION_INVOICES + FilenameUtils.getPath(processList.get(3));
                     File filereplyImg = new File(pathFile + File.separator + image1);//+ EXTENSION);
 
                     try {
@@ -294,24 +303,8 @@ public class Accounting {
         try {
             for (int i = 1; i <= processList.size(); ++i) {
                 jsonObject.put("inf_id", String.valueOf(i));
-                if (i == 1) {
-                    if (processList.get(i - 1) != "-1")
-                        jsonObject.put("inf_text", "شماره سند : " + processList.get(i - 1));
-                    else jsonObject.put("inf_text", "ثبت نشده است");
-                } else if (i == 2) {
-                    if (processList.get(i - 1) != "-1")
-                        jsonObject.put("inf_text", "شماره فاکتور : " + processList.get(i - 1));
-                    else jsonObject.put("inf_text", "فاکتور تعریف نشده است");
+                jsonObject.put("inf_text", processList.get(i - 1));
 
-                } else if (i == 3) {
-                    if (processList.get(i - 1) != "-1")
-                        jsonObject.put("inf_text", "فروشنده :    " + processList.get(i - 1));
-                    else jsonObject.put("inf_text", "فروشنده تعریف نشده است");
-                } else if (i == 4) {
-                    if (processList.get(i - 1) != null)
-                        jsonObject.put("inf_text", "" + errorMsg);//, processList.get(i - 1) + ":" + "عکس");
-                    else jsonObject.put("inf_text", "عکس  تعریف نشده است" + errorMsg);
-                }
                 array.add(new JSONObject(jsonObject));
                 jsonObject.clear();
             }
@@ -332,14 +325,14 @@ public class Accounting {
         return new ResponseEntity<>(jsonObjectMain, headers, HttpStatus.OK);
     }
     public ResponseEntity<JSONObject> saveMyDebit(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
-                                                  String checkBox1, String checkBox2, String checkBox3, String userName)
+                                                  String checkBox1, String checkBox2, String checkBox3, String userName,Integer companyId)
     {
-
+        DecimalFormat df = new DecimalFormat("###,###,###");
         JalaliDate date=new JalaliDate();
 
         JalaliCalendar jalaliCalendar=new JalaliCalendar();//date);
         date=jalaliCalendar.getJalaliDate();
-
+        LocalDate dateInvoice;
 
         String idInvoice=null,message=inf.get(0), postId,sellerId=null,description="";
         String[] idList=inf.get(0).split("@");
@@ -347,12 +340,17 @@ public class Accounting {
         String[] priceAndCheck=inf.get(3).split("@");
         Boolean isCheck=false;
         if (priceAndCheck.length==2 && priceAndCheck[1].equals("چک")) isCheck=true;
-        LocalDate dateInvoice= LocalDate.parse(stockANDdateList[1], DateTimeFormatter.BASIC_ISO_DATE);
+        if(stockANDdateList.length==2) {
+             dateInvoice = LocalDate.parse(stockANDdateList[1], DateTimeFormatter.BASIC_ISO_DATE);
+        }
+        else {
+             dateInvoice = LocalDate.parse(stockANDdateList[0], DateTimeFormatter.BASIC_ISO_DATE);
+        }
         Long price,idCheck;
         Long numProduct=null;
         Integer flag1;
         Boolean flag2;
-               if(idList.length==2){
+               if(idList.length==2&&idList[0]!="شماره فاکتور"){
             sellerId=idList[1];
             idInvoice=idList[0];
         }
@@ -394,9 +392,9 @@ public class Accounting {
 
 
 
-                        flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,date.toString(),dateInvoice,Long.valueOf(numProduct),Long.valueOf(price),sellerId );
+                        flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,date.toString(),dateInvoice,Long.valueOf(numProduct),Long.valueOf(price),sellerId,companyId );
                         Integer idDoc=wkhPostMetaRepository.existsCodeInvoice(idInvoice);
-                        wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,-price,"INVOICEBUY",userName,fileName,false );
+                        wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,-price,"INVOICEBUY",userName,fileName,false ,"فاکتور",companyId);
                         errorMsg+="-ASData";
                     }
                     else {
@@ -404,7 +402,7 @@ public class Accounting {
                         Integer idDoc=wkhPostMetaRepository.existsCodeInvoice(idInvoice);
                         if(isCheck){
                             String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
-                            wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,-price,"CHECK",userName,fileName,false );
+                            wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,-price,"CHECK",userName,fileName,false ,description,companyId);
 
 
                         }
@@ -412,7 +410,7 @@ public class Accounting {
 
                         wkhPostMetaRepository.updateInvoices(numProduct,price,idInvoice);
                             String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
-                            wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,-price,"cash",userName,fileName,false );
+                            wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,-price,"cash",userName,fileName,false ,description,companyId);
                     }
 
                     }
@@ -432,10 +430,12 @@ public class Accounting {
         try {
 
 
-           processList.add(String.valueOf(wkhPostMetaRepository.existsCodeInvoice(idInvoice)));
-           processList.add(idInvoice);
-           processList.add(sellerId);
-           processList.add(wkhPostMetaRepository.imageUrlInvoice(idInvoice).get(0));
+            List<Bills> bills=wkhPostMetaRepository.reportInvoiceInBills(idInvoice,companyId);
+            if(bills.size()!=0)
+                for(int i=0;i<=bills.size()-1;++i)
+                {
+                    processList.add(bills.get(i).getDate()+"مبلغ"+String.valueOf(df.format(bills.get(i).getPrice()))+"ریال-"+bills.get(i).getPayKind());
+                }
 
             }catch (Exception e){errorMsg+=e.getMessage();
         }
@@ -556,27 +556,12 @@ public class Accounting {
        try {
            for (int i = 1; i <= processList.size(); ++i) {
                jsonObject.put("inf_id", String.valueOf(i));
-               if (i == 1) {
-                   if (processList.get(i - 1) != "-1")
-                       jsonObject.put("inf_text", "شماره سند : " + processList.get(i - 1));
-                   else jsonObject.put("inf_text", "ثبت نشده است");
-               } else if (i == 2) {
-                   if (processList.get(i - 1) != "-1")
-                       jsonObject.put("inf_text", "شماره فاکتور : " + processList.get(i - 1));
-                   else jsonObject.put("inf_text", "فاکتور تعریف نشده است");
+               jsonObject.put("inf_text", processList.get(i - 1));
 
-               } else if (i == 3) {
-                   if (processList.get(i - 1) != "-1")
-                       jsonObject.put("inf_text", "فروشنده :    " + processList.get(i - 1));
-                   else jsonObject.put("inf_text", "فروشنده تعریف نشده است");
-               } else if (i == 4) {
-                   if (processList.get(i - 1) != null)
-                       jsonObject.put("inf_text", "" + errorMsg);//, processList.get(i - 1) + ":" + "عکس");
-                   else jsonObject.put("inf_text", "عکس  تعریف نشده است" + errorMsg);
-               }
-               array.add(new JSONObject(jsonObject));
-               jsonObject.clear();
-           }
+           array.add(new JSONObject(jsonObject));
+           jsonObject.clear();
+       }
+
        }catch (Exception ex) {
            errorMsg += ex.getMessage();
            jsonObject.put("inf_text", "" + errorMsg);//, processList.get(i - 1) + ":" + "عکس");
@@ -1395,7 +1380,7 @@ public class Accounting {
     }
 
     public ResponseEntity<JSONObject> reportInvoicePay(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
-                                                       String checkBox1, String checkBox2, String checkBox3, UserKind userKind, Role role)
+                                                       String checkBox1, String checkBox2, String checkBox3, UserKind userKind, Role role,Integer companyId)
     {
 
 
@@ -1422,7 +1407,7 @@ public class Accounting {
         }
         else{
           //  BuyInvoices buyInvoices=wkhPostMetaRepository.reportInvoices(idInvoice);
-            List<Bills> bills=wkhPostMetaRepository.reportInvoiceInBills(idInvoice);
+            List<Bills> bills=wkhPostMetaRepository.reportInvoiceInBills(idInvoice,companyId);
             if(bills.size()!=0)
                 for(int i=0;i<=bills.size()-1;++i)
                 {

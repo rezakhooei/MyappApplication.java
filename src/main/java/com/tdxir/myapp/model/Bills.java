@@ -32,6 +32,7 @@ public class Bills {
     private String fileImage;
     private Boolean finish=false;
     private String description;
+    private Integer companyId;
 
 
 }

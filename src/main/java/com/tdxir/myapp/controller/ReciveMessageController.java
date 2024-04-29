@@ -160,18 +160,18 @@ public class ReciveMessageController {
               else  if (user.getRole()==ACCOUNTING){
                   if ((panel3.equals("Rd1") && panel4.equals("Rd1"))||(panel3.equals("Rd2") && panel4.equals("Rd2")))  {
 
-                      return accounting.saveMyDebit(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail());
+                      return accounting.saveMyDebit(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail(),user.getCompanyId());
 
                   } else if ((panel3.equals("Rd1")&& panel4.equals("Rd2"))||(panel3.equals("Rd2")&& panel4.equals("Rd1"))) {
 
-                      return  accounting.saveMyCredit(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail());
+                      return  accounting.saveMyCredit(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail(),user.getCompanyId());
 
                   } else if (panel3.equals("Rd3")) {
                       return accounting.reportProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());
 
                   }
                   else if (panel3.equals("Rd4")&& panel4.equals("Rd1")) {
-                      return accounting.reportInvoicePay(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());
+                      return accounting.reportInvoicePay(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole(),user.getCompanyId());
 
                   }
 

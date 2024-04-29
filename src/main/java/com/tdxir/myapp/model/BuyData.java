@@ -30,6 +30,7 @@ public class BuyData {
     private Long oldPrice;
     @NotNull
     private Long idInvoice;
+    private Integer companyId;
 
 
 }
