@@ -3,15 +3,12 @@ package com.tdxir.myapp.service;
 import com.tdxir.myapp.model.*;
 import com.tdxir.myapp.repository.WkhPostMetaRepository;
 import com.tdxir.myapp.repository.WkhPostsRepository;
-import com.tdxir.myapp.service.ProccessMessage;
-import com.tdxir.myapp.service.RecordAndProccessMessageService;
 import com.tdxir.myapp.utils.Utils;
 import com.tosan.tools.jalali.JalaliCalendar;
 import com.tosan.tools.jalali.JalaliDate;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.apache.commons.io.FilenameUtils;
-import org.hibernate.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -108,10 +105,10 @@ public class Shop {
 
             if(idInvoice!=null)
             {
-                BuyInvoices buyInvoices=wkhPostMetaRepository.reportInvoices(String.valueOf(idInvoice));
+                Invoices invoices =wkhPostMetaRepository.reportInvoices(String.valueOf(idInvoice));
 
     // product code = inf1 and  exists then change price and stock
-    if (code != Long.valueOf(-1)&&String.valueOf(idInvoice).equals(buyInvoices.getIdInvoice())) {
+    if (code != Long.valueOf(-1)&&String.valueOf(idInvoice).equals(invoices.getIdInvoice())) {
         postId = wkhPostMetaRepository.existsCode(String.valueOf(code));
         if (postId != null)
         {
@@ -159,7 +156,7 @@ public class Shop {
 
             flag1 = wkhPostMetaRepository.insertBuyData(nowDate, userName, String.valueOf(code), stock, 0, price, Long.valueOf(0), idInvoice);
             if (stock != -1) {
-                wkhPostMetaRepository.updateInvoices(buyInvoices.getNumProduct()+1,buyInvoices.getPrice()+stock*price,String.valueOf(idInvoice));
+                wkhPostMetaRepository.updateInvoices(invoices.getNumProduct()+1, invoices.getPrice()+stock*price,String.valueOf(idInvoice));
                 flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock + Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0))), postId);
 
             }

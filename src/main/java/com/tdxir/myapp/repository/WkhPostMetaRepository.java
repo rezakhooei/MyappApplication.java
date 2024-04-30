@@ -1,8 +1,6 @@
 package com.tdxir.myapp.repository;
 
 import com.tdxir.myapp.model.*;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,15 +17,15 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
 
     public String existsCode (@Param("code") String code);
 
-    @Query("select B1.idDoc from BuyInvoices B1 where B1.idInvoice=:code")
+    @Query("select B1.idDoc from Invoices B1 where B1.idInvoice=:code")
 
     public Integer existsCodeInvoice (@Param("code") String code);
 
-    @Query("select B1.idInvoice from BuyInvoices B1 where B1.idInvoice=:code")
+    @Query("select B1.idInvoice from Invoices B1 where B1.idInvoice=:code")
 
     public String idInvoice (@Param("code") String code);
 
-    @Query("select B1.price from BuyInvoices B1 where B1.idInvoice=:code")
+    @Query("select B1.price from Invoices B1 where B1.idInvoice=:code")
 
     public Long priceOfInvoice (@Param("code") String code);
     @Query("select B1.price from Bills B1 where B1.idInvoice=:code")
@@ -54,8 +52,8 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     public List<Long> buyPrice (@Param("code") String code);
     @Query("select new BuyData(bd.id,bd.email,bd.date,bd.sku,bd.stock,bd.oldStock,bd.price,bd.oldPrice,bd.idInvoice,bd.companyId) from BuyData bd where bd.sku=:code order by bd.id")
     public List<BuyData> reportProduct (@Param("code") String code);
-    @Query("select new BuyInvoices (bi.idDoc,bi.idInvoice,bi.userName,bi.sellerID,bi.date,bi.dateInvoice,bi.numProduct,bi.idCheck,bi.price,bi.fileImage,bi.companyId,bi.paid,bi.sellOrBuy) from BuyInvoices bi where bi.idInvoice=:code order by bi.idDoc ")
-    public BuyInvoices reportInvoices (@Param("code") String code);
+    @Query("select new Invoices (bi.idDoc,bi.idInvoice,bi.userName,bi.sellerID,bi.date,bi.dateInvoice,bi.numProduct,bi.idCheck,bi.price,bi.fileImage,bi.companyId,bi.paid,bi.sellOrBuy) from Invoices bi where bi.idInvoice=:code order by bi.idDoc ")
+    public Invoices reportInvoices (@Param("code") String code);
     @Query("select new Bills (bi.id,bi.date,bi.datePay,bi.idDoc,bi.idInvoice,bi.price,bi.payKind,bi.userName,bi.fileImage,bi.finish,bi.description,bi.companyId) from Bills bi where bi.idInvoice=:code and bi.companyId=:companyId order by bi.datePay ")
     public List<Bills> reportInvoiceInBills (@Param("code") String code,@Param("companyId") Integer companyId);
 
@@ -75,7 +73,7 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
             "meta_key='_thumbnail_id' and post_id in(select post_id from wkh_postmeta where meta_key='_sku' and meta_value=:id))\n" +
             "and meta_key='_wp_attached_file'")
     public String imageUrlId(@Param("id") String id);
-    @Query("select BI.fileImage from BuyInvoices BI where BI.idInvoice=:idInvoice")
+    @Query("select BI.fileImage from Invoices BI where BI.idInvoice=:idInvoice")
     public List<String> imageUrlInvoice(@Param("idInvoice") String idInvoice);
     @Query("select  pm2.meta_value from wkh_postmeta pm2 where pm2.meta_key='_thumbnail_id' and pm2.post_id in(select pm3.post_id from wkh_postmeta pm3 where pm3.meta_key='_sku' and pm3.meta_value=:code)")
     public List<String> findThumbnail(@Param("code") String code);
@@ -99,14 +97,14 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
 
     @Modifying
     @Transactional
-    @Query(value="update buy_invoices bi set bi.num_product=:numProduct,bi.price=:price  where bi.id_invoice=:idInvoices", nativeQuery = true )
+    @Query(value="update invoices bi set bi.num_product=:numProduct,bi.price=:price  where bi.id_invoice=:idInvoices", nativeQuery = true )
 
 
     public Integer updateInvoices(@Param("numProduct") Long numProduct,@Param("price") Long price,@Param("idInvoices") String idInvoices );
 
     @Modifying
     @Transactional
-    @Query(value="update buy_invoices bi set bi.paid=:paid where bi.id_invoice=:idInvoices", nativeQuery = true )
+    @Query(value="update invoices bi set bi.paid=:paid where bi.id_invoice=:idInvoices", nativeQuery = true )
 
 
     public Integer updateInvoicesPaid(@Param("paid") Boolean paid,@Param("idInvoices") String idInvoices );
@@ -214,7 +212,7 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     //nowDate, userName, numProduct, price, sellerId
     @Modifying
     @Transactional
-    @Query(value="insert into buy_invoices (id_invoice,user_name,file_image,date,date_invoice,num_product,price,sellerId,company_id,paid,sell_or_buy) values (:idInvoice,:userName,:fileName,:date,:dateInvoice,:numProduct,:price,:sellerId,:companyId,:paid,:sellOrBuy)",nativeQuery = true)
+    @Query(value="insert into invoices (id_invoice,user_name,file_image,date,date_invoice,num_product,price,sellerId,company_id,paid,sell_or_buy) values (:idInvoice,:userName,:fileName,:date,:dateInvoice,:numProduct,:price,:sellerId,:companyId,:paid,:sellOrBuy)",nativeQuery = true)
     public Integer insertInvoice(@Param("idInvoice") String idInvoice, @Param("userName") String userName, @Param("fileName") String fileName, @Param("date") String date, @Param("dateInvoice") LocalDate dateInvoice, @Param("numProduct") Long numProduct,
                                  @Param("price") Long price, @Param("sellerId") String sellerId,@Param("companyId") Integer companyId,@Param("paid") Boolean paid,@Param("sellOrBuy") String sellOrBuy);
 

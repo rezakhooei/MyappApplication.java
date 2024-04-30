@@ -3,17 +3,13 @@ package com.tdxir.myapp.service;
 import com.tdxir.myapp.model.*;
 import com.tdxir.myapp.repository.WkhPostMetaRepository;
 import com.tdxir.myapp.repository.WkhPostsRepository;
-import com.tdxir.myapp.service.ProccessMessage;
-import com.tdxir.myapp.service.RecordAndProccessMessageService;
 import com.tdxir.myapp.tools.DateConvertor;
 import com.tdxir.myapp.utils.Utils;
 import com.tosan.tools.jalali.JalaliCalendar;
 import com.tosan.tools.jalali.JalaliDate;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.apache.commons.io.FilenameUtils;
-import org.hibernate.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -31,15 +27,12 @@ import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
-import static com.tdxir.myapp.model.Operation.*;
 import static com.tdxir.myapp.model.Role.ADMIN;
 import static com.tdxir.myapp.model.Role.USER;
-import static com.tdxir.myapp.model.UserKind.SHOP;
 
 @Service
 
@@ -144,9 +137,9 @@ public class Accounting {
                     wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,price,"INVOICESELL",userName,fileName,false ,"فاکتور",companyId);
                 }
                 else {
-                    BuyInvoices buyInvoices=wkhPostMetaRepository.reportInvoices(idInvoice);
-                    Long idDoc=buyInvoices.getIdDoc();//wkhPostMetaRepository.existsCodeInvoice(idInvoice);
-                    if(buyInvoices.getPaid()!=true&&buyInvoices.getSellOrBuy()=="BUY")
+                    Invoices invoices =wkhPostMetaRepository.reportInvoices(idInvoice);
+                    Long idDoc= invoices.getIdDoc();//wkhPostMetaRepository.existsCodeInvoice(idInvoice);
+                    if(invoices.getPaid()!=true&& invoices.getSellOrBuy().equals("BUY"))
                     {
                         if(isCheck){
                         String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
@@ -407,9 +400,9 @@ public class Accounting {
                         wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,-price,"INVOICEBUY",userName,fileName,false ,"فاکتور",companyId);
                        }
                     else {
-                        BuyInvoices buyInvoices=wkhPostMetaRepository.reportInvoices(idInvoice);
-                        Long idDoc=buyInvoices.getIdDoc();//wkhPostMetaRepository.existsCodeInvoice(idInvoice);
-                        if(buyInvoices.getPaid()!=true&&buyInvoices.getSellOrBuy()=="SELL")
+                        Invoices invoices =wkhPostMetaRepository.reportInvoices(idInvoice);
+                        Long idDoc= invoices.getIdDoc();//wkhPostMetaRepository.existsCodeInvoice(idInvoice);
+                        if(invoices.getPaid()!=true&& invoices.getSellOrBuy().equals("SELL"))
                         {if(isCheck){
                             String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
                             wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,idDoc,idInvoice,-price,"CHECK",userName,fileName,false ,description,companyId);
@@ -1234,15 +1227,15 @@ public class Accounting {
             processList = proccessMessage.proccess(idInvoice, userKind, Rd);
         }
         else{
-            BuyInvoices buyInvoices=wkhPostMetaRepository.reportInvoices(idInvoice);
+            Invoices invoices =wkhPostMetaRepository.reportInvoices(idInvoice);
 
-            if(buyInvoices!=null)
+            if(invoices !=null)
             {
-                processList.add("تاریخ-"+buyInvoices.getDate());
-                processList.add("تعداد-"+buyInvoices.getNumProduct());
-                processList.add("فروشنده-"+buyInvoices.getSellerID());
-                processList.add("قیمت-"+String.valueOf(df.format(buyInvoices.getPrice()))+"-ریال");
-                processList.add(buyInvoices.getFileImage());
+                processList.add("تاریخ-"+ invoices.getDate());
+                processList.add("تعداد-"+ invoices.getNumProduct());
+                processList.add("فروشنده-"+ invoices.getSellerID());
+                processList.add("قیمت-"+String.valueOf(df.format(invoices.getPrice()))+"-ریال");
+                processList.add(invoices.getFileImage());
                 for(int i=0;i<=buyData.size()-1;++i){
                 processList.add("کد-"+buyData.get(i).getSku()+"تعداد-"+buyData.get(i).getStock()+"قیمت-"+String.valueOf(df.format(buyData.get(i).getPrice())));
                 }

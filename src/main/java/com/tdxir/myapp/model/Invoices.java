@@ -1,6 +1,5 @@
 package com.tdxir.myapp.model;
 
-import com.tosan.tools.jalali.JalaliDate;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,14 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 
-public class BuyInvoices {
+public class Invoices {
     @Id
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
