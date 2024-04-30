@@ -33,8 +33,8 @@ public class Invoices {
     private Integer companyId;
     private Boolean paid=false;
     private String sellOrBuy="SELL";
-    @Column
-    private Boolean completed=false;
+    @Column(name = "completed", columnDefinition = "boolean default false")
+    private Boolean completed;
 
 
 

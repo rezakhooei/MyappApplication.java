@@ -391,42 +391,55 @@ public class Accounting {
         else idCheck= Long.valueOf(-1);
         if(processList.size()==0)
         try {
-                // product code = inf1 and  exists then change price and stock
+            // product code = inf1 and  exists then change price and stock
 
-                    if (wkhPostMetaRepository.existsCodeInvoice(idInvoice)==null) {
+            if (wkhPostMetaRepository.existsCodeInvoice(idInvoice) == null) {
 
-                        String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
-                        flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,date.toString(),dateInvoice,Long.valueOf(numProduct),Long.valueOf(price),sellerId,companyId ,false,"BUY");
-                        Integer idDoc=wkhPostMetaRepository.existsCodeInvoice(idInvoice);
-                        wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,-price,"INVOICEBUY",userName,fileName,false ,"فاکتور",companyId);
-                       }
-                    else if(true){
-                        Invoices invoices =wkhPostMetaRepository.reportInvoices(idInvoice);
-                        Long idDoc= invoices.getIdDoc();//wkhPostMetaRepository.existsCodeInvoice(idInvoice);
-                        if(invoices.getPaid()!=true&& invoices.getSellOrBuy().equals("SELL"))
-                        {if(isCheck){
-                            String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
-                            wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,idDoc,idInvoice,-price,"CHECK",userName,fileName,false ,description,companyId);
+                String fileName = recordAndProccessMessageService.storeInvoiceImg(fileImage);
+                flag1 = wkhPostMetaRepository.insertInvoice(idInvoice, userName, fileName, date.toString(), dateInvoice, Long.valueOf(numProduct), Long.valueOf(price), sellerId, companyId, false, "BUY");
+                Integer idDoc = wkhPostMetaRepository.existsCodeInvoice(idInvoice);
+                wkhPostMetaRepository.insertBills(date.toString(), dateInvoice, Long.valueOf(idDoc), idInvoice, -price, "INVOICEBUY", userName, fileName, false, "فاکتور", companyId);
+                processList.add(fileName);
+                errorMsg="";
+            } else {
+                Invoices invoices = wkhPostMetaRepository.reportInvoices(idInvoice);
+                if (invoices.getCompleted())
+                {
+                    Long idDoc = invoices.getIdDoc();//wkhPostMetaRepository.existsCodeInvoice(idInvoice);
+                    if (invoices.getPaid() != true && invoices.getSellOrBuy().equals("SELL")) {
+                        if (isCheck) {
+                            String fileName = recordAndProccessMessageService.storeInvoiceImg(fileImage);
+                            wkhPostMetaRepository.insertBills(date.toString(), dateInvoice, idDoc, idInvoice, -price, "CHECK", userName, fileName, false, description, companyId);
+                            processList.add(fileName);
+                            errorMsg="";
+                        } else {
+
+                            wkhPostMetaRepository.updateInvoices(numProduct, price, idInvoice);
+                            String fileName = recordAndProccessMessageService.storeInvoiceImg(fileImage);
+                            wkhPostMetaRepository.insertBills(date.toString(), dateInvoice, idDoc, idInvoice, -price, "cash", userName, fileName, false, description, companyId);
+                            processList.add(fileName);
+                            errorMsg="";
                         }
-                        else {
+                        List<Long> billPrice = wkhPostMetaRepository.priceOfInvoiceBill(idInvoice);
+                        Long tempPrice = Long.valueOf(0);
+                        for (int i = 0; i <= billPrice.size() - 1; ++i) {
+                            tempPrice += billPrice.get(i);
 
-                        wkhPostMetaRepository.updateInvoices(numProduct,price,idInvoice);
-                            String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
-                            wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,idDoc,idInvoice,-price,"cash",userName,fileName,false ,description,companyId);
+                        }
+                        if (tempPrice >= 0) wkhPostMetaRepository.updateInvoicesPaid(true, idInvoice);
+
+                    } else {
+                        processList.add("این فاکتور قبلا تسویه شده است یا پرداختی مربوط به این فاکتور نیست");
+                        errorMsg="قبلا تسویه شده یا مربوط به این فاکتور نیست";
                     }
-                        List<Long> billPrice=wkhPostMetaRepository.priceOfInvoiceBill(idInvoice);
-                        Long tempPrice=Long.valueOf(0);
-                        for(int i=0;i<=billPrice.size()-1;++i)
-                        {tempPrice+=billPrice.get(i);
+                }
 
-                        }
-                        if(tempPrice>=0) wkhPostMetaRepository.updateInvoicesPaid(true,idInvoice);
 
-                        }
-                        else processList.add("این فاکتور قبلا تسویه شده است یا پرداختی مربوط به این فاکتور نیست");
-
+                    else {
+                    processList.add("ابتدا باید کالاهای فاکتور در قسمت -خرید-وارد شود");
+                    errorMsg="کالاهای فاکتور ثبت نشده است";
                     }
-                    else processList.add("ابتدا باید کالاهای فاکتور در قسمت -خرید-وارد شود");
+               }
 
 
 
@@ -493,10 +506,10 @@ public class Accounting {
         else if(Rd.equals("Rd2")){
 
             jsonObjectMain.put("fileContentVoice", null);
-            if((processList.size()>1)&&processList.get(3)!=null) {
-                String image1 = FilenameUtils.getName(processList.get(3));//"replyimage.jpg"
+            if((processList.size()>1)&&processList.get(0)!=null && errorMsg=="") {
+                String image1 = FilenameUtils.getName(processList.get(0));//"replyimage.jpg"
                 if (image1 != null) {
-                    String pathFile = SERVER_LOCATION_INVOICES + FilenameUtils.getPath(processList.get(3));
+                    String pathFile = SERVER_LOCATION_INVOICES + FilenameUtils.getPath(processList.get(0));
                     File filereplyImg = new File(pathFile + File.separator + image1);//+ EXTENSION);
 
                     try {
@@ -511,7 +524,7 @@ public class Accounting {
 
                     }
                 } else jsonObjectMain.put("fileContentImage", null);
-            } else processList.add("وجود ندارد");
+            } else processList.add(errorMsg);
 
         }
         else if(Rd.equals("Rd3")){
@@ -568,9 +581,10 @@ public class Accounting {
 
         JSONArray array = new JSONArray();
        try {
-           for (int i = 1; i <= processList.size(); ++i) {
+           if(processList.size()>1)
+           for (int i = 1; i <= processList.size()-1; ++i) {
                jsonObject.put("inf_id", String.valueOf(i));
-               jsonObject.put("inf_text", processList.get(i - 1));
+               jsonObject.put("inf_text", processList.get(i));
 
            array.add(new JSONObject(jsonObject));
            jsonObject.clear();
