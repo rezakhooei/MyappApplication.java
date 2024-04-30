@@ -31,6 +31,7 @@ public class BuyInvoices {
     private Long price;
     private String fileImage;
     private Integer companyId;
+    private Boolean paid=false;
 
 
 

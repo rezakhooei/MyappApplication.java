@@ -26,6 +26,14 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Query("select B1.idInvoice from BuyInvoices B1 where B1.idInvoice=:code")
 
     public String idInvoice (@Param("code") String code);
+
+    @Query("select B1.price from BuyInvoices B1 where B1.idInvoice=:code")
+
+    public Long priceOfInvoice (@Param("code") String code);
+    @Query("select B1.price from Bills B1 where B1.idInvoice=:code")
+
+    public List<Long> priceOfInvoiceBill (@Param("code") String code);
+
     @Query("select w1.post_id from wkh_postmeta w1 where w1.meta_key='_sku' and w1.meta_value=:mahakCode")
 
         public long post_id (@Param("mahakCode") String mahakCode);
@@ -46,7 +54,7 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     public List<Long> buyPrice (@Param("code") String code);
     @Query("select new BuyData(bd.id,bd.email,bd.date,bd.sku,bd.stock,bd.oldStock,bd.price,bd.oldPrice,bd.idInvoice,bd.companyId) from BuyData bd where bd.sku=:code order by bd.id")
     public List<BuyData> reportProduct (@Param("code") String code);
-    @Query("select new BuyInvoices (bi.idDoc,bi.idInvoice,bi.userName,bi.sellerID,bi.date,bi.dateInvoice,bi.numProduct,bi.idCheck,bi.price,bi.fileImage,bi.companyId) from BuyInvoices bi where bi.idInvoice=:code order by bi.idDoc ")
+    @Query("select new BuyInvoices (bi.idDoc,bi.idInvoice,bi.userName,bi.sellerID,bi.date,bi.dateInvoice,bi.numProduct,bi.idCheck,bi.price,bi.fileImage,bi.companyId,bi.paid) from BuyInvoices bi where bi.idInvoice=:code order by bi.idDoc ")
     public BuyInvoices reportInvoices (@Param("code") String code);
     @Query("select new Bills (bi.id,bi.date,bi.datePay,bi.idDoc,bi.idInvoice,bi.price,bi.payKind,bi.userName,bi.fileImage,bi.finish,bi.description,bi.companyId) from Bills bi where bi.idInvoice=:code and bi.companyId=:companyId order by bi.datePay ")
     public List<Bills> reportInvoiceInBills (@Param("code") String code,@Param("companyId") Integer companyId);
@@ -91,10 +99,17 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
 
     @Modifying
     @Transactional
-    @Query(value="update buy_invoices bi set bi.num_product=:numProduct,bi.price=:price where bi.id_invoice=:idInvoices", nativeQuery = true )
+    @Query(value="update buy_invoices bi set bi.num_product=:numProduct,bi.price=:price  where bi.id_invoice=:idInvoices", nativeQuery = true )
 
 
     public Integer updateInvoices(@Param("numProduct") Long numProduct,@Param("price") Long price,@Param("idInvoices") String idInvoices );
+
+    @Modifying
+    @Transactional
+    @Query(value="update buy_invoices bi set bi.paid=:paid where bi.id_invoice=:idInvoices", nativeQuery = true )
+
+
+    public Integer updateInvoicesPaid(@Param("paid") Boolean paid,@Param("idInvoices") String idInvoices );
     @Modifying
     @Transactional
     @Query(value="update wkh_postmeta pm1 set pm1.meta_value=:fileName where pm1.meta_key='_wp_attached_file' and pm1.post_id=:postId", nativeQuery = true )
