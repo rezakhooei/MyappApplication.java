@@ -129,12 +129,13 @@ public class Accounting {
             try {
                 // product code = inf1 and  exists then change price and stock
 
-                if (wkhPostMetaRepository.existsCodeInvoice(idInvoice)==null) {
-
-                    String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
-                    flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,date.toString(),dateInvoice,Long.valueOf(numProduct),Long.valueOf(price),sellerId,companyId ,false,"SELL");
-                    Integer idDoc=wkhPostMetaRepository.existsCodeInvoice(idInvoice);
-                    wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,price,"INVOICESELL",userName,fileName,false ,"فاکتور",companyId);
+                if (wkhPostMetaRepository.existsCodeInvoice(idInvoice)==null ) {
+                    if(sellerId!=null) {
+                        String fileName = recordAndProccessMessageService.storeInvoiceImg(fileImage);
+                        flag1 = wkhPostMetaRepository.insertInvoice(idInvoice, userName, fileName, date.toString(), dateInvoice, Long.valueOf(numProduct), Long.valueOf(price), sellerId, companyId, false, "SELL");
+                        Integer idDoc = wkhPostMetaRepository.existsCodeInvoice(idInvoice);
+                        wkhPostMetaRepository.insertBills(date.toString(), dateInvoice, Long.valueOf(idDoc), idInvoice, price, "INVOICESELL", userName, fileName, false, "فاکتور", companyId);
+                    } else processList.add("نام فروشنده و شماره فاکتور درست تعریف نشده است-طبق دستورالعمل اطلاعات را وارد نمایید!@!");
                 }
                 else {
                     Invoices invoices =wkhPostMetaRepository.reportInvoices(idInvoice);
