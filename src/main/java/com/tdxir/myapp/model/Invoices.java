@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.time.LocalDate;
 
@@ -32,6 +33,8 @@ public class Invoices {
     private Integer companyId;
     private Boolean paid=false;
     private String sellOrBuy="SELL";
+    @Column
+    private Boolean completed=false;
 
 
 

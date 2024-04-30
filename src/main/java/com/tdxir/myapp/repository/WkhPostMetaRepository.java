@@ -52,7 +52,7 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     public List<Long> buyPrice (@Param("code") String code);
     @Query("select new BuyData(bd.id,bd.email,bd.date,bd.sku,bd.stock,bd.oldStock,bd.price,bd.oldPrice,bd.idInvoice,bd.companyId) from BuyData bd where bd.sku=:code order by bd.id")
     public List<BuyData> reportProduct (@Param("code") String code);
-    @Query("select new Invoices (bi.idDoc,bi.idInvoice,bi.userName,bi.sellerID,bi.date,bi.dateInvoice,bi.numProduct,bi.idCheck,bi.price,bi.fileImage,bi.companyId,bi.paid,bi.sellOrBuy) from Invoices bi where bi.idInvoice=:code order by bi.idDoc ")
+    @Query("select new Invoices (bi.idDoc,bi.idInvoice,bi.userName,bi.sellerID,bi.date,bi.dateInvoice,bi.numProduct,bi.idCheck,bi.price,bi.fileImage,bi.companyId,bi.paid,bi.sellOrBuy,bi.completed) from Invoices bi where bi.idInvoice=:code order by bi.idDoc ")
     public Invoices reportInvoices (@Param("code") String code);
     @Query("select new Bills (bi.id,bi.date,bi.datePay,bi.idDoc,bi.idInvoice,bi.price,bi.payKind,bi.userName,bi.fileImage,bi.finish,bi.description,bi.companyId) from Bills bi where bi.idInvoice=:code and bi.companyId=:companyId order by bi.datePay ")
     public List<Bills> reportInvoiceInBills (@Param("code") String code,@Param("companyId") Integer companyId);
@@ -101,7 +101,12 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
 
 
     public Integer updateInvoices(@Param("numProduct") Long numProduct,@Param("price") Long price,@Param("idInvoices") String idInvoices );
+    @Modifying
+    @Transactional
+    @Query(value="update invoices bi set bi.completed=:completed where bi.id_invoice=:idInvoices", nativeQuery = true )
 
+
+    public Integer updateInvoicesCompleted(@Param("completed") Boolean completed,@Param("idInvoices") String idInvoices );
     @Modifying
     @Transactional
     @Query(value="update invoices bi set bi.paid=:paid where bi.id_invoice=:idInvoices", nativeQuery = true )

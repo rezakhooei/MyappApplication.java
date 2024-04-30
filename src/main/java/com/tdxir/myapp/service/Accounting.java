@@ -400,7 +400,7 @@ public class Accounting {
                         Integer idDoc=wkhPostMetaRepository.existsCodeInvoice(idInvoice);
                         wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,-price,"INVOICEBUY",userName,fileName,false ,"فاکتور",companyId);
                        }
-                    else {
+                    else if(true){
                         Invoices invoices =wkhPostMetaRepository.reportInvoices(idInvoice);
                         Long idDoc= invoices.getIdDoc();//wkhPostMetaRepository.existsCodeInvoice(idInvoice);
                         if(invoices.getPaid()!=true&& invoices.getSellOrBuy().equals("SELL"))
@@ -426,6 +426,7 @@ public class Accounting {
                         else processList.add("این فاکتور قبلا تسویه شده است یا پرداختی مربوط به این فاکتور نیست");
 
                     }
+                    else processList.add("ابتدا باید کالاهای فاکتور در قسمت -خرید-وارد شود");
 
 
 
