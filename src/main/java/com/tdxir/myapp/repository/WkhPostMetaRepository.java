@@ -54,7 +54,7 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     public List<Long> buyPrice (@Param("code") String code);
     @Query("select new BuyData(bd.id,bd.email,bd.date,bd.sku,bd.stock,bd.oldStock,bd.price,bd.oldPrice,bd.idInvoice,bd.companyId) from BuyData bd where bd.sku=:code order by bd.id")
     public List<BuyData> reportProduct (@Param("code") String code);
-    @Query("select new BuyInvoices (bi.idDoc,bi.idInvoice,bi.userName,bi.sellerID,bi.date,bi.dateInvoice,bi.numProduct,bi.idCheck,bi.price,bi.fileImage,bi.companyId,bi.paid) from BuyInvoices bi where bi.idInvoice=:code order by bi.idDoc ")
+    @Query("select new BuyInvoices (bi.idDoc,bi.idInvoice,bi.userName,bi.sellerID,bi.date,bi.dateInvoice,bi.numProduct,bi.idCheck,bi.price,bi.fileImage,bi.companyId,bi.paid,bi.sellOrBuy) from BuyInvoices bi where bi.idInvoice=:code order by bi.idDoc ")
     public BuyInvoices reportInvoices (@Param("code") String code);
     @Query("select new Bills (bi.id,bi.date,bi.datePay,bi.idDoc,bi.idInvoice,bi.price,bi.payKind,bi.userName,bi.fileImage,bi.finish,bi.description,bi.companyId) from Bills bi where bi.idInvoice=:code and bi.companyId=:companyId order by bi.datePay ")
     public List<Bills> reportInvoiceInBills (@Param("code") String code,@Param("companyId") Integer companyId);
@@ -214,9 +214,9 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     //nowDate, userName, numProduct, price, sellerId
     @Modifying
     @Transactional
-    @Query(value="insert into buy_invoices (id_invoice,user_name,file_image,date,date_invoice,num_product,price,sellerId,company_id) values (:idInvoice,:userName,:fileName,:date,:dateInvoice,:numProduct,:price,:sellerId,:companyId)",nativeQuery = true)
+    @Query(value="insert into buy_invoices (id_invoice,user_name,file_image,date,date_invoice,num_product,price,sellerId,company_id,paid,sell_or_buy) values (:idInvoice,:userName,:fileName,:date,:dateInvoice,:numProduct,:price,:sellerId,:companyId,:paid,:sellOrBuy)",nativeQuery = true)
     public Integer insertInvoice(@Param("idInvoice") String idInvoice, @Param("userName") String userName, @Param("fileName") String fileName, @Param("date") String date, @Param("dateInvoice") LocalDate dateInvoice, @Param("numProduct") Long numProduct,
-                                 @Param("price") Long price, @Param("sellerId") String sellerId,@Param("companyId") Integer companyId);
+                                 @Param("price") Long price, @Param("sellerId") String sellerId,@Param("companyId") Integer companyId,@Param("paid") Boolean paid,@Param("sellOrBuy") String sellOrBuy);
 
     @Modifying
     @Transactional

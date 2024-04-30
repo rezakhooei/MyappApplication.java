@@ -74,105 +74,114 @@ public class Accounting {
     public ResponseEntity<JSONObject> saveMyCredit(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
                                                   String checkBox1, String checkBox2, String checkBox3, String userName,Integer companyId)
     {
+        errorMsg="";
         DecimalFormat df = new DecimalFormat("###,###,###");
         JalaliDate date=new JalaliDate();
 
         JalaliCalendar jalaliCalendar=new JalaliCalendar();//date);
         date=jalaliCalendar.getJalaliDate();
-        LocalDate dateInvoice;
-
+        LocalDate dateInvoice=LocalDate.now();
+        List<String> processList=new ArrayList<>();
         String idInvoice=null,message=inf.get(0), postId,sellerId=null,description="";
         String[] idList=inf.get(0).split("@");
         String[] stockANDdateList=inf.get(2).split("@");
         String[] priceAndCheck=inf.get(3).split("@");
         Boolean isCheck=false;
-        if (priceAndCheck.length==2 && priceAndCheck[1].equals("چک")) isCheck=true;
-        if(stockANDdateList.length==2) {
-            dateInvoice = LocalDate.parse(stockANDdateList[1], DateTimeFormatter.BASIC_ISO_DATE);
-        }
-        else {
-            dateInvoice = LocalDate.parse(stockANDdateList[0], DateTimeFormatter.BASIC_ISO_DATE);
-        }
-        Long price,idCheck;
+        Long price=Long.valueOf(0),idCheck;
         Long numProduct=null;
         Integer flag1;
         Boolean flag2;
+
+
+        if(utils.isNumeric(priceAndCheck[0].replaceAll(",","")))
+        {
+            price = Long.valueOf(priceAndCheck[0].replaceAll(",",""));
+            if (priceAndCheck.length==2 ){
+                if (priceAndCheck[1].equals("چک")) {
+
+                    isCheck = true;
+                } else
+                    processList.add("وقتی میخواهیم چک را ثبت کنیم باید به شکل مثلا 25,000,000@چک نوشته شود شما کلمه چک را اشتباه نوشته اید");
+
+
+            }
+        }
+        else processList.add("اشکال در نوشتن قیمت -دستورالعمل بنویسید");
+        if(stockANDdateList.length==2){
+            if(utils.isNumeric(stockANDdateList[0])&&utils.isNumeric(stockANDdateList[1])) {
+                if (stockANDdateList[1].length() == 8) {
+                    dateInvoice = LocalDate.parse(stockANDdateList[1], DateTimeFormatter.BASIC_ISO_DATE);
+                    numProduct=Long.valueOf(stockANDdateList[0]);
+                }
+                else processList.add("اشکال در نوشتن تاریخ -طبق دستورالعمل بنویسید(تعداد و تاریخ نوشته اید!)");
+            }   else processList.add("اشکال در نوشتن تعداد و تاریخ -طبق دستورالعمل بنویسید");
+        }
+        else if(stockANDdateList.length==1 && utils.isNumeric(stockANDdateList[0])&&(stockANDdateList[1].length() == 8))
+            dateInvoice = LocalDate.parse(stockANDdateList[0], DateTimeFormatter.BASIC_ISO_DATE);
+        else processList.add("اشکال در نوشتن تاریخ -طبق دستورالعمل بنویسید(فقط تاریخ نوشته اید!)");
+
+
         if(idList.length==2&&idList[0]!="شماره فاکتور"){
             sellerId=idList[1];
             idInvoice=idList[0];
         }
         else {description=inf.get(0);idInvoice=inf.get(1);}
 
+        if(utils.isNumeric(inf.get(0)))
+        {
+            idCheck=Long.valueOf(inf.get(0));
+        }
+        else idCheck= Long.valueOf(-1);
+        if(processList.size()==0)
+            try {
+                // product code = inf1 and  exists then change price and stock
 
-        try {
-            if(utils.isNumeric(inf.get(0)))
-            {
-                idCheck=Long.valueOf(inf.get(0));
-            }
-            else idCheck= Long.valueOf(-1);
+                if (wkhPostMetaRepository.existsCodeInvoice(idInvoice)==null) {
 
-            if(utils.isNumeric(stockANDdateList[0]))
-            {
-                numProduct=Long.valueOf(stockANDdateList[0]);
-            }
-            else numProduct= Long.valueOf(-1);
-
-            if(utils.isNumeric(priceAndCheck[0].replaceAll(",","")))
-            {
-                price = Long.valueOf(priceAndCheck[0].replaceAll(",",""));
-            }
-            else price= Long.valueOf(-1);
-
-
-
-            errorMsg+="-BSF";
-
-            // product code = inf1 and  exists then change price and stock
-
-            if (wkhPostMetaRepository.existsCodeInvoice(idInvoice)==null) {
-
-                String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
-
-
-
-                errorMsg+="-ASF";
-
-
-
-                flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,date.toString(),dateInvoice,Long.valueOf(numProduct),Long.valueOf(price),sellerId,companyId );
-                Integer idDoc=wkhPostMetaRepository.existsCodeInvoice(idInvoice);
-                wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,price,"INVOICEBUY",userName,fileName,false ,"فاکتور",companyId);
-                errorMsg+="-ASData";
-            }
-            else {
-
-                Integer idDoc=wkhPostMetaRepository.existsCodeInvoice(idInvoice);
-                if(isCheck){
                     String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
-                    wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,price,"CHECK",userName,fileName,false ,description,companyId);
-
-
+                    flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,date.toString(),dateInvoice,Long.valueOf(numProduct),Long.valueOf(price),sellerId,companyId ,false,"SELL");
+                    Integer idDoc=wkhPostMetaRepository.existsCodeInvoice(idInvoice);
+                    wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,price,"INVOICESELL",userName,fileName,false ,"فاکتور",companyId);
                 }
                 else {
+                    BuyInvoices buyInvoices=wkhPostMetaRepository.reportInvoices(idInvoice);
+                    Long idDoc=buyInvoices.getIdDoc();//wkhPostMetaRepository.existsCodeInvoice(idInvoice);
+                    if(buyInvoices.getPaid()!=true&&buyInvoices.getSellOrBuy()=="BUY")
+                    {
+                        if(isCheck){
+                        String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
+                        wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,idDoc,idInvoice,price,"CHECK",userName,fileName,false ,description,companyId);
+                    }
+                    else {
 
-                    wkhPostMetaRepository.updateInvoices(numProduct,price,idInvoice);
-                    String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
-                    wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,price,"cash",userName,fileName,false ,description,companyId);
+                        wkhPostMetaRepository.updateInvoices(numProduct,price,idInvoice);
+                        String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
+                        wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,idDoc,idInvoice,price,"cash",userName,fileName,false ,description,companyId);
+                    }
+                        List<Long> billPrice=wkhPostMetaRepository.priceOfInvoiceBill(idInvoice);
+                        Long tempPrice=Long.valueOf(0);
+                        for(int i=0;i<=billPrice.size()-1;++i)
+                        {tempPrice+=billPrice.get(i);
+
+                        }
+                        if(tempPrice>=0) wkhPostMetaRepository.updateInvoicesPaid(true,idInvoice);
+
+                    }
+                    else processList.add("این فاکتور قبلا تسویه شده است");
+
                 }
 
+
+
+
+            } catch (Exception e){
+                processList.add(e.getMessage());
+
             }
-
-
-
-
-        } catch (Exception e){
-            errorMsg+=e.getMessage();
-
-        }
         JSONObject jsonObjectMain = new JSONObject();
         JSONObject jsonObject = new JSONObject();
         // String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
-        List<String> processList=new ArrayList<>();
+
 
         try {
 
@@ -183,8 +192,9 @@ public class Accounting {
                 {
                     processList.add(bills.get(i).getDate()+"مبلغ"+String.valueOf(df.format(bills.get(i).getPrice()))+"ریال-"+bills.get(i).getPayKind());
                 }
+            else processList.add("اطلاعاتی برای نمایش این فاکتور و آی دی وجود ندارد--"+idInvoice+"--"+String.valueOf(companyId));
 
-        }catch (Exception e){errorMsg+=e.getMessage();
+        }catch (Exception e){processList.add(e.getMessage());
         }
 
         if ((processList == null)|| (processList.size()==0)) {
@@ -218,7 +228,7 @@ public class Accounting {
                 jsonObjectMain.put("fileContentImage", null);
                 jsonObjectMain.put("fileContentVoice", resource.getByteArray());
             } catch (IOException ex) {
-                errorMsg = ex.getMessage();
+                processList.add( ex.getMessage());
             }
 
 
@@ -240,11 +250,11 @@ public class Accounting {
                         //jsonObjectMain.put("fileContentVoice", null);
                         jsonObjectMain.put("fileContentImage", resource1.getByteArray());
                     } catch (IOException ex) {
-                        errorMsg = ex.getMessage() + "Path or file isn't correct";
+                        processList.add(ex.getMessage() + "Path or file isn't correct");
 
                     }
                 } else jsonObjectMain.put("fileContentImage", null);
-            } else errorMsg+="وجود ندارد";
+            } else processList.add("وجود ندارد");
 
         }
         else if(Rd.equals("Rd3")){
@@ -272,7 +282,7 @@ public class Accounting {
 
                 jsonObjectMain.put("fileContentVoice", resource.getByteArray());
             } catch (IOException ex) {
-                errorMsg = ex.getMessage();
+                processList.add(ex.getMessage());
             }
 
             String image1 = "replyimage.jpg";
@@ -308,6 +318,7 @@ public class Accounting {
                 array.add(new JSONObject(jsonObject));
                 jsonObject.clear();
             }
+
         }catch (Exception ex) {
             errorMsg += ex.getMessage();
             jsonObject.put("inf_text", "" + errorMsg);//, processList.get(i - 1) + ":" + "عکس");
@@ -361,8 +372,10 @@ public class Accounting {
         else processList.add("اشکال در نوشتن قیمت -دستورالعمل بنویسید");
         if(stockANDdateList.length==2){
             if(utils.isNumeric(stockANDdateList[0])&&utils.isNumeric(stockANDdateList[1])) {
-                if (stockANDdateList[1].length() == 8)
+                if (stockANDdateList[1].length() == 8) {
                     dateInvoice = LocalDate.parse(stockANDdateList[1], DateTimeFormatter.BASIC_ISO_DATE);
+                    numProduct=Long.valueOf(stockANDdateList[0]);
+                }
                 else processList.add("اشکال در نوشتن تاریخ -طبق دستورالعمل بنویسید(تعداد و تاریخ نوشته اید!)");
             }   else processList.add("اشکال در نوشتن تعداد و تاریخ -طبق دستورالعمل بنویسید");
         }
@@ -389,14 +402,14 @@ public class Accounting {
                     if (wkhPostMetaRepository.existsCodeInvoice(idInvoice)==null) {
 
                         String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
-                        flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,date.toString(),dateInvoice,Long.valueOf(numProduct),Long.valueOf(price),sellerId,companyId );
+                        flag1 = wkhPostMetaRepository.insertInvoice(idInvoice,userName,fileName,date.toString(),dateInvoice,Long.valueOf(numProduct),Long.valueOf(price),sellerId,companyId ,false,"BUY");
                         Integer idDoc=wkhPostMetaRepository.existsCodeInvoice(idInvoice);
                         wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,Long.valueOf(idDoc),idInvoice,-price,"INVOICEBUY",userName,fileName,false ,"فاکتور",companyId);
                        }
                     else {
                         BuyInvoices buyInvoices=wkhPostMetaRepository.reportInvoices(idInvoice);
                         Long idDoc=buyInvoices.getIdDoc();//wkhPostMetaRepository.existsCodeInvoice(idInvoice);
-                        if(buyInvoices.getPaid()!=true)
+                        if(buyInvoices.getPaid()!=true&&buyInvoices.getSellOrBuy()=="SELL")
                         {if(isCheck){
                             String fileName =recordAndProccessMessageService.storeInvoiceImg(fileImage);
                             wkhPostMetaRepository.insertBills(date.toString(),dateInvoice,idDoc,idInvoice,-price,"CHECK",userName,fileName,false ,description,companyId);
@@ -409,13 +422,14 @@ public class Accounting {
                     }
                         List<Long> billPrice=wkhPostMetaRepository.priceOfInvoiceBill(idInvoice);
                         Long tempPrice=Long.valueOf(0);
-                        for(int i=0;i<=billPrice.size();++i)
+                        for(int i=0;i<=billPrice.size()-1;++i)
                         {tempPrice+=billPrice.get(i);
 
                         }
-                        if(tempPrice==buyInvoices.getPrice()) wkhPostMetaRepository.updateInvoicesPaid(true,idInvoice);
+                        if(tempPrice>=0) wkhPostMetaRepository.updateInvoicesPaid(true,idInvoice);
+
                         }
-                        else processList.add("این فاکتور قبلا تسویه شده است");
+                        else processList.add("این فاکتور قبلا تسویه شده است یا پرداختی مربوط به این فاکتور نیست");
 
                     }
 

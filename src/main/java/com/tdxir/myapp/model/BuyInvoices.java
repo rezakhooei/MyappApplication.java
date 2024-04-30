@@ -32,6 +32,7 @@ public class BuyInvoices {
     private String fileImage;
     private Integer companyId;
     private Boolean paid=false;
+    private String sellOrBuy="SELL";
 
 
 
