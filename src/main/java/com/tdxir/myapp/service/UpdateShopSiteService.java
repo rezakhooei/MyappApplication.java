@@ -45,6 +45,15 @@ int i=0;
          if(mahak!=null) {
 
              try {
+                Long code=mahak.getCode();
+                if(code<10){
+                    pid = postMetaRepository.post_id(String.valueOf(mahak.getCode())+"--");
+                }
+                else if (code<100){
+                    pid = postMetaRepository.post_id(String.valueOf(mahak.getCode())+"-");
+
+                }
+                else
                  pid = postMetaRepository.post_id(String.valueOf(mahak.getCode()));
 
                  String stock = String.valueOf(10000);//mahak.getStock());
@@ -74,7 +83,8 @@ int i=0;
                      postMetaRepository.insertRegularPrice(postsRepository.lastId(), String.valueOf(mahak.getPrice()));
                      postMetaRepository.insertWholeSalePrice(postsRepository.lastId(), String.valueOf(mahak.getPrice()));
                      postMetaRepository.insertSalePrice(postsRepository.lastId(), String.valueOf(mahak.getPrice()));
-
+// این کد را اضافه کنم   _manage_stock yes , _stock_status instock
+                 // بازم فک کنم کفایت نکند چون سلام دنیا داد
                      buffer.write(String.valueOf(mahak.getCode()) + "\n");//mahakList.get(numbeforeerror).getCode()) + "\n");
                  }
 

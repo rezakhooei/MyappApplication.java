@@ -29,7 +29,7 @@ public class BuyData {
     private Long price;
     private Long oldPrice;
     @NotNull
-    private Long idInvoice;
+    private String idInvoice;
     private Integer companyId;
 
 

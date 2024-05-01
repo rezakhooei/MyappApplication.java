@@ -73,17 +73,18 @@ public class Shop {
         String nowDate= date.toString();//new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(date);
         String message=inf.get(1), postId,sellerId=inf.get(0);
         String[] idList=inf.get(0).split("@");
-        Long idInvoice=null;
+        String idInvoice=null;
         Operation op=null;
         if((idList.length==1)&&utils.isNumeric(idList[0])){
-            idInvoice=Long.valueOf(idList[0]);
+            idInvoice=idList[0];
            // op=PRODUCT;
         }
         else if(idList.length==2&&utils.isNumeric(idList[0])&&utils.isNumeric(idList[1])) {
-            sellerId=idList[1];
+
+            idInvoice=idList[1];
           //  op=INVOICE;
         }
-        Long code,price=Long.valueOf(0);
+        Long code,price=0L;
         try {
 
             Integer stock ,flag1,flag2;
@@ -101,14 +102,14 @@ public class Shop {
             {
                 price = Long.valueOf(inf.get(3));
             }
-            else price= Long.valueOf(-1);
+            else price= -1L;
 
             if(idInvoice!=null)
             {
                 Invoices invoices =wkhPostMetaRepository.reportInvoices(String.valueOf(idInvoice));
 
     // product code = inf1 and  exists then change price and stock
-    if (code != Long.valueOf(-1)&&String.valueOf(idInvoice).equals(invoices.getIdInvoice())) {
+    if (code != -1L &&String.valueOf(idInvoice).equals(invoices.getIdInvoice())) {
         postId = wkhPostMetaRepository.existsCode(String.valueOf(code));
         if (postId != null)
         {
@@ -118,9 +119,20 @@ public class Shop {
             if(buyData.size()==0)
             {
                 flag1 = wkhPostMetaRepository.insertBuyData(nowDate, userName, String.valueOf(code), stock, oldStock, price, oldPrice, idInvoice);
-                if (stock != -1 && price != Long.valueOf(-1) ) {
+                if (stock != -1 && price !=-1L ) {
 
+                    List<BuyData> buyDataList= wkhPostMetaRepository.findInvoiceInBuyData(idInvoice);
+                    Long tempPrice=0L,tempNumProduct=0L;
+                    for(int i=0;i<=buyDataList.size()-1;++i)
+                    {
+                        tempPrice+=buyDataList.get(i).getPrice()*buyDataList.get(i).getStock();
+                        tempNumProduct+=1;
 
+                    }
+                    Invoices invoices1 =wkhPostMetaRepository.reportInvoices(String.valueOf(idInvoice));
+                    if(tempPrice.equals(invoices1.getPrice()) && tempNumProduct.equals(invoices1.getNumProduct()))
+                        wkhPostMetaRepository.updateInvoicesCompleted(true,String.valueOf(idInvoice));
+                    else wkhPostMetaRepository.updateInvoicesCompleted(false,String.valueOf(idInvoice));
                     wkhPostMetaRepository.updateStock(String.valueOf(stock + Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0))), postId);
 
                 }
@@ -129,9 +141,20 @@ public class Shop {
             else
             {wkhPostMetaRepository.updateBuyData(Long.valueOf(stock),price,buyData.get(0).getId());
 
-            if (stock != -1 && price != Long.valueOf(-1) )
+            if (stock != -1 && price != -1L )
             {
+                List<BuyData> buyDataList= wkhPostMetaRepository.findInvoiceInBuyData(idInvoice);
+                Long tempPrice=Long.valueOf(0),tempNumProduct=Long.valueOf(0);
+                for(int i=0;i<=buyDataList.size()-1;++i)
+                {
+                    tempPrice+=buyDataList.get(i).getPrice()*buyDataList.get(i).getStock();
+                    tempNumProduct+=1;
 
+                }
+                Invoices invoices1 =wkhPostMetaRepository.reportInvoices(String.valueOf(idInvoice));
+                if(tempPrice.equals(invoices1.getPrice()) && tempNumProduct.equals(invoices1.getNumProduct()))
+                    wkhPostMetaRepository.updateInvoicesCompleted(true,String.valueOf(idInvoice));
+                else wkhPostMetaRepository.updateInvoicesCompleted(false,String.valueOf(idInvoice));
 
                 flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock-buyData.get(0).getStock() + Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0))), postId);
 
@@ -156,17 +179,18 @@ public class Shop {
 
             flag1 = wkhPostMetaRepository.insertBuyData(nowDate, userName, String.valueOf(code), stock, 0, price, Long.valueOf(0), idInvoice);
             if (stock != -1) {
-               List<BuyData> buyDataList= wkhPostMetaRepository.findInvoiceInBuyData(String.valueOf(invoices));
+               List<BuyData> buyDataList= wkhPostMetaRepository.findInvoiceInBuyData(idInvoice);
                Long tempPrice=Long.valueOf(0),tempNumProduct=Long.valueOf(0);
                for(int i=0;i<=buyDataList.size()-1;++i)
                {
-                   tempPrice+=buyDataList.get(i).getPrice();
+                   tempPrice+=buyDataList.get(i).getPrice()*buyDataList.get(i).getStock();
                    tempNumProduct+=1;
 
                }
                Invoices invoices1 =wkhPostMetaRepository.reportInvoices(String.valueOf(idInvoice));
-               if(tempPrice==invoices1.getPrice() && tempNumProduct==invoices1.getNumProduct())
+               if(tempPrice.equals(invoices1.getPrice()) && tempNumProduct.equals(invoices1.getNumProduct()))
                 wkhPostMetaRepository.updateInvoicesCompleted(true,String.valueOf(idInvoice));
+               else wkhPostMetaRepository.updateInvoicesCompleted(false,String.valueOf(idInvoice));
                 flag1 = wkhPostMetaRepository.updateStock(String.valueOf(stock + Integer.valueOf(wkhPostMetaRepository.stockIdCode(String.valueOf(code)).get(0))), postId);
 
             }

@@ -213,7 +213,7 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Query(value="insert into buy_data (date,email,sku,stock,old_stock,price,old_price,id_invoice) values (:date,:email,:sku,:stock,:oldStock,:price,:oldPrice,:idInvoice)",nativeQuery = true)
     public Integer insertBuyData(@Param("date") String date,@Param("email") String email,@Param("sku") String sku,@Param("stock") Integer stock,
                                  @Param("oldStock") Integer oldStock,@Param("price") Long price,@Param("oldPrice") Long oldPrice,
-                                @Param("idInvoice") Long  idInvoice);
+                                @Param("idInvoice") String idInvoice);
     //nowDate, userName, numProduct, price, sellerId
     @Modifying
     @Transactional
