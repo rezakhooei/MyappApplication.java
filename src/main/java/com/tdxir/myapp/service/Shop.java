@@ -625,6 +625,7 @@ public class Shop {
     public ResponseEntity<JSONObject> searchProduct(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
                                                     String checkBox1, String checkBox2, String checkBox3, UserKind userKind, Role role)
     {
+        DecimalFormat df = new DecimalFormat("###,###,###");
         String message=inf.get(1);
         JSONObject jsonObjectMain = new JSONObject();
         JSONObject jsonObject = new JSONObject();
@@ -646,10 +647,10 @@ public class Shop {
             List<String> price=wkhPostMetaRepository.priceIdCode(message);
             if(price.size()>0) {
                 if(role==USER)
-                processList.add(price.get(0));
+                processList.add(String.valueOf(df.format(Long.valueOf(price.get(0))))+"  - ریال");
                 else if(role==ADMIN)
                 {   List<Long> buyPrice=wkhPostMetaRepository.buyPrice(message);
-                    DecimalFormat df = new DecimalFormat("###,###,###");
+
                     if(buyPrice.size()!=0)
                     processList.add(String.valueOf(df.format(Long.valueOf(price.get(0))))+ "ریال"+"(قیمت خرید"+String.valueOf(df.format(buyPrice.get(buyPrice.size()-1)))+")");
                     else processList.add(String.valueOf(df.format(Long.valueOf(price.get(0))))+ "ریال"+"--"+"قیمت خرید ندارد");
@@ -793,7 +794,7 @@ public class Shop {
             }
             else if(i==2) {
                 if(processList.get(i - 1)!="-1")
-                {  DecimalFormat df = new DecimalFormat("###,###,###");
+                {
                     jsonObject.put("inf_text", "قیمت : " + processList.get(i - 1) );
 
                 }
