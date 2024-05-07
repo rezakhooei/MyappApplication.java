@@ -363,7 +363,7 @@ public class Accounting {
 
             }
         }
-        else processList.add("اشکال در نوشتن قیمت -دستورالعمل بنویسید");
+        else processList.add("اشکال در نوشتن قیمت -طبق دستورالعمل بنویسید");
         if(stockANDdateList.length==2){
             if(utils.isNumeric(stockANDdateList[0])&&utils.isNumeric(stockANDdateList[1])) {
                 if (stockANDdateList[1].length() == 8) {
@@ -1599,6 +1599,233 @@ public class Accounting {
         // ContentDisposition disposition = ContentDisposition.attachment().filename("monshi.mp3").build();
         // ContentDisposition disposition = ContentDisposition.attachment().filename(filereply.getName()).build();
         //headers.setContentDisposition(disposition);
+
+        return new ResponseEntity<>(jsonObjectMain, headers, HttpStatus.OK);
+    }
+    public ResponseEntity<JSONObject> saveCompanyId(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
+                                                  String checkBox1, String checkBox2, String checkBox3, String userName,Integer companyId)
+    {   errorMsg="";
+
+        String userId=inf.get(0),branch=inf.get(1);
+
+
+        Integer flag1;
+        Boolean flag2;
+
+        if(processList.size()==0)
+            try {
+                // product code = inf1 and  exists then change price and stock
+
+                if (wkhPostMetaRepository.existsCodeInvoice(idInvoice) == null) {
+
+                    String fileName = recordAndProccessMessageService.storeInvoiceImg(fileImage);
+                    flag1 = wkhPostMetaRepository.insertInvoice(idInvoice, userName, fileName, date.toString(), dateInvoice, Long.valueOf(numProduct), Long.valueOf(price), sellerId, companyId, false, "BUY");
+                    Integer idDoc = wkhPostMetaRepository.existsCodeInvoice(idInvoice);
+                    wkhPostMetaRepository.insertBills(date.toString(), dateInvoice, Long.valueOf(idDoc), idInvoice, -price, "INVOICEBUY", userName, fileName, false, "فاکتور", companyId);
+                    processList.add(fileName);
+                    errorMsg="";
+                } else {
+                    Invoices invoices = wkhPostMetaRepository.reportInvoices(idInvoice);
+                    if (invoices.getCompleted())
+                    {
+                        Long idDoc = invoices.getIdDoc();//wkhPostMetaRepository.existsCodeInvoice(idInvoice);
+                        if (invoices.getPaid() != true && invoices.getSellOrBuy().equals("SELL")) {
+                            if (isCheck) {
+                                String fileName = recordAndProccessMessageService.storeInvoiceImg(fileImage);
+                                wkhPostMetaRepository.insertBills(date.toString(), dateInvoice, idDoc, idInvoice, -price, "CHECK", userName, fileName, false, description, companyId);
+                                processList.add(fileName);
+                                errorMsg="";
+                            } else {
+
+                                wkhPostMetaRepository.updateInvoices(numProduct, price, idInvoice);
+                                String fileName = recordAndProccessMessageService.storeInvoiceImg(fileImage);
+                                wkhPostMetaRepository.insertBills(date.toString(), dateInvoice, idDoc, idInvoice, -price, "cash", userName, fileName, false, description, companyId);
+                                processList.add(fileName);
+                                errorMsg="";
+                            }
+                            List<Long> billPrice = wkhPostMetaRepository.priceOfInvoiceBill(idInvoice);
+                            Long tempPrice = Long.valueOf(0);
+                            for (int i = 0; i <= billPrice.size() - 1; ++i) {
+                                tempPrice += billPrice.get(i);
+
+                            }
+                            if (tempPrice >= 0) wkhPostMetaRepository.updateInvoicesPaid(true, idInvoice);
+
+                        } else {
+                            processList.add("این فاکتور قبلا تسویه شده است یا پرداختی مربوط به این فاکتور نیست");
+                            errorMsg="قبلا تسویه شده یا مربوط به این فاکتور نیست";
+                        }
+                    }
+
+
+                    else {
+                        processList.add("ابتدا باید کالاهای فاکتور در قسمت -خرید-وارد شود");
+                        errorMsg="کالاهای فاکتور ثبت نشده است";
+                    }
+                }
+
+
+
+
+            } catch (Exception e){
+                processList.add(e.getMessage());
+
+            }
+        JSONObject jsonObjectMain = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
+        // String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
+
+
+        try {
+
+
+            List<Bills> bills=wkhPostMetaRepository.reportInvoiceInBills(idInvoice,companyId);
+            if(bills.size()!=0)
+                for(int i=0;i<=bills.size()-1;++i)
+                {
+                    processList.add(bills.get(i).getDate()+"مبلغ"+String.valueOf(df.format(bills.get(i).getPrice()))+"ریال-"+bills.get(i).getPayKind());
+                }
+            else processList.add("اطلاعاتی برای نمایش این فاکتور و آی دی وجود ندارد--"+idInvoice+"--"+String.valueOf(companyId));
+
+        }catch (Exception e){processList.add(e.getMessage());
+        }
+
+        if ((processList == null)|| (processList.size()==0)) {
+            processList = new ArrayList<>();
+            processList.add(" پاسخی پیدا نکردم");
+        }
+
+        if(Rd.equals("Rd1")) {
+
+
+            jsonObjectMain.put("fileContentImage", null);
+            String fileName = "receivedmessage.wav";
+            inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
+            //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
+
+            String image = fileName;//"file";
+            File filereply = new File(SERVER_LOCATION + File.separator + image);//+ EXTENSION);
+
+             /*HttpHeaders header = new HttpHeaders();
+             header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
+
+             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+             header.add("Pragma", "no-cache");
+             header.add("Expires", "0");
+*/
+            try {
+                Path path = Paths.get(filereply.getAbsolutePath());
+                ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+
+                byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
+                jsonObjectMain.put("fileContentImage", null);
+                jsonObjectMain.put("fileContentVoice", resource.getByteArray());
+            } catch (IOException ex) {
+                processList.add( ex.getMessage());
+            }
+
+
+        }
+        else if(Rd.equals("Rd2")){
+
+            jsonObjectMain.put("fileContentVoice", null);
+            if((processList.size()>1)&&processList.get(0)!=null && errorMsg=="") {
+                String image1 = FilenameUtils.getName(processList.get(0));//"replyimage.jpg"
+                if (image1 != null) {
+                    String pathFile = SERVER_LOCATION_INVOICES + FilenameUtils.getPath(processList.get(0));
+                    File filereplyImg = new File(pathFile + File.separator + image1);//+ EXTENSION);
+
+                    try {
+                        Path path1 = Paths.get(filereplyImg.getAbsolutePath());
+                        ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
+
+                        byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
+                        //jsonObjectMain.put("fileContentVoice", null);
+                        jsonObjectMain.put("fileContentImage", resource1.getByteArray());
+                    } catch (IOException ex) {
+                        processList.add(ex.getMessage() + "Path or file isn't correct");
+
+                    }
+                } else jsonObjectMain.put("fileContentImage", null);
+            } else processList.add(errorMsg);
+
+        }
+        else if(Rd.equals("Rd3")){
+
+
+            String fileName = "receivedmessage.wav";
+            inf.add(0, "افلاطون بیان می کند که زندگی ما در بیشتر مواقع به این خاطر با مشکل مواجه می شود که ما تقریباً هیچ وقت فرصت کافی به خودمان نمی دهیم تا به شکلی دقیق و عاقلان افلاطون قصد داشت تا نظم و شفافیت را در ذهن مخاطبینش به وجود آورد");
+            //UploadResponse uploadResponse = new UploadResponse(fileName,fileName,inf);
+
+            String image = fileName;//"file";
+            File filereply = new File(SERVER_LOCATION + File.separator + image);//+ EXTENSION);
+
+             /*HttpHeaders header = new HttpHeaders();
+             header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=filereply");//monshi.mp3");
+
+             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+             header.add("Pragma", "no-cache");
+             header.add("Expires", "0");
+*/
+            try {
+                Path path = Paths.get(filereply.getAbsolutePath());
+                ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+
+                byte[] encoder = Base64.getEncoder().encode(resource.getByteArray());
+
+                jsonObjectMain.put("fileContentVoice", resource.getByteArray());
+            } catch (IOException ex) {
+                processList.add(ex.getMessage());
+            }
+
+            String image1 = "replyimage.jpg";
+
+            File filereplyImg = new File(SERVER_LOCATION + File.separator + image1);//+ EXTENSION);
+
+
+            try {
+                Path path1 = Paths.get(filereplyImg.getAbsolutePath());
+                ByteArrayResource resource1 = new ByteArrayResource(Files.readAllBytes(path1));
+
+                byte[] encoder1 = Base64.getEncoder().encode(resource1.getByteArray());
+
+                jsonObjectMain.put("fileContentImage", resource1.getByteArray());
+            } catch (IOException ex) {
+                errorMsg = ex.getMessage();
+            }
+        }
+        else if(Rd.equals("Rd4")){
+
+            jsonObjectMain.put("fileContentVoice", null);
+            jsonObjectMain.put("fileContentImage", null);
+        }
+
+
+
+        JSONArray array = new JSONArray();
+        try {
+            if(processList.size()>1)
+                for (int i = 1; i <= processList.size()-1; ++i) {
+                    jsonObject.put("inf_id", String.valueOf(i));
+                    jsonObject.put("inf_text", processList.get(i));
+
+                    array.add(new JSONObject(jsonObject));
+                    jsonObject.clear();
+                }
+
+        }catch (Exception ex) {
+            errorMsg += ex.getMessage();
+            jsonObject.put("inf_text", "" + errorMsg);//, processList.get(i - 1) + ":" + "عکس");
+            jsonObject.put("inf_text", "عکس  تعریف نشده است" + errorMsg);
+
+            array.add(new JSONObject(jsonObject));
+            jsonObject.clear();
+
+        }
+        jsonObjectMain.put("inf", array);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
         return new ResponseEntity<>(jsonObjectMain, headers, HttpStatus.OK);
     }

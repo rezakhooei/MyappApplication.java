@@ -34,6 +34,7 @@ import java.util.Base64;
 import java.util.List;
 
 import static com.tdxir.myapp.model.Role.*;
+import static com.tdxir.myapp.model.UserKind.PERSON;
 import static com.tdxir.myapp.model.UserKind.SHOP;
 
 @RestController
@@ -157,21 +158,20 @@ public class ReciveMessageController {
               }
 
               }
-              else  if (user.getRole()==ACCOUNTING){
-                  if ((panel3.equals("Rd1") && panel4.equals("Rd1"))||(panel3.equals("Rd2") && panel4.equals("Rd2")))  {
+              else  if (user.getRole()==ACCOUNTING) {
+                  if ((panel3.equals("Rd1") && panel4.equals("Rd1")) || (panel3.equals("Rd2") && panel4.equals("Rd2"))) {
 
-                      return accounting.saveMyDebit(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail(),user.getCompanyId());
+                      return accounting.saveMyDebit(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail(), user.getCompanyId());
 
-                  } else if ((panel3.equals("Rd1")&& panel4.equals("Rd2"))||(panel3.equals("Rd2")&& panel4.equals("Rd1"))) {
+                  } else if ((panel3.equals("Rd1") && panel4.equals("Rd2")) || (panel3.equals("Rd2") && panel4.equals("Rd1"))) {
 
-                      return  accounting.saveMyCredit(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail(),user.getCompanyId());
+                      return accounting.saveMyCredit(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail(), user.getCompanyId());
 
                   } else if (panel3.equals("Rd3")) {
-                      return accounting.reportProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());
+                      return accounting.reportProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(), user.getRole());
 
-                  }
-                  else if (panel3.equals("Rd4")&& panel4.equals("Rd1")) {
-                      return accounting.reportInvoicePay(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole(),user.getCompanyId());
+                  } else if (panel3.equals("Rd4") && panel4.equals("Rd1")) {
+                      return accounting.reportInvoicePay(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(), user.getRole(), user.getCompanyId());
 
                   }
 
@@ -179,6 +179,14 @@ public class ReciveMessageController {
               }
           }
 
+          else if(user.getUserKind()==PERSON) {
+              if (user.getRole() == ACCOUNTING) {
+
+                  return accounting.saveCompanyId(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail(), user.getCompanyId());
+
+
+              }
+          }
         } else if (authentication.getName().equals("javadghane18@gmail.com"))
         {
             JSONObject jsonObjectMain = new JSONObject();

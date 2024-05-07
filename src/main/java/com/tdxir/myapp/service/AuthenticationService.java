@@ -90,6 +90,7 @@ public class AuthenticationService {
                 checkBoxesList=new String[]{"chk1","chk2","chk3"};
                 panels=new String[][]{{"نحوه ارسال","نحوه دریافت","دستور","نوع"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"بدهکار","طلبکار","گزارش کالا","صورتحساب فاکتور"},{"شدیم ما","شدند ایشان"}};
 
+
                 return  sendAuthConfig(infList,checkBoxesList,panels,jwtToken);
 
             }
@@ -114,12 +115,12 @@ public class AuthenticationService {
         }
         if (user.getUserKind() ==UserKind.PERSON)            //Person
         {
-            if (user.getRole() == ADMIN) {/*
-                return AuthenticationResponse.builder()
-                        .token(jwtToken)
-                        .paramCount("2")
-                        .paramTime(("30"))
-                        .build();*/
+            if (user.getRole() ==ACCOUNTING) {
+                infList=new String[]{"نام کاربری یا ایمیل","نام بیزینس","",""};
+                checkBoxesList=new String[]{};//"chk1","chk2","chk3"};
+                panels=new String[][]{{}};//{{"نحوه ارسال","نحوه دریافت","دستور"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"بررسی","ذخیره","خرید","فاکتور"}};
+
+                return  sendAuthConfig(infList,checkBoxesList,panels,jwtToken);
             } else if (user.getRole() == USER) {/*
                 return AuthenticationResponse.builder()
                         .token(jwtToken)
