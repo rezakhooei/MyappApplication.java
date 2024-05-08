@@ -30,7 +30,7 @@ public class Users implements UserDetails {
     @Column(unique=true)
     private String email;
     private  String password;
-    private Integer companyId;
+    private String companyIds;
     @Enumerated(EnumType.STRING)
     private Role role=Role.USER;
     @Override

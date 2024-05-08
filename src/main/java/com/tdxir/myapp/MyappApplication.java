@@ -14,6 +14,8 @@ public class MyappApplication extends SpringBootServletInitializer {
 		return builder.sources(MyappApplication.class);
 	}
 	public static final int WinLinux=0;//  0 for linux  1 for windows
+	//public Integer companyId=0;
+
 /*	public static final int PERSON=2;// for using Personal app
 	public static final int SPORT=1;// for using Sporting app
 	public static final int SHOP=0;// for using Shopping app*/

@@ -12,7 +12,9 @@ import java.util.List;
 
 public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> {
 
+    @Query("select new Company (c1.id,c1.ownerName,c1.branch) from Company c1 where c1.ownerName=:userId ")
 
+    public List<Company> reportCompanies (@Param("userId") String userId);
     @Query("select w1.post_id from wkh_postmeta w1 where w1.meta_key='_sku' and w1.meta_value=:code")
 
     public String existsCode (@Param("code") String code);
@@ -176,6 +178,11 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
 
     //    ("UPDATE WkhPostMeta as w1 , (SELECT post_id  FROM WkhPostMeta WHERE meta_key='_sku' and meta_value='902') AS w2 SET w1.meta_value = '48' WHERE w1.post_id=w2.post_id")
     public void updatePriceMahak(@Param("mahakPrice") String mahakPrice,@Param("mahakCode") String mahakCode );
+    @Modifying
+    @Transactional                 //   _price , _sale_price  , _regular_price , wcwp_wholesale
+    @Query(value="insert into company (branch,owner_name) values (:branch,:userId) ",nativeQuery = true)
+
+    public Integer insertCompanyId(@Param("userId") String userId,@Param("branch") String branch);
     @Modifying
     @Transactional                 //   _price , _sale_price  , _regular_price , wcwp_wholesale
     @Query(value="insert into Wkh_postmeta (post_id,meta_key,meta_value) values (:post_id,'_sku',:mahakCode) ",nativeQuery = true)

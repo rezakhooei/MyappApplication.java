@@ -1,10 +1,12 @@
 package com.tdxir.myapp.service;
 
+import com.tdxir.myapp.MyappApplication;
 import com.tdxir.myapp.auth.AuthenticationRequest;
 import com.tdxir.myapp.auth.AuthenticationResponse;
 import com.tdxir.myapp.auth.RegisterRequest;
 import com.tdxir.myapp.model.*;
 import com.tdxir.myapp.repository.UserRepository;
+import com.tdxir.myapp.repository.WkhPostMetaRepository;
 import lombok.RequiredArgsConstructor;
 //import org.springframework.security.authentication.AuthenticationManager;
 import net.minidev.json.JSONArray;
@@ -30,6 +32,9 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private  final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    @Autowired
+    WkhPostMetaRepository wkhPostMetaRepository;
+    public static Integer companyId;
 
     public AuthenticationResponse register(RegisterRequest request) {
        var user= Users.builder()
@@ -66,7 +71,9 @@ public class AuthenticationService {
         String[] infList,checkBoxesList;
 
         String[][] panels;
-        if(user.getCompanyId()==null) return null;
+        if(user.getCompanyIds()==null) return null;
+
+        companyId=1;
         if (user.getUserKind() == UserKind.SHOP)            //User Shop
         {
             if (user.getRole() == ADMIN) {
@@ -88,7 +95,12 @@ public class AuthenticationService {
             else if(user.getRole() == ACCOUNTING){
                 infList=new String[]{"شماره فاکتور@شناسه فروشنده توضیحات/آی دی چک","شماره فاکتور","تعداد کالا@تاریخ","مبلغ(ریال)@چک"};
                 checkBoxesList=new String[]{"chk1","chk2","chk3"};
-                panels=new String[][]{{"نحوه ارسال","نحوه دریافت","دستور","نوع"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"بدهکار","طلبکار","گزارش کالا","صورتحساب فاکتور"},{"شدیم ما","شدند ایشان"}};
+                panels=new String[][]{{"نحوه ارسال","نحوه دریافت","دستور","کی","بیزینس"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"بدهکار","طلبکار","گزارش کالا","صورتحساب فاکتور"},{"شدیم ما","شدند ایشان"},{null,null,null,null,null,null,null,null,null,null}};
+
+                List<Company> company=wkhPostMetaRepository.reportCompanies(user.getEmail());
+                for(int i=0;i<=company.size()-1;++i)
+                panels[5][i]=company.get(i).getBranch();
+
 
 
                 return  sendAuthConfig(infList,checkBoxesList,panels,jwtToken);
@@ -152,22 +164,25 @@ JSONObject sendAuthConfig(String infList[],String[] checkBoxesList,String[][] pa
     jsonObjectMain.put("paramCount",4);
     jsonObjectMain.put("paramTime",60);
 
-for(int panelNum=1;panelNum<=panels[0].length;++panelNum)
-{    ArrayList<JSONObject> jsonObjectItems = new ArrayList<JSONObject>();
+for(int panelNum=1;panelNum<=panels[0].length;++panelNum) {
+    ArrayList<JSONObject> jsonObjectItems = new ArrayList<JSONObject>();
     JSONObject jsonObjectRd = new JSONObject();
     JSONObject jsonObjectPanel = new JSONObject();
     JSONArray array1 = new JSONArray();
 
     for (int rdNum = 1; rdNum <= panels[panelNum].length; ++rdNum) {
-        jsonObjectRd.put("id", rdNum);//String.valueOf(i));
-        jsonObjectRd.put("name", panels[panelNum][rdNum-1]);
+        if (panels[panelNum][rdNum - 1] != null)
+        {
+            jsonObjectRd.put("id", rdNum);//String.valueOf(i));
+        jsonObjectRd.put("name", panels[panelNum][rdNum - 1]);
 
-        if ((rdNum == 4 && (panelNum==1 || panelNum==2))||(rdNum==1 && panelNum==3)||(rdNum==1 && panelNum==4))
+        if ((rdNum == 4 && (panelNum == 1 || panelNum == 2)) || (rdNum == 1 && panelNum == 3) || (rdNum == 1 && panelNum == 4) || (rdNum == 1 && panelNum == 5))
             jsonObjectRd.put("isSelct", true);
         else jsonObjectRd.put("isSelct", false);
 
         jsonObjectItems.add(new JSONObject(jsonObjectRd));
     }
+}
 
     jsonObjectPanel.put("name", panels[0][panelNum - 1]);
     switch (panelNum) {
@@ -178,6 +193,8 @@ for(int panelNum=1;panelNum<=panels[0].length;++panelNum)
         case 3:jsonObjectPanel.put("latin_name","panel3");
             break;
         case 4:jsonObjectPanel.put("latin_name","panel4");
+            break;
+        case 5:jsonObjectPanel.put("latin_name","panel5");
             break;
     }
     jsonObjectPanel.put("items", jsonObjectItems);

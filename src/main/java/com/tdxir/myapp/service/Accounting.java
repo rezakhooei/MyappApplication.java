@@ -1,6 +1,7 @@
 package com.tdxir.myapp.service;
 
 import com.tdxir.myapp.model.*;
+import com.tdxir.myapp.repository.UserRepository;
 import com.tdxir.myapp.repository.WkhPostMetaRepository;
 import com.tdxir.myapp.repository.WkhPostsRepository;
 import com.tdxir.myapp.tools.DateConvertor;
@@ -44,6 +45,8 @@ public class Accounting {
     private WkhPostsRepository wkhPostsRepository;
     @Autowired
     WkhPostMetaRepository wkhPostMetaRepository;
+    @Autowired
+    UserRepository userRepository;
     @Autowired
 
     private  RecordAndProccessMessageService recordAndProccessMessageService;
@@ -1607,61 +1610,27 @@ public class Accounting {
     {   errorMsg="";
 
         String userId=inf.get(0),branch=inf.get(1);
-
+        List<String> processList=new ArrayList<>();
 
         Integer flag1;
         Boolean flag2;
 
-        if(processList.size()==0)
+
             try {
                 // product code = inf1 and  exists then change price and stock
 
-                if (wkhPostMetaRepository.existsCodeInvoice(idInvoice) == null) {
+                if (userRepository.findByEmail(userId) != null) {
 
-                    String fileName = recordAndProccessMessageService.storeInvoiceImg(fileImage);
-                    flag1 = wkhPostMetaRepository.insertInvoice(idInvoice, userName, fileName, date.toString(), dateInvoice, Long.valueOf(numProduct), Long.valueOf(price), sellerId, companyId, false, "BUY");
-                    Integer idDoc = wkhPostMetaRepository.existsCodeInvoice(idInvoice);
-                    wkhPostMetaRepository.insertBills(date.toString(), dateInvoice, Long.valueOf(idDoc), idInvoice, -price, "INVOICEBUY", userName, fileName, false, "فاکتور", companyId);
-                    processList.add(fileName);
+
+                    flag1 = wkhPostMetaRepository.insertCompanyId(userId,branch);
+                    if(flag1==1)
+                    processList.add("با موفقیت اضافه شد");
+                    List<Company> companyList=wkhPostMetaRepository.reportCompanies(inf.get(2));
+                    for(int i=0;i<=companyList.size()-1;++i)
+                        processList.add(companyList.get(i).getOwnerName()+"----"+companyList.get(i).getBranch());
                     errorMsg="";
                 } else {
-                    Invoices invoices = wkhPostMetaRepository.reportInvoices(idInvoice);
-                    if (invoices.getCompleted())
-                    {
-                        Long idDoc = invoices.getIdDoc();//wkhPostMetaRepository.existsCodeInvoice(idInvoice);
-                        if (invoices.getPaid() != true && invoices.getSellOrBuy().equals("SELL")) {
-                            if (isCheck) {
-                                String fileName = recordAndProccessMessageService.storeInvoiceImg(fileImage);
-                                wkhPostMetaRepository.insertBills(date.toString(), dateInvoice, idDoc, idInvoice, -price, "CHECK", userName, fileName, false, description, companyId);
-                                processList.add(fileName);
-                                errorMsg="";
-                            } else {
-
-                                wkhPostMetaRepository.updateInvoices(numProduct, price, idInvoice);
-                                String fileName = recordAndProccessMessageService.storeInvoiceImg(fileImage);
-                                wkhPostMetaRepository.insertBills(date.toString(), dateInvoice, idDoc, idInvoice, -price, "cash", userName, fileName, false, description, companyId);
-                                processList.add(fileName);
-                                errorMsg="";
-                            }
-                            List<Long> billPrice = wkhPostMetaRepository.priceOfInvoiceBill(idInvoice);
-                            Long tempPrice = Long.valueOf(0);
-                            for (int i = 0; i <= billPrice.size() - 1; ++i) {
-                                tempPrice += billPrice.get(i);
-
-                            }
-                            if (tempPrice >= 0) wkhPostMetaRepository.updateInvoicesPaid(true, idInvoice);
-
-                        } else {
-                            processList.add("این فاکتور قبلا تسویه شده است یا پرداختی مربوط به این فاکتور نیست");
-                            errorMsg="قبلا تسویه شده یا مربوط به این فاکتور نیست";
-                        }
-                    }
-
-
-                    else {
-                        processList.add("ابتدا باید کالاهای فاکتور در قسمت -خرید-وارد شود");
-                        errorMsg="کالاهای فاکتور ثبت نشده است";
-                    }
+                    processList.add("این نام کاربری وجود ندارد");
                 }
 
 
@@ -1673,27 +1642,9 @@ public class Accounting {
             }
         JSONObject jsonObjectMain = new JSONObject();
         JSONObject jsonObject = new JSONObject();
-        // String fileName = recordAndProccessMessageService.storeInfs(fileVoice, fileImage, inf);
 
 
-        try {
 
-
-            List<Bills> bills=wkhPostMetaRepository.reportInvoiceInBills(idInvoice,companyId);
-            if(bills.size()!=0)
-                for(int i=0;i<=bills.size()-1;++i)
-                {
-                    processList.add(bills.get(i).getDate()+"مبلغ"+String.valueOf(df.format(bills.get(i).getPrice()))+"ریال-"+bills.get(i).getPayKind());
-                }
-            else processList.add("اطلاعاتی برای نمایش این فاکتور و آی دی وجود ندارد--"+idInvoice+"--"+String.valueOf(companyId));
-
-        }catch (Exception e){processList.add(e.getMessage());
-        }
-
-        if ((processList == null)|| (processList.size()==0)) {
-            processList = new ArrayList<>();
-            processList.add(" پاسخی پیدا نکردم");
-        }
 
         if(Rd.equals("Rd1")) {
 
