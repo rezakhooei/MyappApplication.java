@@ -34,7 +34,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     @Autowired
     WkhPostMetaRepository wkhPostMetaRepository;
-    public static Integer companyId;
+    public static Integer companyId=0;
 
     public AuthenticationResponse register(RegisterRequest request) {
        var user= Users.builder()
@@ -71,9 +71,11 @@ public class AuthenticationService {
         String[] infList,checkBoxesList;
 
         String[][] panels;
-        if(user.getCompanyIds()==null) return null;
+        List<Company> company=wkhPostMetaRepository.reportCompanies(user.getEmail());
+        if(company.size()==0) return null;
+        else if(company.size()==0) companyId=company.get(0).getId();
 
-        companyId=1;
+
         if (user.getUserKind() == UserKind.SHOP)            //User Shop
         {
             if (user.getRole() == ADMIN) {
@@ -97,7 +99,7 @@ public class AuthenticationService {
                 checkBoxesList=new String[]{"chk1","chk2","chk3"};
                 panels=new String[][]{{"نحوه ارسال","نحوه دریافت","دستور","کی","بیزینس"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"بدهکار","طلبکار","گزارش کالا","صورتحساب فاکتور"},{"شدیم ما","شدند ایشان"},{null,null,null,null,null,null,null,null,null,null}};
 
-                List<Company> company=wkhPostMetaRepository.reportCompanies(user.getEmail());
+
                 for(int i=0;i<=company.size()-1;++i)
                 panels[5][i]=company.get(i).getBranch();
 

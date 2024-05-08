@@ -141,7 +141,7 @@ public class Accounting {
                     } else processList.add("نام فروشنده و شماره فاکتور درست تعریف نشده است-طبق دستورالعمل اطلاعات را وارد نمایید!@!");
                 }
                 else {
-                    Invoices invoices =wkhPostMetaRepository.reportInvoices(idInvoice);
+                    Invoices invoices =wkhPostMetaRepository.reportInvoices(idInvoice,companyId);
                     Long idDoc= invoices.getIdDoc();//wkhPostMetaRepository.existsCodeInvoice(idInvoice);
                     if(invoices.getPaid()!=true&& invoices.getSellOrBuy().equals("BUY"))
                     {
@@ -405,7 +405,7 @@ public class Accounting {
                 processList.add(fileName);
                 errorMsg="";
             } else {
-                Invoices invoices = wkhPostMetaRepository.reportInvoices(idInvoice);
+                Invoices invoices = wkhPostMetaRepository.reportInvoices(idInvoice,companyId);
                 if (invoices.getCompleted())
                 {
                     Long idDoc = invoices.getIdDoc();//wkhPostMetaRepository.existsCodeInvoice(idInvoice);
@@ -1220,7 +1220,7 @@ public class Accounting {
     }
 
     public ResponseEntity<JSONObject> reportInvoiceBuy(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
-                                                    String checkBox1, String checkBox2, String checkBox3, UserKind userKind, Role role)
+                                                    String checkBox1, String checkBox2, String checkBox3, UserKind userKind, Role role , Integer companyId)
     {
 
 
@@ -1246,7 +1246,7 @@ public class Accounting {
             processList = proccessMessage.proccess(idInvoice, userKind, Rd);
         }
         else{
-            Invoices invoices =wkhPostMetaRepository.reportInvoices(idInvoice);
+            Invoices invoices =wkhPostMetaRepository.reportInvoices(idInvoice,companyId);
 
             if(invoices !=null)
             {

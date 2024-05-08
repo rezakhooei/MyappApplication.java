@@ -1,6 +1,7 @@
 package com.tdxir.myapp.controller;
 
 //import com.google.gson.JsonObject;
+import com.tdxir.myapp.model.Company;
 import com.tdxir.myapp.model.Users;
 import com.tdxir.myapp.nlp.training.MakeTsv;
 import com.tdxir.myapp.repository.UserRepository;
@@ -45,6 +46,8 @@ public class ReciveMessageController {
     UserRepository userRepository;
     @Autowired
     private WkhPostsRepository wkhPostsRepository;
+    @Autowired
+    private WkhPostMetaRepository wkhPostMetaRepository;
   //  @Autowired
    // private WkhPostMetaRepository wkhPostMetaRepository;
     @Autowired
@@ -80,7 +83,7 @@ public class ReciveMessageController {
             @RequestParam("inf1") String inf1, @RequestParam("inf2") String inf2,@RequestParam("inf3") String inf3,@RequestParam("inf4")String inf4,
             @RequestParam("selected_rds") String selected_rds ,@RequestParam("selected_chks") String selected_chks
                      ) throws Exception {   //googleSpeech.initialize();
-        String checkBox1 = "false", checkBox2 = "false", checkBox3 = "false", checkBox4 = "false", panel1 = "", panel2 = "", panel3 = "",panel4="";
+        String checkBox1 = "false", checkBox2 = "false", checkBox3 = "false", checkBox4 = "false", panel1 = "", panel2 = "", panel3 = "",panel4="",panel5="";
 
         // inf1="Rds="+selected_rds+"-Chks="+selected_chks;
         // inf1=inf2;
@@ -88,6 +91,8 @@ public class ReciveMessageController {
         panel2 = "Rd" + selected_rds.substring(selected_rds.indexOf("panel2-") + 7, selected_rds.indexOf("panel2-") + 8);
         panel3 = "Rd" + selected_rds.substring(selected_rds.indexOf("panel3-") + 7, selected_rds.indexOf("panel3-") + 8);
         panel4 = "Rd" + selected_rds.substring(selected_rds.indexOf("panel4-") + 7, selected_rds.indexOf("panel4-") + 8);
+        panel5 = "Rd" + selected_rds.substring(selected_rds.indexOf("panel5-") + 7, selected_rds.indexOf("panel5-") + 8);
+
         String[] checkBoxes = selected_chks.split(",");
         for (int i = 0; i <= checkBoxes.length - 1; ++i) {
             if (checkBoxes[i].equals(String.valueOf(1))) checkBox1 = "true";
@@ -109,6 +114,27 @@ public class ReciveMessageController {
 
 
         Users user = userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
+
+        if(panel5.equals("Rd-")){}
+        else {
+            try {
+
+                List<Company> companyList = wkhPostMetaRepository.reportCompanies(user.getEmail());
+                if (panel5.equals("Rd1")) AuthenticationService.companyId = companyList.get(0).getId();
+                else if (panel5.equals("Rd2")) AuthenticationService.companyId = companyList.get(1).getId();
+                else if (panel5.equals("Rd3")) AuthenticationService.companyId = companyList.get(2).getId();
+                else if (panel5.equals("Rd4")) AuthenticationService.companyId = companyList.get(3).getId();
+                else if (panel5.equals("Rd5")) AuthenticationService.companyId = companyList.get(4).getId();
+                else if (panel5.equals("Rd6")) AuthenticationService.companyId = companyList.get(5).getId();
+                else if (panel5.equals("Rd7")) AuthenticationService.companyId = companyList.get(6).getId();
+                else if (panel5.equals("Rd8")) AuthenticationService.companyId = companyList.get(7).getId();
+                else if (panel5.equals("Rd9")) AuthenticationService.companyId = companyList.get(8).getId();
+                else AuthenticationService.companyId=1;
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
         String message = inf2;
         // message= recordAndProccessMessageService.storeInfs(file, inf1, inf2, inf3, inf4);
         System.out.println(authentication.getName());
