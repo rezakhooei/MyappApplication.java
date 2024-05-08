@@ -11,6 +11,7 @@ import com.tdxir.myapp.service.*;
 import com.tdxir.myapp.utils.Utils;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
@@ -168,10 +169,10 @@ public class ReciveMessageController {
                   } else if (panel3.equals("Rd2")) {
                       return shop.saveProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind());
                   } else if (panel3.equals("Rd3")) {
-                      return shop.buyProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail());
+                      return shop.buyProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail(), AuthenticationService.companyId);
                   }
                   else if (panel3.equals("Rd4")) {
-                      return accounting.reportInvoiceBuy(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole());
+                      return accounting.reportInvoiceBuy(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(),user.getRole(),AuthenticationService.companyId);
                   }
               }
               else  if (user.getRole()==USER){

@@ -63,7 +63,7 @@ public class Shop {
     //inf3 تعداد inf4 قیمت
 
     public ResponseEntity<JSONObject> buyProduct(String Rd, MultipartFile fileVoice, MultipartFile fileImage, List<String> inf,
-                                                 String checkBox1, String checkBox2, String checkBox3, String userName) {
+                                                 String checkBox1, String checkBox2, String checkBox3, String userName, Integer companyId) {
 
         JalaliDate date=new JalaliDate();
 
@@ -106,7 +106,7 @@ public class Shop {
 
             if(idInvoice!=null)
             {
-                Invoices invoices =wkhPostMetaRepository.reportInvoices(String.valueOf(idInvoice));
+                Invoices invoices =wkhPostMetaRepository.reportInvoices(String.valueOf(idInvoice),companyId);
 
     // product code = inf1 and  exists then change price and stock
     if (code != -1L &&String.valueOf(idInvoice).equals(invoices.getIdInvoice())) {
@@ -129,7 +129,7 @@ public class Shop {
                         tempNumProduct+=1;
 
                     }
-                    Invoices invoices1 =wkhPostMetaRepository.reportInvoices(String.valueOf(idInvoice));
+                    Invoices invoices1 =wkhPostMetaRepository.reportInvoices(String.valueOf(idInvoice),companyId);
                     if(tempPrice.equals(invoices1.getPrice()) && tempNumProduct.equals(invoices1.getNumProduct()))
                         wkhPostMetaRepository.updateInvoicesCompleted(true,String.valueOf(idInvoice));
                     else wkhPostMetaRepository.updateInvoicesCompleted(false,String.valueOf(idInvoice));
@@ -151,7 +151,7 @@ public class Shop {
                     tempNumProduct+=1;
 
                 }
-                Invoices invoices1 =wkhPostMetaRepository.reportInvoices(String.valueOf(idInvoice));
+                Invoices invoices1 =wkhPostMetaRepository.reportInvoices(String.valueOf(idInvoice),companyId);
                 if(tempPrice.equals(invoices1.getPrice()) && tempNumProduct.equals(invoices1.getNumProduct()))
                     wkhPostMetaRepository.updateInvoicesCompleted(true,String.valueOf(idInvoice));
                 else wkhPostMetaRepository.updateInvoicesCompleted(false,String.valueOf(idInvoice));
@@ -187,7 +187,7 @@ public class Shop {
                    tempNumProduct+=1;
 
                }
-               Invoices invoices1 =wkhPostMetaRepository.reportInvoices(String.valueOf(idInvoice));
+               Invoices invoices1 =wkhPostMetaRepository.reportInvoices(String.valueOf(idInvoice),companyId);
                if(tempPrice.equals(invoices1.getPrice()) && tempNumProduct.equals(invoices1.getNumProduct()))
                 wkhPostMetaRepository.updateInvoicesCompleted(true,String.valueOf(idInvoice));
                else wkhPostMetaRepository.updateInvoicesCompleted(false,String.valueOf(idInvoice));
