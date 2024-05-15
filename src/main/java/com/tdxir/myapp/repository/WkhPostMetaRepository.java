@@ -241,7 +241,7 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     @Transactional
 
 
-    @Query(value="insert into Docs (userid,date,doc_name,description,voice_file_name,image_file_name) values (:userName,:date,:docName,:description,:fileNameVoice ,:fileNameImg)",nativeQuery = true)
+    @Query(value="insert into docs (userid,date,doc_name,description,voice_file_name,image_file_name) values (:userName,:date,:docName,:description,:fileNameVoice ,:fileNameImg)",nativeQuery = true)
 
     public Integer insertDoc(@Param("userName") String userName,@Param("date") String date,   @Param("docName") String docName,
             @Param("description") String description,  @Param("fileNameVoice") String fileNameVoice, @Param("fileNameImg") String fileNameImg);
