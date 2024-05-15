@@ -1821,8 +1821,8 @@ public class Accounting {
                     imgSelected=docs.get(i).getImageFileName();
                     flagImg = true;
                 }
-                else if(docs.get(i).getImageFileName()!=null) {
-                    processList.add("ردیف " + String.valueOf(i) + "--" + docs.get(i - 1).getDate() + "--" + docs.get(i - 1).getDocName() + "===" + docs.get(i - 1).getDescription());
+                else if(docs.get(i-1).getImageFileName()!=null) {
+                    processList.add("ردیف " + String.valueOf(i-1) + "--" + docs.get(i - 1).getDate() + "--" + docs.get(i - 1).getDocName() + "===" + docs.get(i - 1).getDescription());
                 } else processList.add( docs.get(i - 1).getDate() + "--" + docs.get(i - 1).getDocName() + "===" + docs.get(i - 1).getDescription());
              }
 
