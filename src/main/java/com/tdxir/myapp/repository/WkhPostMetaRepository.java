@@ -8,10 +8,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> {
+    @Query("select new Docs (c1.id,c1.userid,c1.date,c1.docName,c1.description,c1.voiceFileName,c1.imageFileName) from Docs c1 where c1.docName=:docName and c1.userid=:userId ")
 
+    public List<Docs> reportDocs (@Param("docName") String docName,@Param("userId") String userId);
     @Query("select new Company (c1.id,c1.ownerName,c1.branch) from Company c1 where c1.ownerName=:userId ")
 
     public List<Company> reportCompanies (@Param("userId") String userId);
@@ -234,6 +237,13 @@ public interface WkhPostMetaRepository extends JpaRepository<wkh_postmeta,Long> 
     public Integer insertBills(@Param("date") String date, @Param("dateInvoice") LocalDate dateInvoice, @Param("idDoc") Long idDoc, @Param("idInvoice") String idInvoice,
                                  @Param("price") Long price,  @Param("payKind") String PayKind, @Param("userName") String userName, @Param("fileName") String fileName,@Param("finish") Boolean finish,@Param("description") String description,@Param("companyId") Integer companyId);
 
+    @Modifying
+    @Transactional
 
+
+    @Query(value="insert into Docs (userid,date,doc_name,description,voice_file_name,image_file_name) values (:userName,:date,:docName,:description,:fileNameVoice ,:fileNameImg)",nativeQuery = true)
+
+    public Integer insertDoc(@Param("userName") String userName,@Param("date") String date,   @Param("docName") String docName,
+            @Param("description") String description,  @Param("fileNameVoice") String fileNameVoice, @Param("fileNameImg") String fileNameImg);
 
 }

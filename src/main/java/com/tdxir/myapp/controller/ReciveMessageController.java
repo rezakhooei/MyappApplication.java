@@ -196,10 +196,17 @@ public class ReciveMessageController {
                       return accounting.saveMyCredit(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail(), AuthenticationService.companyId);
 
                   } else if (panel3.equals("Rd3")) {
+                      return accounting.saveDoc(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail());
+
+                  } else if (panel3.equals("Rd4")) {
                       return accounting.reportProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(), user.getRole());
 
-                  } else if (panel3.equals("Rd4") && panel4.equals("Rd1")) {
+                  } else if (panel3.equals("Rd5") && panel4.equals("Rd1")) {
                       return accounting.reportInvoicePay(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(), user.getRole(),AuthenticationService.companyId);
+
+                  }
+                  else if (panel3.equals("Rd6")) {
+                      return accounting.reportDoc(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(), user.getRole(),user.getEmail());
 
                   }
 
