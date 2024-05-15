@@ -1872,7 +1872,7 @@ public class Accounting {
         else if(Rd.equals("Rd2")){
 
             jsonObjectMain.put("fileContentVoice", null);
-            if((processList.size()>1)&&imgSelected!=null) {
+            if((processList.size()>=1)&&imgSelected!=null) {
                 String image1 = FilenameUtils.getName(imgSelected);//"replyimage.jpg"
                 if (image1 != null) {
                     String pathFile = SERVER_LOCATION_INVOICES + FilenameUtils.getPath(imgSelected);
