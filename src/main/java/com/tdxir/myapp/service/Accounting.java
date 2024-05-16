@@ -116,7 +116,11 @@ public class Accounting {
             if(docs.size()!=0)
                 for(int i=0;i<=docs.size()-1;++i)
                 {
-                    processList.add(docs.get(i).getDate()+"نام : "+docs.get(i).getDocName()+"توضیحات"+docs.get(i).getDescription());
+                    processList.add(docs.get(i).getDate()+"\nنام : "+docs.get(i).getDocName()+"\nتوضیحات "+docs.get(i).getDescription());
+                    if(docs.get(i).getImageFileName()!=null) {
+                        processList.add( String.valueOf(i) + "تاریخ" + docs.get(i ).getDate() + "\n" + docs.get(i ).getDocName() + "\n" + docs.get(i ).getDescription());
+                    } else processList.add("عکس ندارد" +"\n"+ docs.get(i ).getDate() + "\n" + docs.get(i ).getDocName() + "\n" + docs.get(i ).getDescription());
+
                 }
             else processList.add("اطلاعاتی برای نمایش این نام وجود ندارد--"+docName);
 
@@ -1823,8 +1827,8 @@ public class Accounting {
                     flagImg = true;
                 }
                 else if(docs.get(i-1).getImageFileName()!=null) {
-                    processList.add("ردیف " + String.valueOf(i-1) + "تاریخ" + docs.get(i - 1).getDate() + "\n" + docs.get(i - 1).getDocName() + "\n" + docs.get(i - 1).getDescription());
-                } else processList.add( docs.get(i - 1).getDate() + "\n" + docs.get(i - 1).getDocName() + "\n" + docs.get(i - 1).getDescription());
+                    processList.add( String.valueOf(i-1) + "تاریخ" + docs.get(i - 1).getDate() + "\n" + docs.get(i - 1).getDocName() + "\n" + docs.get(i - 1).getDescription());
+                } else processList.add("عکس ندارد" +"\n"+ docs.get(i - 1).getDate() + "\n" + docs.get(i - 1).getDocName() + "\n" + docs.get(i - 1).getDescription());
              }
 
 
