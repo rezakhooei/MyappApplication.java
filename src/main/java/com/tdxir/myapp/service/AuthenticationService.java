@@ -97,7 +97,7 @@ public class AuthenticationService {
             else if(user.getRole() == ACCOUNTING){
                 infList=new String[]{"شماره فاکتور@شناسه فروشنده توضیحات/آی دی چک","شماره فاکتور/نام سند","تعداد کالا@تاریخ","مبلغ(ریال)@چک"};
                 checkBoxesList=new String[]{"chk1","chk2","chk3"};
-                panels=new String[][]{{"نحوه ارسال","نحوه دریافت","دستور","کی","بیزینس"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"بدهکار","طلبکار","غیر مالی",null,null,/*"گزارش کالا","گزارش فاکتور",*/"گزارش سند"},{"شدیم ما","شدند ایشان"},{null,null,null,null,null,null,null,null,null,null}};
+                panels=new String[][]{{"نحوه ارسال","نحوه دریافت","دستور","طرف معامله","بیزینس","گزارش"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"صدا","تصویر","صداوتصویر","هیچکدام"},{"بدهکار","طلبکار","غیر مالی","هیچکدام"},{"شدیم ما","شدند ایشان"},{null,null,null,null,null,null,null,null,null,null},{"گزارش کالا","گزارش فاکتور","گزارش سند"}};
 
 
                 for(int i=0;i<=company.size()-1;++i)
@@ -179,7 +179,7 @@ for(int panelNum=1;panelNum<=panels[0].length;++panelNum) {
             jsonObjectRd.put("id", rdNum);//String.valueOf(i));
         jsonObjectRd.put("name", panels[panelNum][rdNum - 1]);
 
-        if ((rdNum == 4 && (panelNum == 1 || panelNum == 2)) || (rdNum == 1 && panelNum == 3) || (rdNum == 1 && panelNum == 4) || (rdNum == 1 && panelNum == 5))
+        if ((rdNum == 4 && (panelNum == 1 || panelNum == 2 || panelNum == 3 )) ||  (rdNum == 1 && panelNum == 4) || (rdNum == 1 && panelNum == 5)|| (rdNum == 3 && panelNum == 6))
             jsonObjectRd.put("isSelct", true);
         else jsonObjectRd.put("isSelct", false);
 

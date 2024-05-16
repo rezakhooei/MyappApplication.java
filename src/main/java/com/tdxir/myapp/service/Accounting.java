@@ -81,6 +81,7 @@ public class Accounting {
         List<String> processList=new ArrayList<>();
         String docName=inf.get(1),
                 description=inf.get(0),fileNameImg=null,fileNameVoice=null;
+        if(description.equals("شماره فاکتور@شناسه فروشنده توضیحات/آی دی چک")) description="";
         Integer flag1;
         Boolean flagImg=false;
 
@@ -1822,8 +1823,8 @@ public class Accounting {
                     flagImg = true;
                 }
                 else if(docs.get(i-1).getImageFileName()!=null) {
-                    processList.add("ردیف " + String.valueOf(i-1) + "--" + docs.get(i - 1).getDate() + "--" + docs.get(i - 1).getDocName() + "===" + docs.get(i - 1).getDescription());
-                } else processList.add( docs.get(i - 1).getDate() + "--" + docs.get(i - 1).getDocName() + "===" + docs.get(i - 1).getDescription());
+                    processList.add("ردیف " + String.valueOf(i-1) + "تاریخ" + docs.get(i - 1).getDate() + "\n" + docs.get(i - 1).getDocName() + "\n" + docs.get(i - 1).getDescription());
+                } else processList.add( docs.get(i - 1).getDate() + "\n" + docs.get(i - 1).getDocName() + "\n" + docs.get(i - 1).getDescription());
              }
 
 

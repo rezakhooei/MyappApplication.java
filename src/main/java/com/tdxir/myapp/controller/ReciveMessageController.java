@@ -84,7 +84,7 @@ public class ReciveMessageController {
             @RequestParam("inf1") String inf1, @RequestParam("inf2") String inf2,@RequestParam("inf3") String inf3,@RequestParam("inf4")String inf4,
             @RequestParam("selected_rds") String selected_rds ,@RequestParam("selected_chks") String selected_chks
                      ) throws Exception {   //googleSpeech.initialize();
-        String checkBox1 = "false", checkBox2 = "false", checkBox3 = "false", checkBox4 = "false", panel1 = "", panel2 = "", panel3 = "",panel4="",panel5="";
+        String checkBox1 = "false", checkBox2 = "false", checkBox3 = "false", checkBox4 = "false", panel1 = "", panel2 = "", panel3 = "",panel4="",panel5="",panel6="";
 
         // inf1="Rds="+selected_rds+"-Chks="+selected_chks;
         // inf1=inf2;
@@ -93,6 +93,7 @@ public class ReciveMessageController {
         panel3 = "Rd" + selected_rds.substring(selected_rds.indexOf("panel3-") + 7, selected_rds.indexOf("panel3-") + 8);
         panel4 = "Rd" + selected_rds.substring(selected_rds.indexOf("panel4-") + 7, selected_rds.indexOf("panel4-") + 8);
         panel5 = "Rd" + selected_rds.substring(selected_rds.indexOf("panel5-") + 7, selected_rds.indexOf("panel5-") + 8);
+        panel6 = "Rd" + selected_rds.substring(selected_rds.indexOf("panel6-") + 7, selected_rds.indexOf("panel6-") + 8);
 
         String[] checkBoxes = selected_chks.split(",");
         for (int i = 0; i <= checkBoxes.length - 1; ++i) {
@@ -198,16 +199,18 @@ public class ReciveMessageController {
                   } else if (panel3.equals("Rd3")) {
                       return accounting.saveDoc(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getEmail());
 
-                  } else if (panel3.equals("Rd4")) {
-                      return accounting.reportProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(), user.getRole());
-
-                  } else if (panel3.equals("Rd5") && panel4.equals("Rd1")) {
-                      return accounting.reportInvoicePay(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(), user.getRole(),AuthenticationService.companyId);
-
                   }
-                  else if (panel3.equals("Rd6")) {
-                      return accounting.reportDoc(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(), user.getRole(),user.getEmail());
+                  else if (panel3.equals("Rd4")) {
+                      if (panel6.equals("Rd1")) {
+                          return accounting.reportProduct(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(), user.getRole());
 
+                      } else if (panel6.equals("Rd2") && panel4.equals("Rd1")) {
+                          return accounting.reportInvoicePay(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(), user.getRole(), AuthenticationService.companyId);
+
+                      } else if (panel6.equals("Rd3")) {
+                          return accounting.reportDoc(panel2, fileVoice, fileImage, inf, checkBox1, checkBox2, checkBox3, user.getUserKind(), user.getRole(), user.getEmail());
+
+                      }
                   }
 
 
