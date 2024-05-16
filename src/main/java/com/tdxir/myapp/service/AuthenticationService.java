@@ -199,6 +199,8 @@ for(int panelNum=1;panelNum<=panels[0].length;++panelNum) {
             break;
         case 5:jsonObjectPanel.put("latin_name","panel5");
             break;
+        case 6:jsonObjectPanel.put("latin_name","panel6");
+            break;
     }
     jsonObjectPanel.put("items", jsonObjectItems);
     jsonObjectRdList.add(jsonObjectPanel);
